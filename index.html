@@ -431,25 +431,27 @@ body {
 
 /* card reset button */
 .card-reset {
-  position: absolute;
-  top: 10px; left: 10px;
-  width: 22px; height: 22px;
-  border-radius: 50%;
-  border: none;
-  background: transparent;
-  color: var(--light-gray);
-  font-size: 13px;
-  cursor: pointer;
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 5px;
+  border: 1px solid var(--light-gray);
+  background: var(--bg);
+  color: var(--muted);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  cursor: pointer;
   transition: all 0.2s;
-  z-index: 2;
+  margin-bottom: 10px;
 }
 
 .card-reset:hover {
   background: var(--pink-light);
   color: var(--pink);
+  border-color: var(--pink);
 }
 
 .card-num {
@@ -1297,12 +1299,12 @@ body {
     <div class="card-row">
 
       <div class="card card-1">
-        <button class="card-reset" onclick="resetCard('card1')" title="Clear this section">↺</button>
         <div class="card-num">1</div>
         <div class="card-top">
           <div class="card-icon" style="background:var(--cyan-light); color:var(--cyan);">⏱</div>
           <div><h3>Career Goals</h3><div class="timeframe">3–5 Year Horizon</div></div>
         </div>
+        <button class="card-reset" onclick="resetCard('card1')" title="Clear this section">↺ Clear section</button>
         <div class="learning-tags"><span class="ltag ltag-self">Self-Directed</span></div>
         <p class="card-desc">Define the future role, scope, and impact you want. Be specific — include functions, industries, leadership scope, and technical depth.</p>
         <div class="prompt-label">Guiding Questions</div>
@@ -1319,12 +1321,12 @@ body {
       </div>
 
       <div class="card card-2">
-        <button class="card-reset" onclick="resetCard('card2')" title="Clear this section">↺</button>
         <div class="card-num">2</div>
         <div class="card-top">
           <div class="card-icon" style="background:var(--pink-light); color:var(--pink);">♥</div>
           <div><h3>What I Love About My Role</h3><div class="timeframe">Self-Awareness</div></div>
         </div>
+        <button class="card-reset" onclick="resetCard('card2')" title="Clear this section">↺ Clear section</button>
         <div class="learning-tags"><span class="ltag ltag-self">Self-Directed</span><span class="ltag ltag-feedback">External Feedback</span></div>
         <p class="card-desc">Identify the activities, responsibilities, and work that energize you. This anchors future planning in genuine motivation.</p>
         <div class="prompt-label">Guiding Questions</div>
@@ -1340,12 +1342,12 @@ body {
       </div>
 
       <div class="card card-3">
-        <button class="card-reset" onclick="resetCard('card3')" title="Clear this section">↺</button>
         <div class="card-num">3</div>
         <div class="card-top">
           <div class="card-icon" style="background:var(--blue-light); color:var(--blue);">📖</div>
           <div><h3>Current Learning Goals</h3><div class="timeframe">6–12 Month Focus</div></div>
         </div>
+        <button class="card-reset" onclick="resetCard('card3')" title="Clear this section">↺ Clear section</button>
         <div class="learning-tags"><span class="ltag ltag-self">Self-Directed</span><span class="ltag ltag-feedback">External Feedback</span></div>
         <p class="card-desc">Clarify the concrete areas for growth right now. Align these to feedback themes, next-level performance, and future roles.</p>
         <div class="prompt-label">Guiding Questions</div>
@@ -1373,12 +1375,12 @@ body {
     <div class="card-row">
 
       <div class="card card-4">
-        <button class="card-reset" onclick="resetCard('card4')" title="Clear this section">↺</button>
         <div class="card-num">4</div>
         <div class="card-top">
           <div class="card-icon" style="background:var(--purple-light); color:var(--purple);">◆</div>
           <div><h3>Skills I Want to Develop</h3><div class="timeframe">Competency Mapping</div></div>
         </div>
+        <button class="card-reset" onclick="resetCard('card4')" title="Clear this section">↺ Clear section</button>
         <div class="learning-tags"><span class="ltag ltag-formal">Formal Training</span><span class="ltag ltag-experiential">Experiential</span></div>
         <p class="card-desc">Break development into three dimensions for a holistic view of growth.</p>
         <div class="prompt-label">Three Dimensions</div>
@@ -1394,12 +1396,12 @@ body {
       </div>
 
       <div class="card card-5">
-        <button class="card-reset" onclick="resetCard('card5')" title="Clear this section">↺</button>
         <div class="card-num">5</div>
         <div class="card-top">
           <div class="card-icon" style="background:var(--green-light); color:var(--green);">💼</div>
           <div><h3>Experiences I Want to Gain</h3><div class="timeframe">Stretch &amp; Exposure</div></div>
         </div>
+        <button class="card-reset" onclick="resetCard('card5')" title="Clear this section">↺ Clear section</button>
         <div class="learning-tags"><span class="ltag ltag-experiential">Experiential</span><span class="ltag ltag-social">Social / Observational</span></div>
         <p class="card-desc">Think beyond courses — exposure and stretch assignments drive the deepest growth.</p>
         <div class="prompt-label">Example Experiences</div>
@@ -1416,12 +1418,12 @@ body {
       </div>
 
       <div class="card card-6">
-        <button class="card-reset" onclick="resetCard('card6')" title="Clear this section">↺</button>
         <div class="card-num">6</div>
         <div class="card-top">
           <div class="card-icon" style="background:var(--orange-light); color:var(--orange);">👥</div>
           <div><h3>Support From My Manager</h3><div class="timeframe">Partnership</div></div>
         </div>
+        <button class="card-reset" onclick="resetCard('card6')" title="Clear this section">↺ Clear section</button>
         <div class="learning-tags"><span class="ltag ltag-mentoring">Mentoring &amp; Coaching</span><span class="ltag ltag-feedback">External Feedback</span></div>
         <p class="card-desc">Spell out the enablement, sponsorship, and feedback cadence required to make this plan real.</p>
         <div class="prompt-label">Types of Support</div>
@@ -2030,9 +2032,18 @@ Use this EXACT HTML structure:
 Make each action SPECIFIC to their actual goals, skills, and experiences — not generic. Reference their specific words where possible. Each action should be concrete and achievable within the quarter.`;
 
   try {
-    var response = await fetch('https://api.anthropic.com/v1/messages', {
+    // Direct call to Anthropic API routed through a CORS proxy.
+    // Required because GitHub Pages is a static host with no backend —
+    // browsers block direct calls to api.anthropic.com (CORS policy).
+    var API_URL = 'https://corsproxy.io/?' + encodeURIComponent('https://api.anthropic.com/v1/messages');
+
+    var response = await fetch(API_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 1000,
@@ -2064,11 +2075,15 @@ Make each action SPECIFIC to their actual goals, skills, and experiences — not
     saveAll();
 
   } catch (err) {
+    var errMsg = err.message || 'Unknown error';
+    var hint = errMsg.toLowerCase().includes('fetch') || errMsg.toLowerCase().includes('network')
+      ? 'This is usually a network or CORS issue. Try refreshing the page, or use the "Copy Plan Text" button in the Share menu to manually paste your plan into an AI assistant.'
+      : 'Error: ' + errMsg;
     document.getElementById('planOutput').innerHTML =
       '<div class="empty-state" style="color:var(--pink);">' +
       '<div class="empty-icon">⚠</div>' +
-      '<p><strong>Could not connect to AI.</strong><br>' +
-      '<span style="font-size:12px;">Check your connection and try again. Error: ' + escHtml(err.message) + '</span></p></div>';
+      '<p><strong>Could not generate roadmap.</strong><br>' +
+      '<span style="font-size:12px;">' + escHtml(hint) + '</span></p></div>';
   }
 
   btn.disabled = false;
