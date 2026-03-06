@@ -1991,45 +1991,46 @@ async function generateAIPlan() {
     qDates.push('Q' + qNum + ' ' + d.getFullYear() + ' (' + mNames[d.getMonth()] + '–' + mNames[ed.getMonth()] + ')');
   }
 
-  var prompt = `You are a career development expert helping create a personalized quarterly Individual Development Plan (IDP).
+  var prompt = `You are a career development expert. Analyze this employee's IDP inputs and create a personalized 12-month quarterly development plan.
 
 EMPLOYEE CONTEXT:
 ${name ? '- Name: ' + name : ''}
 ${role ? '- Current Role: ' + role : ''}
 ${timeInRole ? '- Time in Role: ' + timeInRole + ' years' : ''}
 - Plan Start: ${startDate.toLocaleDateString('en-US', {month:'long', year:'numeric'})}
+- Quarters: ${qDates.join(' | ')}
 
-THEIR INPUTS:
-${goals ? '1. CAREER GOALS (3-5 year):\n' + goals : ''}
-${loves ? '\n2. WHAT THEY LOVE ABOUT THEIR ROLE:\n' + loves : ''}
-${learning ? '\n3. CURRENT LEARNING GOALS (6-12 month):\n' + learning : ''}
-${skills ? '\n4. SKILLS TO DEVELOP:\n' + skills : ''}
-${experiences ? '\n5. EXPERIENCES TO GAIN:\n' + experiences : ''}
-${support ? '\n6. MANAGER SUPPORT NEEDED:\n' + support : ''}
+IDP INPUTS:
+${goals ? '1. CAREER GOALS:\n' + goals + '\n' : ''}
+${loves ? '2. WHAT THEY LOVE:\n' + loves + '\n' : ''}
+${learning ? '3. LEARNING GOALS:\n' + learning + '\n' : ''}
+${skills ? '4. SKILLS TO DEVELOP:\n' + skills + '\n' : ''}
+${experiences ? '5. EXPERIENCES TO GAIN:\n' + experiences + '\n' : ''}
+${support ? '6. MANAGER SUPPORT NEEDED:\n' + support + '\n' : ''}
 
-Create a specific, actionable quarterly roadmap for the next 12 months. Format your response as an HTML table ONLY — no preamble, no explanation outside the table.
+Return ONLY a valid JSON object. No markdown, no code fences, no explanation — raw JSON only.
 
-Use this EXACT HTML structure:
-<table class="quarterly-plan">
-<thead><tr>
-<th style="width:120px;">Quarter</th>
-<th>Development Actions</th>
-<th style="width:90px;">Owner</th>
-<th style="width:90px;">Status</th>
-</tr></thead>
-<tbody>
-[FOR EACH OF THE 4 QUARTERS: ${qDates.join(', ')}]
-[Each quarter should have 3-4 action rows + 1 check-in row]
-[First action row uses rowspan on the quarter cell]
-[Quarter badges: Q1=<span class="q-badge q1">, Q2=<span class="q-badge q2">, Q3=<span class="q-badge q3">, Q4=<span class="q-badge q4">]
-[Check-in rows use style="background:var(--bg);" and bold text]
-[Status: Q1 rows get <span class="status-indicator"><span class="status-dot" style="background:var(--cyan)"></span> Active</span>]
-[Status: Q2-Q4 rows get <span class="status-indicator"><span class="status-dot" style="background:var(--light-gray)"></span> Planned</span>]
-[Owner values: "Self", "Manager", "Both", "Self + Mgr"]
-</tbody>
-</table>
+Schema:
+{
+  "quarters": [
+    {
+      "label": "Q1 2026",
+      "range": "March-May",
+      "actions": [
+        { "action": "specific action text here", "owner": "Self", "checkin": false },
+        { "action": "Q1 Check-in: review progress with manager", "owner": "Both", "checkin": true }
+      ]
+    }
+  ]
+}
 
-Make each action SPECIFIC to their actual goals, skills, and experiences — not generic. Reference their specific words where possible. Each action should be concrete and achievable within the quarter.`;
+Rules:
+- Exactly 4 quarter objects
+- Use these quarter labels and ranges: ${qDates.map(function(q){var m=q.match(/^(.+?) \((.+?)\)$/); return m ? m[1]+'|'+m[2] : q;}).join(', ')}
+- Each quarter: 3-4 regular action objects (checkin:false) + exactly 1 check-in object (checkin:true)
+- Make every action SPECIFIC to this person's actual words — not generic career advice
+- owner values must be one of: "Self", "Manager", "Both", "Self + Mgr"`;
+
 
   try {
     // Direct call to Anthropic API routed through a CORS proxy.
@@ -2052,24 +2053,73 @@ Make each action SPECIFIC to their actual goals, skills, and experiences — not
     });
 
     var data = await response.json();
-    var text = (data.content || []).map(function(b) { return b.text || ''; }).join('');
+    var rawText = (data.content || []).map(function(b) { return b.text || ''; }).join('').trim();
 
-    // Extract table from response
-    var tableMatch = text.match(/<table[\s\S]*<\/table>/i);
-    var tableHTML = tableMatch ? tableMatch[0] : null;
+    // Strip any markdown code fences Claude might add despite instructions
+    var jsonText = rawText.replace(/^```[\w]*\n?/i, '').replace(/\n?```$/i, '').trim();
 
-    if (tableHTML) {
+    var plan;
+    try {
+      plan = JSON.parse(jsonText);
+    } catch(parseErr) {
+      // If JSON parse fails, try extracting JSON object from the text
+      var jsonMatch = jsonText.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        try { plan = JSON.parse(jsonMatch[0]); } catch(e2) { plan = null; }
+      }
+    }
+
+    if (plan && plan.quarters && plan.quarters.length) {
+      var qClasses = ['q1','q2','q3','q4'];
+      var html = '<table class="quarterly-plan"><thead><tr>' +
+        '<th style="width:120px;">Quarter</th>' +
+        '<th>Development Action</th>' +
+        '<th style="width:90px;">Owner</th>' +
+        '<th style="width:100px;">Status</th>' +
+        '</tr></thead><tbody>';
+
+      plan.quarters.forEach(function(q, qi) {
+        var acts = q.actions || [];
+        var qClass = qClasses[qi] || 'q1';
+        var isActive = qi === 0;
+        var statusDotColor = isActive ? '#00BCD4' : '#ECEFF1';
+        var statusLabel = isActive ? 'Active' : 'Planned';
+
+        acts.forEach(function(row, ri) {
+          var rowStyle = row.checkin ? ' style="background:var(--bg);"' : '';
+          html += '<tr' + rowStyle + '>';
+
+          // Quarter cell only on first row
+          if (ri === 0) {
+            html += '<td rowspan="' + acts.length + '" style="vertical-align:middle;">';
+            html += '<span class="q-badge ' + qClass + '">' + escHtml(q.label) + '</span>';
+            if (q.range) html += '<br><span style="font-size:10px;color:var(--muted);">' + escHtml(q.range) + '</span>';
+            html += '</td>';
+          }
+
+          html += '<td>' + (row.checkin ? '<strong>' : '') + escHtml(row.action) + (row.checkin ? '</strong>' : '') + '</td>';
+          html += '<td>' + escHtml(row.owner || 'Self') + '</td>';
+          html += '<td><span class="status-indicator">' +
+            '<span class="status-dot" style="background:' + statusDotColor + '"></span> ' +
+            statusLabel + '</span></td>';
+          html += '</tr>';
+        });
+      });
+
+      html += '</tbody></table>';
+
       document.getElementById('planOutput').innerHTML =
         '<div class="ai-plan-output">' +
-          '<div class="ai-plan-header">✦ AI-Generated Roadmap &nbsp;·&nbsp; Personalized by Claude</div>' +
-          tableHTML +
+          '<div class="ai-plan-header">❆ AI-Generated Roadmap &nbsp;&middot;&nbsp; Personalized by Claude</div>' +
+          html +
         '</div>';
+
     } else {
-      // Fallback: display whatever came back, wrapped nicely
+      // Complete fallback — show raw text so user can see what came back
       document.getElementById('planOutput').innerHTML =
         '<div class="ai-plan-output">' +
-          '<div class="ai-plan-header">✦ AI-Generated Roadmap</div>' +
-          '<div style="padding: 16px; font-size: 13px; line-height: 1.7; color: var(--text); white-space: pre-wrap;">' + escHtml(text) + '</div>' +
+          '<div class="ai-plan-header">❆ AI Response</div>' +
+          '<div style="padding:16px;font-size:13px;line-height:1.7;color:var(--text);white-space:pre-wrap;">' + escHtml(rawText) + '</div>' +
         '</div>';
     }
     saveAll();
