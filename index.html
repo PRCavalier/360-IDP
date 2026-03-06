@@ -1211,6 +1211,9 @@ body {
       </button>
     </div>
     <div class="toolbar-right">
+      <button class="toolbar-btn" id="apiKeyBtn" onclick="openApiKeyModal()" title="Set your Anthropic API key for AI roadmap generation">
+        🔑 API Key
+      </button>
       <button class="toolbar-btn" onclick="openResetModal()" title="Clear fields">
         ↺ Reset Fields
       </button>
@@ -1695,6 +1698,32 @@ Example:
   </div>
 </div>
 
+<!-- API KEY MODAL -->
+<div class="modal-overlay" id="apiKeyModal">
+  <div class="modal confirm-modal" style="max-width:460px;">
+    <button class="modal-close" onclick="closeModal('apiKeyModal')">&times;</button>
+    <div class="modal-header">
+      <div class="modal-icon" style="background:linear-gradient(135deg,var(--purple-light),var(--blue-light));">🔑</div>
+      <h2>Anthropic API Key</h2>
+      <p id="apiKeyModalDesc">Your key is stored only in your browser and sent directly to Anthropic — never to any third party.</p>
+    </div>
+    <div class="modal-body">
+      <div class="email-info-box" style="background:var(--purple-light);border-color:rgba(123,104,200,0.2);color:var(--purple);">
+        <strong>How to get a key:</strong> Visit <a href="https://console.anthropic.com/keys" target="_blank" style="color:var(--purple);">console.anthropic.com/keys</a> → create an API key → paste it below.
+      </div>
+      <div class="modal-field">
+        <label>API Key</label>
+        <input type="password" id="apiKeyInput" placeholder="sk-ant-api03-..." autocomplete="off" style="font-family:monospace;letter-spacing:0.5px;" onkeydown="if(event.key==='Enter')saveApiKey()">
+      </div>
+      <div id="apiKeyStatus" style="font-size:12px;color:var(--muted);margin-top:-6px;margin-bottom:8px;min-height:16px;"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="publish-btn secondary" onclick="clearApiKey()">🗑 Remove Key</button>
+      <button class="publish-btn primary" onclick="saveApiKey()">Save Key</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // ══════════════════════════════════
 // STORAGE & SAVE
@@ -1926,14 +1955,14 @@ function openModalEl(id) { openModal(id); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); document.body.style.overflow = ''; }
 
 document.addEventListener('click', function(e) {
-  ['shareModal','resetModal','versionModal'].forEach(function(id) {
+  ['shareModal','resetModal','versionModal','apiKeyModal'].forEach(function(id) {
     if (e.target.id === id) closeModal(id);
   });
 });
 
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') {
-    ['shareModal','resetModal','versionModal'].forEach(closeModal);
+    ['shareModal','resetModal','versionModal','apiKeyModal'].forEach(closeModal);
   }
 });
 
@@ -2033,39 +2062,61 @@ Rules:
 
 
   try {
-    // Direct call to Anthropic API routed through a CORS proxy.
-    // Required because GitHub Pages is a static host with no backend —
-    // browsers block direct calls to api.anthropic.com (CORS policy).
-    var API_URL = 'https://corsproxy.io/?' + encodeURIComponent('https://api.anthropic.com/v1/messages');
+    // API key stored in localStorage — user-supplied, stays in their browser only
+    var apiKey = localStorage.getItem('360idp_apikey') || '';
+    if (!apiKey) {
+      showApiKeyPrompt();
+      btn.disabled = false;
+      btn.innerHTML = '<span>\u2746</span> Generate AI Roadmap <span class="ai-badge">AI</span>';
+      document.getElementById('planOutput').innerHTML =
+        '<div class="empty-state"><div class="empty-icon">\uD83D\uDD11</div>' +
+        '<p><strong>API key required.</strong><br>' +
+        '<span style="font-size:12px;">Enter your Anthropic API key using the \u{1F511} button above to enable AI generation.</span></p></div>';
+      return;
+    }
 
-    var response = await fetch(API_URL, {
+    var DIRECT_URL = 'https://api.anthropic.com/v1/messages';
+
+    var response = await fetch(DIRECT_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'x-api-key': apiKey,
         'anthropic-version': '2023-06-01',
         'anthropic-dangerous-direct-browser-access': 'true'
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
+        max_tokens: 1500,
         messages: [{ role: 'user', content: prompt }]
       })
     });
 
+    if (response.status === 401) {
+      localStorage.removeItem('360idp_apikey');
+      showApiKeyPrompt('invalid');
+      throw new Error('Invalid API key. Please re-enter a valid Anthropic key.');
+    }
+
+    if (!response.ok) {
+      var errBody = await response.text();
+      throw new Error('API error ' + response.status + ': ' + errBody.substring(0, 300));
+    }
+
     var data = await response.json();
-    var rawText = (data.content || []).map(function(b) { return b.text || ''; }).join('').trim();
+    var content_blocks = data.content || [];
+    var rawText = content_blocks.map(function(b) { return b.text || ''; }).join('').trim();
 
-    // Strip any markdown code fences Claude might add despite instructions
-    var jsonText = rawText.replace(/^```[\w]*\n?/i, '').replace(/\n?```$/i, '').trim();
+    // Strip any markdown code fences
+    var jsonText = rawText.replace(/^```[\w]*\n?/gim, '').replace(/^```$/gim, '').trim();
 
-    var plan;
+    var plan = null;
     try {
       plan = JSON.parse(jsonText);
     } catch(parseErr) {
-      // If JSON parse fails, try extracting JSON object from the text
       var jsonMatch = jsonText.match(/\{[\s\S]*\}/);
       if (jsonMatch) {
-        try { plan = JSON.parse(jsonMatch[0]); } catch(e2) { plan = null; }
+        try { plan = JSON.parse(jsonMatch[0]); } catch(e2) {}
       }
     }
 
@@ -2088,52 +2139,43 @@ Rules:
         acts.forEach(function(row, ri) {
           var rowStyle = row.checkin ? ' style="background:var(--bg);"' : '';
           html += '<tr' + rowStyle + '>';
-
-          // Quarter cell only on first row
           if (ri === 0) {
             html += '<td rowspan="' + acts.length + '" style="vertical-align:middle;">';
             html += '<span class="q-badge ' + qClass + '">' + escHtml(q.label) + '</span>';
             if (q.range) html += '<br><span style="font-size:10px;color:var(--muted);">' + escHtml(q.range) + '</span>';
             html += '</td>';
           }
-
           html += '<td>' + (row.checkin ? '<strong>' : '') + escHtml(row.action) + (row.checkin ? '</strong>' : '') + '</td>';
           html += '<td>' + escHtml(row.owner || 'Self') + '</td>';
-          html += '<td><span class="status-indicator">' +
-            '<span class="status-dot" style="background:' + statusDotColor + '"></span> ' +
-            statusLabel + '</span></td>';
+          html += '<td><span class="status-indicator"><span class="status-dot" style="background:' + statusDotColor + '"></span> ' + statusLabel + '</span></td>';
           html += '</tr>';
         });
       });
 
       html += '</tbody></table>';
-
       document.getElementById('planOutput').innerHTML =
         '<div class="ai-plan-output">' +
-          '<div class="ai-plan-header">❆ AI-Generated Roadmap &nbsp;&middot;&nbsp; Personalized by Claude</div>' +
+          '<div class="ai-plan-header">\u2746 AI-Generated Roadmap \u00b7 Personalized by Claude</div>' +
           html +
         '</div>';
 
     } else {
-      // Complete fallback — show raw text so user can see what came back
+      // Show raw response so it's never blank — visible for debugging
       document.getElementById('planOutput').innerHTML =
         '<div class="ai-plan-output">' +
-          '<div class="ai-plan-header">❆ AI Response</div>' +
-          '<div style="padding:16px;font-size:13px;line-height:1.7;color:var(--text);white-space:pre-wrap;">' + escHtml(rawText) + '</div>' +
+          '<div class="ai-plan-header">\u2746 AI Response</div>' +
+          '<div style="padding:16px;font-size:12px;line-height:1.7;color:var(--text);white-space:pre-wrap;">' + escHtml(rawText || 'Empty response received.') + '</div>' +
         '</div>';
     }
     saveAll();
 
   } catch (err) {
-    var errMsg = err.message || 'Unknown error';
-    var hint = errMsg.toLowerCase().includes('fetch') || errMsg.toLowerCase().includes('network')
-      ? 'This is usually a network or CORS issue. Try refreshing the page, or use the "Copy Plan Text" button in the Share menu to manually paste your plan into an AI assistant.'
-      : 'Error: ' + errMsg;
+    var errMsg = String(err.message || err);
     document.getElementById('planOutput').innerHTML =
       '<div class="empty-state" style="color:var(--pink);">' +
-      '<div class="empty-icon">⚠</div>' +
-      '<p><strong>Could not generate roadmap.</strong><br>' +
-      '<span style="font-size:12px;">' + escHtml(hint) + '</span></p></div>';
+      '<div class="empty-icon">\u26A0</div>' +
+      '<p><strong>Generation failed.</strong><br>' +
+      '<span style="font-size:12px;">' + escHtml(errMsg) + '</span></p></div>';
   }
 
   btn.disabled = false;
@@ -2143,6 +2185,68 @@ Rules:
 function escHtml(str) {
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
+
+// ══════════════════════════════════
+// API KEY MANAGEMENT
+// ══════════════════════════════════
+function openApiKeyModal(mode) {
+  var existing = localStorage.getItem('360idp_apikey') || '';
+  var input = document.getElementById('apiKeyInput');
+  var desc = document.getElementById('apiKeyModalDesc');
+  var status = document.getElementById('apiKeyStatus');
+  input.value = existing ? '••••••••••••' + existing.slice(-6) : '';
+  input.placeholder = existing ? 'Key saved — enter new key to replace' : 'sk-ant-api03-...';
+  status.textContent = existing ? '✓ Key is saved' : '';
+  status.style.color = 'var(--green)';
+  if (mode === 'invalid') {
+    desc.textContent = 'Your key was rejected by Anthropic (401). Please check it and try again.';
+    status.textContent = '✗ Invalid key — please re-enter';
+    status.style.color = 'var(--pink)';
+  } else {
+    desc.textContent = 'Your key is stored only in your browser and sent directly to Anthropic — never to any third party.';
+  }
+  // Update toolbar button indicator
+  updateApiKeyBtn();
+  openModal('apiKeyModal');
+  setTimeout(function(){ if(!existing) document.getElementById('apiKeyInput').focus(); }, 100);
+}
+
+function showApiKeyPrompt(mode) { openApiKeyModal(mode); }
+
+function saveApiKey() {
+  var val = document.getElementById('apiKeyInput').value.trim();
+  if (!val || val.startsWith('••')) {
+    closeModal('apiKeyModal');
+    return;
+  }
+  if (!val.startsWith('sk-ant-')) {
+    document.getElementById('apiKeyStatus').textContent = '✗ Keys should start with sk-ant- — double-check your key';
+    document.getElementById('apiKeyStatus').style.color = 'var(--pink)';
+    return;
+  }
+  localStorage.setItem('360idp_apikey', val);
+  document.getElementById('apiKeyStatus').textContent = '✓ Key saved!';
+  document.getElementById('apiKeyStatus').style.color = 'var(--green)';
+  updateApiKeyBtn();
+  setTimeout(function(){ closeModal('apiKeyModal'); }, 800);
+}
+
+function clearApiKey() {
+  localStorage.removeItem('360idp_apikey');
+  document.getElementById('apiKeyInput').value = '';
+  document.getElementById('apiKeyStatus').textContent = 'Key removed.';
+  document.getElementById('apiKeyStatus').style.color = 'var(--muted)';
+  updateApiKeyBtn();
+}
+
+function updateApiKeyBtn() {
+  var btn = document.getElementById('apiKeyBtn');
+  if (!btn) return;
+  var hasKey = !!localStorage.getItem('360idp_apikey');
+  btn.innerHTML = hasKey ? '🔑 API Key <span style="color:var(--green);font-size:10px;">✓</span>' : '🔑 API Key';
+  btn.title = hasKey ? 'API key is set — click to manage' : 'Set your Anthropic API key for AI roadmap generation';
+}
+
 
 // ══════════════════════════════════
 // BUILD PLAN TEXT (for email/print)
@@ -2361,6 +2465,7 @@ function downloadPrintVersion() {
 // ══════════════════════════════════
 document.addEventListener('DOMContentLoaded', function() {
   loadSaved();
+  updateApiKeyBtn();
   // Auto-fill today's date if empty
   var dateEl = document.getElementById('planDate');
   if (dateEl && !dateEl.value) {
