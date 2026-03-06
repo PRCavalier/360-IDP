@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>360 IDP — Interactive Development Plan</title>
+<title>360 IDP — Individual Development Plan</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -43,8 +43,92 @@ body {
 .app {
   max-width: 960px;
   margin: 0 auto;
-  padding: 32px 24px 64px;
+  padding: 32px 24px 80px;
 }
+
+/* ── TOP TOOLBAR ── */
+.top-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: var(--white);
+  border: 1px solid var(--light-gray);
+  border-radius: var(--radius);
+  padding: 10px 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  animation: fadeUp 0.4s ease both;
+}
+
+.toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.toolbar-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 7px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid var(--light-gray);
+  background: var(--bg);
+  color: var(--text);
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.toolbar-btn:hover { background: var(--light-gray); }
+
+.toolbar-btn.danger { color: var(--pink); border-color: var(--pink-light); }
+.toolbar-btn.danger:hover { background: var(--pink-light); }
+
+.toolbar-btn.primary {
+  background: linear-gradient(135deg, var(--cyan), var(--blue));
+  color: #fff;
+  border-color: transparent;
+}
+.toolbar-btn.primary:hover {
+  box-shadow: 0 3px 12px rgba(0,188,212,0.3);
+  transform: translateY(-1px);
+}
+
+.version-selector {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.version-selector select {
+  padding: 6px 10px;
+  border: 1px solid var(--light-gray);
+  border-radius: 6px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  background: var(--bg);
+  cursor: pointer;
+  max-width: 180px;
+}
+
+.version-selector select:focus { outline: none; border-color: var(--cyan); }
 
 /* ── HEADER ── */
 .header {
@@ -95,6 +179,81 @@ body {
   max-width: 600px;
   margin: 0 auto;
 }
+
+/* ── PROGRESS BAR ── */
+.progress-bar-wrap {
+  background: var(--white);
+  border: 1px solid var(--light-gray);
+  border-radius: var(--radius);
+  padding: 14px 20px;
+  margin-bottom: 24px;
+  animation: fadeUp 0.5s ease 0.05s both;
+}
+
+.progress-bar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.progress-bar-header span {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.progress-bar-header .progress-pct {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--cyan);
+}
+
+.progress-track {
+  height: 6px;
+  background: var(--light-gray);
+  border-radius: 3px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--cyan), var(--purple));
+  border-radius: 3px;
+  transition: width 0.5s ease;
+  width: 0%;
+}
+
+.progress-fields {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.prog-field {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 10px;
+  transition: all 0.3s;
+}
+
+.prog-field .dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.prog-field.empty { background: var(--bg); color: var(--muted); }
+.prog-field.empty .dot { background: var(--light-gray); }
+.prog-field.filled { background: var(--cyan-light); color: var(--cyan); }
+.prog-field.filled .dot { background: var(--cyan); }
 
 /* ── LEGEND ── */
 .legend {
@@ -208,9 +367,7 @@ body {
 .info-field input::placeholder { color: rgba(255,255,255,0.3); }
 
 /* ── PHASE ── */
-.phase {
-  margin-bottom: 28px;
-}
+.phase { margin-bottom: 28px; }
 
 .phase-header {
   display: flex;
@@ -235,11 +392,7 @@ body {
   color: var(--dark);
 }
 
-.phase-line {
-  flex: 1;
-  height: 1px;
-  opacity: 0.2;
-}
+.phase-line { flex: 1; height: 1px; opacity: 0.2; }
 
 .phase-1 .phase-badge { background: var(--cyan-light); color: var(--cyan); }
 .phase-1 .phase-line { background: var(--cyan); }
@@ -258,6 +411,8 @@ body {
 @media (max-width: 768px) {
   .card-row { grid-template-columns: 1fr; }
   .info-grid { grid-template-columns: repeat(2, 1fr); }
+  .top-toolbar { flex-direction: column; align-items: stretch; }
+  .toolbar-left, .toolbar-right { justify-content: center; }
 }
 
 .card {
@@ -272,6 +427,29 @@ body {
 .card:hover {
   box-shadow: 0 8px 28px rgba(0,0,0,0.07);
   transform: translateY(-2px);
+}
+
+/* card reset button */
+.card-reset {
+  position: absolute;
+  top: 10px; left: 10px;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--light-gray);
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  z-index: 2;
+}
+
+.card-reset:hover {
+  background: var(--pink-light);
+  color: var(--pink);
 }
 
 .card-num {
@@ -322,7 +500,7 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
-  margin: 10px 0 10px;
+  margin: 10px 0;
 }
 
 .ltag {
@@ -359,10 +537,7 @@ body {
   border-top: 1px solid var(--light-gray);
 }
 
-.card .prompts {
-  list-style: none;
-  margin-bottom: 12px;
-}
+.card .prompts { list-style: none; margin-bottom: 12px; }
 
 .card .prompts li {
   font-size: 12px;
@@ -380,7 +555,6 @@ body {
   border-radius: 50%;
 }
 
-/* Bullet colors per card */
 .card-1 .prompts li::before { background: var(--cyan); }
 .card-2 .prompts li::before { background: var(--pink); }
 .card-3 .prompts li::before { background: var(--blue); }
@@ -389,9 +563,7 @@ body {
 .card-6 .prompts li::before { background: var(--orange); }
 
 /* ── TEXT ENTRY ── */
-.entry-area {
-  margin-top: 8px;
-}
+.entry-area { margin-top: 8px; }
 
 .entry-area textarea {
   width: 100%;
@@ -415,10 +587,7 @@ body {
   background: var(--white);
 }
 
-.entry-area textarea::placeholder {
-  color: #B0BEC5;
-  font-size: 12px;
-}
+.entry-area textarea::placeholder { color: #B0BEC5; font-size: 12px; }
 
 .entry-label {
   font-size: 10px;
@@ -430,7 +599,7 @@ body {
   display: block;
 }
 
-/* ── FULL WIDTH CARDS (7, 8, 9) ── */
+/* ── FULL WIDTH CARDS ── */
 .full-card {
   background: var(--white);
   border-radius: var(--radius);
@@ -441,15 +610,9 @@ body {
   transition: box-shadow 0.3s;
 }
 
-.full-card:hover {
-  box-shadow: 0 6px 24px rgba(0,0,0,0.06);
-}
+.full-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.06); }
 
-.full-card .card-num {
-  font-size: 52px;
-  top: 10px;
-  right: 20px;
-}
+.full-card .card-num { font-size: 52px; top: 10px; right: 20px; }
 
 .full-card-header {
   display: flex;
@@ -472,10 +635,7 @@ body {
   color: var(--muted);
 }
 
-.full-card .card-desc {
-  font-size: 13px;
-  max-width: 700px;
-}
+.full-card .card-desc { font-size: 13px; max-width: 700px; }
 
 /* ── QUARTERLY PLAN TABLE ── */
 .quarterly-plan {
@@ -532,10 +692,7 @@ body {
   font-weight: 600;
 }
 
-.status-dot {
-  width: 7px; height: 7px;
-  border-radius: 50%;
-}
+.status-dot { width: 7px; height: 7px; border-radius: 50%; }
 
 .empty-state {
   text-align: center;
@@ -553,13 +710,13 @@ body {
   opacity: 0.5;
 }
 
-/* ── GENERATE BUTTON ── */
+/* ── AI GENERATE BUTTON ── */
 .generate-btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   padding: 10px 24px;
-  background: linear-gradient(135deg, var(--cyan), var(--blue));
+  background: linear-gradient(135deg, var(--purple), var(--blue));
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -573,10 +730,65 @@ body {
 
 .generate-btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 16px rgba(0,188,212,0.3);
+  box-shadow: 0 4px 16px rgba(123,104,200,0.35);
 }
 
 .generate-btn:active { transform: translateY(0); }
+.generate-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+.ai-badge {
+  font-size: 9px;
+  font-weight: 800;
+  background: rgba(255,255,255,0.2);
+  padding: 1px 6px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+
+/* ── AI LOADING ── */
+.ai-loading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px;
+  background: var(--bg);
+  border-radius: 8px;
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.ai-spinner {
+  width: 20px; height: 20px;
+  border: 2px solid var(--light-gray);
+  border-top-color: var(--purple);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── AI PLAN OUTPUT ── */
+.ai-plan-output {
+  margin-top: 14px;
+  border: 1px solid rgba(123,104,200,0.2);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.ai-plan-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, rgba(123,104,200,0.08), rgba(74,127,191,0.06));
+  border-bottom: 1px solid rgba(123,104,200,0.15);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--purple);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
 
 /* ── DIAGNOSTIC CALLOUT ── */
 .callout {
@@ -597,18 +809,9 @@ body {
   flex-shrink: 0;
 }
 
-.callout h4 {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--pink);
-  margin-bottom: 3px;
-}
+.callout h4 { font-size: 13px; font-weight: 700; color: var(--pink); margin-bottom: 3px; }
 
-.callout p {
-  font-size: 12px;
-  color: rgba(255,255,255,0.7);
-  line-height: 1.65;
-}
+.callout p { font-size: 12px; color: rgba(255,255,255,0.7); line-height: 1.65; }
 
 /* ── FOOTER ── */
 .footer {
@@ -625,15 +828,8 @@ body {
   margin-bottom: 8px;
 }
 
-.footer .color-dots span {
-  width: 7px; height: 7px;
-  border-radius: 50%;
-}
-
-.footer p {
-  font-size: 11px;
-  color: var(--muted);
-}
+.footer .color-dots span { width: 7px; height: 7px; border-radius: 50%; }
+.footer p { font-size: 11px; color: var(--muted); }
 
 /* ── ANIMATIONS ── */
 @keyframes fadeUp {
@@ -664,10 +860,7 @@ body {
   z-index: 100;
 }
 
-.save-indicator.show {
-  opacity: 1;
-  transform: translateY(0);
-}
+.save-indicator.show { opacity: 1; transform: translateY(0); }
 
 /* ── PUBLISH SECTION ── */
 .publish-section {
@@ -699,10 +892,7 @@ body {
   flex-shrink: 0;
 }
 
-.publish-content {
-  flex: 1;
-  min-width: 200px;
-}
+.publish-content { flex: 1; min-width: 200px; }
 
 .publish-content h3 {
   font-family: 'DM Serif Display', serif;
@@ -711,17 +901,9 @@ body {
   margin-bottom: 4px;
 }
 
-.publish-content p {
-  font-size: 13px;
-  color: var(--muted);
-  line-height: 1.55;
-}
+.publish-content p { font-size: 13px; color: var(--muted); line-height: 1.55; }
 
-.publish-actions {
-  display: flex;
-  gap: 10px;
-  flex-shrink: 0;
-}
+.publish-actions { display: flex; gap: 10px; flex-shrink: 0; }
 
 .publish-btn {
   display: inline-flex;
@@ -738,34 +920,18 @@ body {
   white-space: nowrap;
 }
 
-.publish-btn:hover {
-  transform: translateY(-1px);
-}
-
+.publish-btn:hover { transform: translateY(-1px); }
 .publish-btn:active { transform: translateY(0); }
 
-.publish-btn.primary {
-  background: linear-gradient(135deg, var(--cyan), var(--blue));
-  color: #fff;
-}
+.publish-btn.primary { background: linear-gradient(135deg, var(--cyan), var(--blue)); color: #fff; }
+.publish-btn.primary:hover { box-shadow: 0 4px 16px rgba(0,188,212,0.3); }
 
-.publish-btn.primary:hover {
-  box-shadow: 0 4px 16px rgba(0,188,212,0.3);
-}
-
-.publish-btn.secondary {
-  background: var(--bg);
-  color: var(--text);
-  border: 1px solid var(--light-gray);
-}
-
-.publish-btn.secondary:hover {
-  background: var(--light-gray);
-}
+.publish-btn.secondary { background: var(--bg); color: var(--text); border: 1px solid var(--light-gray); }
+.publish-btn.secondary:hover { background: var(--light-gray); }
 
 .btn-icon { font-size: 15px; }
 
-/* ── MODAL ── */
+/* ── MODAL (shared base) ── */
 .modal-overlay {
   display: none;
   position: fixed;
@@ -778,9 +944,7 @@ body {
   padding: 24px;
 }
 
-.modal-overlay.open {
-  display: flex;
-}
+.modal-overlay.open { display: flex; }
 
 .modal {
   background: var(--white);
@@ -841,19 +1005,11 @@ body {
   margin-bottom: 6px;
 }
 
-.modal-header p {
-  font-size: 13px;
-  color: var(--muted);
-  line-height: 1.55;
-}
+.modal-header p { font-size: 13px; color: var(--muted); line-height: 1.55; }
 
-.modal-body {
-  padding: 20px 28px;
-}
+.modal-body { padding: 20px 28px; }
 
-.modal-field {
-  margin-bottom: 14px;
-}
+.modal-field { margin-bottom: 14px; }
 
 .modal-field label {
   display: block;
@@ -885,9 +1041,7 @@ body {
   background: var(--white);
 }
 
-.modal-preview-toggle {
-  margin-bottom: 10px;
-}
+.modal-preview-toggle { margin-bottom: 10px; }
 
 .preview-toggle-btn {
   background: none;
@@ -924,11 +1078,108 @@ body {
   border-top: 1px solid var(--light-gray);
 }
 
-@media (max-width: 768px) {
-  .publish-inner { flex-direction: column; text-align: center; }
-  .publish-actions { width: 100%; justify-content: center; }
-  .modal { margin: 12px; }
+/* ── CONFIRM MODAL ── */
+.confirm-modal { max-width: 420px; }
+
+.confirm-modal .modal-header { padding-bottom: 16px; }
+
+.confirm-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px 28px;
 }
+
+.confirm-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border: 1.5px solid var(--light-gray);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: var(--white);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 13px;
+  color: var(--text);
+  text-align: left;
+}
+
+.confirm-option:hover { border-color: var(--pink); background: var(--pink-light); }
+.confirm-option.selected { border-color: var(--pink); background: var(--pink-light); }
+
+.confirm-option-icon { font-size: 16px; flex-shrink: 0; }
+
+.confirm-option-text strong { display: block; font-size: 13px; margin-bottom: 1px; }
+.confirm-option-text span { font-size: 11px; color: var(--muted); }
+
+/* ── VERSION MODAL ── */
+.version-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 0 28px 8px;
+}
+
+.version-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border: 1px solid var(--light-gray);
+  border-radius: 8px;
+  background: var(--bg);
+  font-size: 13px;
+  gap: 8px;
+}
+
+.version-item-info { flex: 1; }
+.version-item-info strong { display: block; font-size: 12px; color: var(--dark); }
+.version-item-info span { font-size: 11px; color: var(--muted); }
+
+.version-item-actions { display: flex; gap: 6px; }
+
+.ver-btn {
+  padding: 4px 10px;
+  border-radius: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid var(--light-gray);
+  background: var(--white);
+  color: var(--text);
+  transition: all 0.2s;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.ver-btn:hover { background: var(--light-gray); }
+.ver-btn.restore { color: var(--cyan); border-color: var(--cyan-light); }
+.ver-btn.restore:hover { background: var(--cyan-light); }
+.ver-btn.del { color: var(--pink); border-color: var(--pink-light); }
+.ver-btn.del:hover { background: var(--pink-light); }
+
+.version-save-form {
+  padding: 12px 28px 0;
+  border-top: 1px solid var(--light-gray);
+  margin-top: 8px;
+}
+
+.version-save-form .modal-field { margin-bottom: 8px; }
+
+/* ── EMAIL INFO BOX ── */
+.email-info-box {
+  background: var(--blue-light);
+  border: 1px solid rgba(74,127,191,0.2);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-bottom: 14px;
+  font-size: 12px;
+  color: var(--blue);
+  line-height: 1.6;
+}
+
+.email-info-box strong { font-weight: 700; }
 
 /* Print styles */
 @media print {
@@ -936,7 +1187,7 @@ body {
   .app { max-width: 100%; padding: 12px; }
   .card:hover, .full-card:hover { transform: none; box-shadow: none; }
   textarea { border: 1px solid #ccc !important; }
-  .generate-btn { display: none; }
+  .generate-btn, .top-toolbar, .save-indicator, .publish-section { display: none; }
 }
 </style>
 </head>
@@ -944,11 +1195,55 @@ body {
 
 <div class="app" id="app">
 
+  <!-- TOP TOOLBAR -->
+  <div class="top-toolbar">
+    <div class="toolbar-left">
+      <div class="version-selector">
+        <span>📁</span>
+        <select id="versionSelect" onchange="loadVersion(this.value)" title="Switch between saved versions">
+          <option value="current">Current Draft</option>
+        </select>
+      </div>
+      <button class="toolbar-btn" onclick="openVersionModal()" title="Save a named snapshot of this plan">
+        💾 Save Version
+      </button>
+    </div>
+    <div class="toolbar-right">
+      <button class="toolbar-btn" onclick="openResetModal()" title="Clear fields">
+        ↺ Reset Fields
+      </button>
+      <button class="toolbar-btn primary" onclick="openShareModal()" title="Share your plan via email">
+        ✉ Share Plan
+      </button>
+    </div>
+  </div>
+
   <!-- HEADER -->
   <div class="header">
     <div class="header-label">GPS Training 360° Framework</div>
     <h1>360 IDP — The Comprehensive <em>Individual Development Plan</em></h1>
-    <p class="subtitle">9 components, 3 phases — each tagged with the learning types it activates. Complete sections 1–6, then generate your quarterly roadmap.</p>
+    <p class="subtitle">9 components, 3 phases — each tagged with the learning types it activates. Complete sections 1–6, then generate your AI-powered quarterly roadmap.</p>
+  </div>
+
+  <!-- PROGRESS BAR -->
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-header">
+      <span>Plan Completion</span>
+      <span class="progress-pct" id="progressPct">0%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <div class="progress-fields" id="progressFields">
+      <div class="prog-field empty" data-field="empName"><span class="dot"></span>Name</div>
+      <div class="prog-field empty" data-field="card1"><span class="dot"></span>Career Goals</div>
+      <div class="prog-field empty" data-field="card2"><span class="dot"></span>What I Love</div>
+      <div class="prog-field empty" data-field="card3"><span class="dot"></span>Learning Goals</div>
+      <div class="prog-field empty" data-field="card4"><span class="dot"></span>Skills</div>
+      <div class="prog-field empty" data-field="card5"><span class="dot"></span>Experiences</div>
+      <div class="prog-field empty" data-field="card6"><span class="dot"></span>Manager Support</div>
+      <div class="prog-field empty" data-field="card8"><span class="dot"></span>Wins Log</div>
+    </div>
   </div>
 
   <!-- LEGEND -->
@@ -975,7 +1270,7 @@ body {
       </div>
       <div class="info-field">
         <label>Date (MM/DD/YYYY)</label>
-        <input type="text" id="planDate" placeholder="02/23/2026" data-save="planDate">
+        <input type="text" id="planDate" placeholder="03/06/2026" data-save="planDate">
       </div>
       <div class="info-field">
         <label>Current Role</label>
@@ -986,13 +1281,13 @@ body {
         <input type="text" id="timeInRole" placeholder="e.g. 2.5" data-save="timeInRole">
       </div>
       <div class="info-field">
-        <label>Time at UiPath (Years)</label>
+        <label>Time at Company (Years)</label>
         <input type="text" id="timeAtCompany" placeholder="e.g. 4" data-save="timeAtCompany">
       </div>
     </div>
   </div>
 
-  <!-- ═══ PHASE 1: DISCOVER ═══ -->
+  <!-- PHASE 1 -->
   <div class="phase phase-1">
     <div class="phase-header">
       <span class="phase-badge">Phase 1</span>
@@ -1001,19 +1296,14 @@ body {
     </div>
     <div class="card-row">
 
-      <!-- Card 1 -->
       <div class="card card-1">
+        <button class="card-reset" onclick="resetCard('card1')" title="Clear this section">↺</button>
         <div class="card-num">1</div>
         <div class="card-top">
           <div class="card-icon" style="background:var(--cyan-light); color:var(--cyan);">⏱</div>
-          <div>
-            <h3>Career Goals</h3>
-            <div class="timeframe">3–5 Year Horizon</div>
-          </div>
+          <div><h3>Career Goals</h3><div class="timeframe">3–5 Year Horizon</div></div>
         </div>
-        <div class="learning-tags">
-          <span class="ltag ltag-self">Self-Directed</span>
-        </div>
+        <div class="learning-tags"><span class="ltag ltag-self">Self-Directed</span></div>
         <p class="card-desc">Define the future role, scope, and impact you want. Be specific — include functions, industries, leadership scope, and technical depth.</p>
         <div class="prompt-label">Guiding Questions</div>
         <ul class="prompts">
@@ -1028,20 +1318,14 @@ body {
         </div>
       </div>
 
-      <!-- Card 2 -->
       <div class="card card-2">
+        <button class="card-reset" onclick="resetCard('card2')" title="Clear this section">↺</button>
         <div class="card-num">2</div>
         <div class="card-top">
           <div class="card-icon" style="background:var(--pink-light); color:var(--pink);">♥</div>
-          <div>
-            <h3>What I Love About My Role</h3>
-            <div class="timeframe">Self-Awareness</div>
-          </div>
+          <div><h3>What I Love About My Role</h3><div class="timeframe">Self-Awareness</div></div>
         </div>
-        <div class="learning-tags">
-          <span class="ltag ltag-self">Self-Directed</span>
-          <span class="ltag ltag-feedback">External Feedback</span>
-        </div>
+        <div class="learning-tags"><span class="ltag ltag-self">Self-Directed</span><span class="ltag ltag-feedback">External Feedback</span></div>
         <p class="card-desc">Identify the activities, responsibilities, and work that energize you. This anchors future planning in genuine motivation.</p>
         <div class="prompt-label">Guiding Questions</div>
         <ul class="prompts">
@@ -1055,20 +1339,14 @@ body {
         </div>
       </div>
 
-      <!-- Card 3 -->
       <div class="card card-3">
+        <button class="card-reset" onclick="resetCard('card3')" title="Clear this section">↺</button>
         <div class="card-num">3</div>
         <div class="card-top">
           <div class="card-icon" style="background:var(--blue-light); color:var(--blue);">📖</div>
-          <div>
-            <h3>Current Learning Goals</h3>
-            <div class="timeframe">6–12 Month Focus</div>
-          </div>
+          <div><h3>Current Learning Goals</h3><div class="timeframe">6–12 Month Focus</div></div>
         </div>
-        <div class="learning-tags">
-          <span class="ltag ltag-self">Self-Directed</span>
-          <span class="ltag ltag-feedback">External Feedback</span>
-        </div>
+        <div class="learning-tags"><span class="ltag ltag-self">Self-Directed</span><span class="ltag ltag-feedback">External Feedback</span></div>
         <p class="card-desc">Clarify the concrete areas for growth right now. Align these to feedback themes, next-level performance, and future roles.</p>
         <div class="prompt-label">Guiding Questions</div>
         <ul class="prompts">
@@ -1085,7 +1363,7 @@ body {
     </div>
   </div>
 
-  <!-- ═══ PHASE 2: DEFINE ═══ -->
+  <!-- PHASE 2 -->
   <div class="phase phase-2">
     <div class="phase-header">
       <span class="phase-badge">Phase 2</span>
@@ -1094,20 +1372,14 @@ body {
     </div>
     <div class="card-row">
 
-      <!-- Card 4 -->
       <div class="card card-4">
+        <button class="card-reset" onclick="resetCard('card4')" title="Clear this section">↺</button>
         <div class="card-num">4</div>
         <div class="card-top">
           <div class="card-icon" style="background:var(--purple-light); color:var(--purple);">◆</div>
-          <div>
-            <h3>Skills I Want to Develop</h3>
-            <div class="timeframe">Competency Mapping</div>
-          </div>
+          <div><h3>Skills I Want to Develop</h3><div class="timeframe">Competency Mapping</div></div>
         </div>
-        <div class="learning-tags">
-          <span class="ltag ltag-formal">Formal Training</span>
-          <span class="ltag ltag-experiential">Experiential</span>
-        </div>
+        <div class="learning-tags"><span class="ltag ltag-formal">Formal Training</span><span class="ltag ltag-experiential">Experiential</span></div>
         <p class="card-desc">Break development into three dimensions for a holistic view of growth.</p>
         <div class="prompt-label">Three Dimensions</div>
         <ul class="prompts">
@@ -1121,20 +1393,14 @@ body {
         </div>
       </div>
 
-      <!-- Card 5 -->
       <div class="card card-5">
+        <button class="card-reset" onclick="resetCard('card5')" title="Clear this section">↺</button>
         <div class="card-num">5</div>
         <div class="card-top">
           <div class="card-icon" style="background:var(--green-light); color:var(--green);">💼</div>
-          <div>
-            <h3>Experiences I Want to Gain</h3>
-            <div class="timeframe">Stretch &amp; Exposure</div>
-          </div>
+          <div><h3>Experiences I Want to Gain</h3><div class="timeframe">Stretch &amp; Exposure</div></div>
         </div>
-        <div class="learning-tags">
-          <span class="ltag ltag-experiential">Experiential</span>
-          <span class="ltag ltag-social">Social / Observational</span>
-        </div>
+        <div class="learning-tags"><span class="ltag ltag-experiential">Experiential</span><span class="ltag ltag-social">Social / Observational</span></div>
         <p class="card-desc">Think beyond courses — exposure and stretch assignments drive the deepest growth.</p>
         <div class="prompt-label">Example Experiences</div>
         <ul class="prompts">
@@ -1149,20 +1415,14 @@ body {
         </div>
       </div>
 
-      <!-- Card 6 -->
       <div class="card card-6">
+        <button class="card-reset" onclick="resetCard('card6')" title="Clear this section">↺</button>
         <div class="card-num">6</div>
         <div class="card-top">
           <div class="card-icon" style="background:var(--orange-light); color:var(--orange);">👥</div>
-          <div>
-            <h3>Support From My Manager</h3>
-            <div class="timeframe">Partnership</div>
-          </div>
+          <div><h3>Support From My Manager</h3><div class="timeframe">Partnership</div></div>
         </div>
-        <div class="learning-tags">
-          <span class="ltag ltag-mentoring">Mentoring &amp; Coaching</span>
-          <span class="ltag ltag-feedback">External Feedback</span>
-        </div>
+        <div class="learning-tags"><span class="ltag ltag-mentoring">Mentoring &amp; Coaching</span><span class="ltag ltag-feedback">External Feedback</span></div>
         <p class="card-desc">Spell out the enablement, sponsorship, and feedback cadence required to make this plan real.</p>
         <div class="prompt-label">Types of Support</div>
         <ul class="prompts">
@@ -1180,7 +1440,7 @@ body {
     </div>
   </div>
 
-  <!-- ═══ PHASE 3: ACTIVATE ═══ -->
+  <!-- PHASE 3 -->
   <div class="phase phase-3">
     <div class="phase-header">
       <span class="phase-badge">Phase 3</span>
@@ -1188,14 +1448,14 @@ body {
       <div class="phase-line"></div>
     </div>
 
-    <!-- Card 7 — Quarterly Plan (Full Width) -->
+    <!-- Card 7 — Quarterly Plan -->
     <div class="full-card" id="card7">
       <div class="card-num">7</div>
       <div class="full-card-header">
-        <div class="card-icon" style="background:var(--cyan-light); color:var(--cyan); width:40px; height:40px; font-size:18px;">✓</div>
+        <div class="card-icon" style="background:var(--purple-light); color:var(--purple); width:40px; height:40px; font-size:18px;">✦</div>
         <div>
           <h3>Quarterly Development Plan</h3>
-          <div class="timeframe">Next 12 Months — Auto-Generated from Your Entries</div>
+          <div class="timeframe">Next 12 Months — AI-Generated from Your Entries</div>
         </div>
       </div>
       <div class="learning-tags">
@@ -1203,35 +1463,29 @@ body {
         <span class="ltag ltag-formal">Formal Training</span>
         <span class="ltag ltag-mentoring">Mentoring</span>
       </div>
-      <p class="card-desc">This quarterly roadmap is generated from your entries in Components 1–6. It maps your goals, skills, experiences, and support needs across four quarters with built-in check-in and review intervals.</p>
+      <p class="card-desc">Claude AI analyzes everything you've written across sections 1–6 and generates a personalized, specific quarterly roadmap — with real actions, timelines, and check-in milestones tailored to your goals.</p>
 
-      <button class="generate-btn" onclick="generatePlan()">
-        <span>⚡</span> Generate Quarterly Roadmap
+      <button class="generate-btn" id="generateBtn" onclick="generateAIPlan()">
+        <span>✦</span> Generate AI Roadmap <span class="ai-badge">AI</span>
       </button>
 
       <div id="planOutput">
         <div class="empty-state">
           <div class="empty-icon">📋</div>
-          Complete sections 1–6 above, then click "Generate Quarterly Roadmap" to build your 12-month plan.
+          Complete sections 1–6 above, then click "Generate AI Roadmap" to build your personalized 12-month plan.
         </div>
       </div>
     </div>
 
-    <!-- Card 8 — Wins & Progress (Full Width) -->
+    <!-- Card 8 -->
     <div class="full-card">
       <div class="card-num">8</div>
       <div class="full-card-header">
         <div class="card-icon" style="background:var(--green-light); color:var(--green); width:40px; height:40px; font-size:18px;">📈</div>
-        <div>
-          <h3>Wins &amp; Progress Log</h3>
-          <div class="timeframe">Running Record — Add Entries Over Time</div>
-        </div>
+        <div><h3>Wins &amp; Progress Log</h3><div class="timeframe">Running Record — Add Entries Over Time</div></div>
       </div>
-      <div class="learning-tags">
-        <span class="ltag ltag-self">Self-Directed</span>
-        <span class="ltag ltag-feedback">External Feedback</span>
-      </div>
-      <p class="card-desc">A running log that makes progress visible and easy to reference during reviews, calibrations, and promotion conversations. Come back and update this regularly.</p>
+      <div class="learning-tags"><span class="ltag ltag-self">Self-Directed</span><span class="ltag ltag-feedback">External Feedback</span></div>
+      <p class="card-desc">A running log that makes progress visible and easy to reference during reviews, calibrations, and promotion conversations.</p>
       <div class="entry-area">
         <label class="entry-label">Recent Progress &amp; Wins</label>
         <textarea data-save="card8" placeholder="Log your wins, milestones, and progress here. Date each entry for easy reference during reviews.
@@ -1243,30 +1497,18 @@ Example:
       </div>
     </div>
 
-    <!-- Card 9 — Future Opportunities (Full Width) -->
+    <!-- Card 9 -->
     <div class="full-card">
       <div class="card-num">9</div>
       <div class="full-card-header">
         <div class="card-icon" style="background:var(--blue-light); color:var(--blue); width:40px; height:40px; font-size:18px;">🔭</div>
-        <div>
-          <h3>Future Opportunities to Explore</h3>
-          <div class="timeframe">Longer-Term Pipeline — Revisit Quarterly</div>
-        </div>
+        <div><h3>Future Opportunities to Explore</h3><div class="timeframe">Longer-Term Pipeline — Revisit Quarterly</div></div>
       </div>
-      <div class="learning-tags">
-        <span class="ltag ltag-social">Social / Observational</span>
-        <span class="ltag ltag-self">Self-Directed</span>
-      </div>
-      <p class="card-desc">You can't tackle everything at once. This is a parking lot for ideas to revisit — keeping the roadmap dynamic and forward-looking.</p>
+      <div class="learning-tags"><span class="ltag ltag-social">Social / Observational</span><span class="ltag ltag-self">Self-Directed</span></div>
+      <p class="card-desc">A parking lot for ideas to revisit — keeping the roadmap dynamic and forward-looking.</p>
       <div class="entry-area">
         <label class="entry-label">Opportunities to Explore Later</label>
-        <textarea data-save="card9" placeholder="Roles, functions, skills, networks, or ideas you want to explore down the road...
-
-Example:
-• Explore product management track
-• Build relationships with APAC team leads
-• Investigate AI/ML certification paths
-• Shadow customer success for 2 weeks" style="min-height: 120px;"></textarea>
+        <textarea data-save="card9" placeholder="Roles, functions, skills, networks, or ideas you want to explore down the road..." style="min-height: 100px;"></textarea>
       </div>
     </div>
 
@@ -1281,64 +1523,20 @@ Example:
     </div>
   </div>
 
-  <!-- PUBLISH / SHARE SECTION -->
+  <!-- PUBLISH SECTION -->
   <div class="publish-section">
     <div class="publish-inner">
-      <div class="publish-icon">&#9993;</div>
+      <div class="publish-icon">✉</div>
       <div class="publish-content">
         <h3>Ready to Share Your Plan?</h3>
-        <p>Publish your completed IDP to share with your manager, HR partner, or coach. You can email the plan directly or download a print-ready version.</p>
+        <p>Share your completed IDP with your manager, HR partner, or coach via email, or download a print-ready version.</p>
       </div>
       <div class="publish-actions">
         <button class="publish-btn primary" onclick="openShareModal()">
-          <span class="btn-icon">&#9993;</span> Share via Email
+          <span class="btn-icon">✉</span> Share via Email
         </button>
         <button class="publish-btn secondary" onclick="downloadPrintVersion()">
-          <span class="btn-icon">&#8681;</span> Download for Print
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- SHARE MODAL -->
-  <div class="modal-overlay" id="shareModal">
-    <div class="modal">
-      <button class="modal-close" onclick="closeShareModal()">&times;</button>
-      <div class="modal-header">
-        <div class="modal-icon">&#9993;</div>
-        <h2>Share Your 360 IDP</h2>
-        <p>Enter recipients and add an optional message. Your completed plan will be included in the email body.</p>
-      </div>
-      <div class="modal-body">
-        <div class="modal-field">
-          <label>To (required)</label>
-          <input type="email" id="shareTo" placeholder="manager@uipath.com">
-        </div>
-        <div class="modal-field">
-          <label>CC (optional)</label>
-          <input type="email" id="shareCc" placeholder="hr-partner@uipath.com, coach@uipath.com">
-        </div>
-        <div class="modal-field">
-          <label>Subject</label>
-          <input type="text" id="shareSubject" placeholder="My 360 Individual Development Plan">
-        </div>
-        <div class="modal-field">
-          <label>Personal Message (optional)</label>
-          <textarea id="shareMessage" rows="3" placeholder="Hi — here is my completed 360 IDP for your review. I'd love to discuss during our next 1:1."></textarea>
-        </div>
-        <div class="modal-preview-toggle">
-          <button class="preview-toggle-btn" onclick="togglePreview()">
-            <span id="previewToggleIcon">&#9654;</span> Preview email content
-          </button>
-        </div>
-        <div class="modal-preview" id="emailPreview" style="display:none;">
-          <div id="emailPreviewContent"></div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="publish-btn secondary" onclick="closeShareModal()">Cancel</button>
-        <button class="publish-btn primary" onclick="sendEmail()">
-          <span class="btn-icon">&#9993;</span> Open in Email Client
+          <span class="btn-icon">↓</span> Download for Print
         </button>
       </div>
     </div>
@@ -1362,552 +1560,752 @@ Example:
 <!-- SAVE INDICATOR -->
 <div class="save-indicator" id="saveIndicator">✓ Saved locally</div>
 
+<!-- ══════════════════════════════════ -->
+<!-- SHARE MODAL -->
+<!-- ══════════════════════════════════ -->
+<div class="modal-overlay" id="shareModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('shareModal')">&times;</button>
+    <div class="modal-header">
+      <div class="modal-icon">✉</div>
+      <h2>Share Your 360 IDP</h2>
+      <p>Compose your email below. Your plan will open in your default mail client.</p>
+    </div>
+    <div class="modal-body">
+      <div class="email-info-box">
+        <strong>Note:</strong> This will open your computer's default email app (Outlook, Apple Mail, etc.) with the plan pre-filled. If your company uses SSO, ensure your mail client is signed in — or copy the plan text to paste directly into your browser-based mail (Gmail, Outlook Web).
+      </div>
+      <div class="modal-field">
+        <label>To (required)</label>
+        <input type="email" id="shareTo" placeholder="manager@yourcompany.com">
+      </div>
+      <div class="modal-field">
+        <label>CC (optional)</label>
+        <input type="email" id="shareCc" placeholder="hr-partner@yourcompany.com">
+      </div>
+      <div class="modal-field">
+        <label>Subject</label>
+        <input type="text" id="shareSubject" placeholder="My 360 Individual Development Plan">
+      </div>
+      <div class="modal-field">
+        <label>Personal Message (optional)</label>
+        <textarea id="shareMessage" rows="3" placeholder="Hi — here is my completed 360 IDP for your review. I'd love to discuss during our next 1:1."></textarea>
+      </div>
+      <div class="modal-preview-toggle">
+        <button class="preview-toggle-btn" onclick="togglePreview()">
+          <span id="previewToggleIcon">▶</span> Preview plan content
+        </button>
+      </div>
+      <div class="modal-preview" id="emailPreview" style="display:none;">
+        <div id="emailPreviewContent"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="publish-btn secondary" onclick="closeModal('shareModal')">Cancel</button>
+      <button class="publish-btn secondary" onclick="copyPlanToClipboard()" id="copyBtn">
+        📋 Copy Plan Text
+      </button>
+      <button class="publish-btn primary" onclick="sendEmail()">
+        ✉ Open in Email App
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════ -->
+<!-- RESET MODAL -->
+<!-- ══════════════════════════════════ -->
+<div class="modal-overlay" id="resetModal">
+  <div class="modal confirm-modal">
+    <button class="modal-close" onclick="closeModal('resetModal')">&times;</button>
+    <div class="modal-header">
+      <div class="modal-icon" style="background: linear-gradient(135deg, var(--pink-light), var(--orange-light));">↺</div>
+      <h2>Reset Fields</h2>
+      <p>Choose what you'd like to clear. This cannot be undone — consider saving a version first.</p>
+    </div>
+    <div class="confirm-options">
+      <button class="confirm-option" onclick="resetSection('phase1')">
+        <span class="confirm-option-icon">1️⃣</span>
+        <div class="confirm-option-text">
+          <strong>Phase 1 only — Discover</strong>
+          <span>Clears Career Goals, What I Love, Learning Goals</span>
+        </div>
+      </button>
+      <button class="confirm-option" onclick="resetSection('phase2')">
+        <span class="confirm-option-icon">2️⃣</span>
+        <div class="confirm-option-text">
+          <strong>Phase 2 only — Define</strong>
+          <span>Clears Skills, Experiences, Manager Support</span>
+        </div>
+      </button>
+      <button class="confirm-option" onclick="resetSection('phase3')">
+        <span class="confirm-option-icon">3️⃣</span>
+        <div class="confirm-option-text">
+          <strong>Phase 3 only — Activate</strong>
+          <span>Clears Wins Log, Future Opportunities, and the generated roadmap</span>
+        </div>
+      </button>
+      <button class="confirm-option" onclick="resetSection('plan_details')">
+        <span class="confirm-option-icon">👤</span>
+        <div class="confirm-option-text">
+          <strong>Plan Details only</strong>
+          <span>Clears name, manager, role, and date fields</span>
+        </div>
+      </button>
+      <button class="confirm-option" style="border-color: var(--pink);" onclick="resetSection('all')">
+        <span class="confirm-option-icon">🗑</span>
+        <div class="confirm-option-text">
+          <strong>Reset everything</strong>
+          <span>Wipes all fields and the generated roadmap</span>
+        </div>
+      </button>
+    </div>
+    <div class="modal-footer">
+      <button class="publish-btn secondary" onclick="closeModal('resetModal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════ -->
+<!-- VERSION MODAL -->
+<!-- ══════════════════════════════════ -->
+<div class="modal-overlay" id="versionModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('versionModal')">&times;</button>
+    <div class="modal-header">
+      <div class="modal-icon" style="background: linear-gradient(135deg, var(--green-light), var(--cyan-light));">💾</div>
+      <h2>Version History</h2>
+      <p>Save named snapshots of your plan and restore them any time.</p>
+    </div>
+    <div id="versionListContainer" class="version-list" style="padding-top: 16px;">
+      <!-- populated by JS -->
+    </div>
+    <div class="version-save-form">
+      <div class="modal-field">
+        <label>Save current plan as a new version</label>
+        <input type="text" id="versionNameInput" placeholder="e.g. Q1 2026 draft, After manager review...">
+      </div>
+      <div class="modal-footer" style="padding: 0 0 20px; border: none;">
+        <button class="publish-btn secondary" onclick="closeModal('versionModal')">Close</button>
+        <button class="publish-btn primary" onclick="saveVersion()">💾 Save Version</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
+// ══════════════════════════════════
+// STORAGE & SAVE
+// ══════════════════════════════════
 var STORAGE_KEY = '360idp_data';
+var VERSIONS_KEY = '360idp_versions';
 var saveTimeout = null;
+var currentVersionName = 'Current Draft';
+
+function getAllFields() {
+  var fields = document.querySelectorAll('[data-save]');
+  var data = {};
+  for (var i = 0; i < fields.length; i++) {
+    data[fields[i].getAttribute('data-save')] = fields[i].value;
+  }
+  return data;
+}
+
+function applyFields(data) {
+  var fields = document.querySelectorAll('[data-save]');
+  for (var i = 0; i < fields.length; i++) {
+    var key = fields[i].getAttribute('data-save');
+    fields[i].value = data[key] || '';
+  }
+}
 
 function loadSaved() {
   try {
     var raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return;
     var data = JSON.parse(raw);
-    var fields = document.querySelectorAll('[data-save]');
-    for (var i = 0; i < fields.length; i++) {
-      var key = fields[i].getAttribute('data-save');
-      if (data[key]) fields[i].value = data[key];
-    }
+    applyFields(data);
     if (data._generatedPlan) {
       document.getElementById('planOutput').innerHTML = data._generatedPlan;
     }
   } catch(e) {}
+  updateProgress();
+  refreshVersionDropdown();
 }
 
 function saveAll() {
   try {
-    var data = {};
-    var fields = document.querySelectorAll('[data-save]');
-    for (var i = 0; i < fields.length; i++) {
-      data[fields[i].getAttribute('data-save')] = fields[i].value;
-    }
+    var data = getAllFields();
     var planHTML = document.getElementById('planOutput').innerHTML;
     if (planHTML.indexOf('empty-state') === -1) {
       data._generatedPlan = planHTML;
     }
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-    showSaveIndicator();
+    showToast('✓ Saved locally');
+    updateProgress();
   } catch(e) {}
 }
 
-function showSaveIndicator() {
+function showToast(msg, duration) {
   var el = document.getElementById('saveIndicator');
+  el.textContent = msg || '✓ Saved locally';
   el.classList.add('show');
-  setTimeout(function() { el.classList.remove('show'); }, 1500);
+  setTimeout(function() { el.classList.remove('show'); }, duration || 1800);
 }
 
 document.addEventListener('input', function() {
   clearTimeout(saveTimeout);
-  saveTimeout = setTimeout(saveAll, 800);
+  saveTimeout = setTimeout(saveAll, 700);
 });
 
-function generatePlan() {
-  try {
-    var fields = document.querySelectorAll('[data-save]');
-    var vals = {};
-    for (var f = 0; f < fields.length; f++) {
-      vals[fields[f].getAttribute('data-save')] = fields[f].value.trim();
+// ══════════════════════════════════
+// PROGRESS BAR
+// ══════════════════════════════════
+function updateProgress() {
+  var trackFields = ['empName','card1','card2','card3','card4','card5','card6','card8'];
+  var filled = 0;
+  trackFields.forEach(function(key) {
+    var el = document.querySelector('[data-save="' + key + '"]');
+    var val = el ? el.value.trim() : '';
+    var indicator = document.querySelector('.prog-field[data-field="' + key + '"]');
+    if (indicator) {
+      indicator.className = 'prog-field ' + (val.length > 3 ? 'filled' : 'empty');
     }
-
-    var goals = vals.card1 || '';
-    var learning = vals.card3 || '';
-    var skills = vals.card4 || '';
-    var experiences = vals.card5 || '';
-    var support = vals.card6 || '';
-    var planDate = vals.planDate || '';
-
-    if (!goals && !learning && !skills && !experiences) {
-      document.getElementById('planOutput').innerHTML =
-        '<div class="empty-state"><div class="empty-icon" style="font-size:24px;margin-bottom:8px;">&#9888;</div>' +
-        '<p>Please complete at least one of sections 1, 3, 4, or 5 before generating.</p></div>';
-      return;
-    }
-
-    var startDate = new Date();
-    if (planDate) {
-      var parts = planDate.split('/');
-      if (parts.length === 3) {
-        var yr = parseInt(parts[2], 10);
-        var mo = parseInt(parts[0], 10) - 1;
-        var dy = parseInt(parts[1], 10);
-        var parsed = new Date(yr, mo, dy);
-        if (!isNaN(parsed.getTime())) startDate = parsed;
-      }
-    }
-
-    var mNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    var qLabels = [];
-    for (var i = 0; i < 4; i++) {
-      var d = new Date(startDate.getTime());
-      d.setMonth(d.getMonth() + (i * 3));
-      var qNum = Math.ceil((d.getMonth() + 1) / 3);
-      var ed = new Date(d.getTime());
-      ed.setMonth(ed.getMonth() + 2);
-      qLabels.push({
-        q: 'Q' + qNum, year: d.getFullYear(),
-        range: mNames[d.getMonth()] + ' - ' + mNames[ed.getMonth()],
-        cls: 'q' + (i + 1)
-      });
-    }
-
-    function extract(text) {
-      if (!text) return [];
-      var lines = text.split('\n');
-      var out = [];
-      for (var j = 0; j < lines.length; j++) {
-        var c = lines[j].replace(/^[\s\-\*\u2022\d\.)\]]+/, '').trim();
-        if (c.length > 2) out.push(c);
-      }
-      if (out.length <= 1 && text.length > 30) {
-        var sents = text.split(/[\.;]/);
-        out = [];
-        for (var k = 0; k < sents.length; k++) {
-          var s = sents[k].trim();
-          if (s.length > 5) out.push(s);
-        }
-      }
-      if (out.length === 0 && text.trim().length > 2) out.push(text.trim());
-      return out;
-    }
-
-    var gi = extract(goals);
-    var li = extract(learning);
-    var si = extract(skills);
-    var ei = extract(experiences);
-    var ui = extract(support);
-
-    function sg(arr, idx) {
-      if (!arr || arr.length === 0) return '';
-      return arr[Math.min(idx, arr.length - 1)];
-    }
-
-    var Q = [[], [], [], []];
-
-    // Q1
-    if (li.length) Q[0].push({a: 'Begin: ' + sg(li,0), o: 'Self', c: false});
-    if (si.length) Q[0].push({a: 'Skill focus: ' + sg(si,0), o: 'Self', c: false});
-    if (ui.length) Q[0].push({a: 'Establish: ' + sg(ui,0), o: 'Manager', c: false});
-    if (gi.length && !li.length && !si.length) Q[0].push({a: 'Define milestones toward: ' + sg(gi,0), o: 'Self', c: false});
-    Q[0].push({a: 'Q1 Check-in: Align IDP priorities with manager', o: 'Both', c: true});
-
-    // Q2
-    if (ei.length) Q[1].push({a: 'Begin: ' + sg(ei,0), o: 'Self + Mgr', c: false});
-    if (si.length) Q[1].push({a: 'Skill focus: ' + sg(si,1), o: 'Self', c: false});
-    if (li.length) Q[1].push({a: 'Continue: ' + sg(li,1), o: 'Self', c: false});
-    if (!ei.length && gi.length) Q[1].push({a: 'Progress toward: ' + sg(gi,0), o: 'Self', c: false});
-    Q[1].push({a: 'Q2 Check-in: Mid-year review, assess progress and adjust', o: 'Both', c: true});
-
-    // Q3
-    if (ei.length) Q[2].push({a: 'Pursue: ' + sg(ei,1), o: 'Self + Mgr', c: false});
-    if (si.length) Q[2].push({a: 'Skill focus: ' + sg(si,2), o: 'Self', c: false});
-    if (ui.length) Q[2].push({a: 'Leverage: ' + sg(ui,1), o: 'Manager', c: false});
-    if (!ei.length && li.length) Q[2].push({a: 'Advance: ' + sg(li,0), o: 'Self', c: false});
-    Q[2].push({a: 'Q3 Check-in: Assess growth against career goals', o: 'Both', c: true});
-
-    // Q4
-    if (gi.length) Q[3].push({a: 'Progress toward: ' + sg(gi,0), o: 'Self', c: false});
-    if (ei.length) Q[3].push({a: 'Complete: ' + sg(ei,2), o: 'Self', c: false});
-    if (li.length) Q[3].push({a: 'Finalize: ' + sg(li,2), o: 'Self', c: false});
-    if (!gi.length && si.length) Q[3].push({a: 'Apply and demonstrate: ' + sg(si,0), o: 'Self', c: false});
-    Q[3].push({a: 'Q4 Review: Celebrate wins and set next-year IDP', o: 'Both', c: true});
-
-    var html = '<table class="quarterly-plan"><thead><tr>' +
-      '<th style="width:110px;">Quarter</th><th>Development Action</th>' +
-      '<th style="width:100px;">Owner</th><th style="width:100px;">Status</th>' +
-      '</tr></thead><tbody>';
-
-    for (var qi = 0; qi < 4; qi++) {
-      var acts = Q[qi];
-      for (var idx = 0; idx < acts.length; idx++) {
-        var row = acts[idx];
-        html += '<tr';
-        if (row.c) html += ' style="background:var(--bg);"';
-        html += '>';
-        if (idx === 0) {
-          html += '<td rowspan="' + acts.length + '" style="vertical-align:middle;">';
-          html += '<span class="q-badge ' + qLabels[qi].cls + '">' + qLabels[qi].q + ' ' + qLabels[qi].year + '</span>';
-          html += '<br><span style="font-size:10px;color:var(--muted);">' + qLabels[qi].range + '</span></td>';
-        }
-        html += '<td>';
-        if (row.c) html += '<strong>';
-        html += row.a;
-        if (row.c) html += '</strong>';
-        html += '</td>';
-        html += '<td>' + row.o + '</td>';
-        html += '<td><span class="status-indicator">';
-        html += '<span class="status-dot" style="background:' + (qi === 0 ? 'var(--cyan)' : 'var(--light-gray)') + '"></span> ';
-        html += (qi === 0 ? 'Active' : 'Planned');
-        html += '</span></td></tr>';
-      }
-    }
-
-    html += '</tbody></table>';
-    document.getElementById('planOutput').innerHTML = html;
-    saveAll();
-
-  } catch(err) {
-    document.getElementById('planOutput').innerHTML =
-      '<div class="empty-state" style="color:#E8588C;"><p><strong>Error:</strong> ' + err.message + '</p></div>';
-  }
+    if (val.length > 3) filled++;
+  });
+  var pct = Math.round((filled / trackFields.length) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressPct').textContent = pct + '%';
 }
 
-document.addEventListener('DOMContentLoaded', loadSaved);
+// ══════════════════════════════════
+// RESET / CLEAR
+// ══════════════════════════════════
+var SECTION_FIELDS = {
+  plan_details: ['empName','mgrName','planDate','currentRole','timeInRole','timeAtCompany'],
+  phase1: ['card1','card2','card3'],
+  phase2: ['card4','card5','card6'],
+  phase3: ['card8','card9'],
+  all: ['empName','mgrName','planDate','currentRole','timeInRole','timeAtCompany',
+        'card1','card2','card3','card4','card5','card6','card8','card9']
+};
+
+function resetSection(section) {
+  var keys = SECTION_FIELDS[section] || [];
+  keys.forEach(function(key) {
+    var el = document.querySelector('[data-save="' + key + '"]');
+    if (el) el.value = '';
+  });
+  if (section === 'phase3' || section === 'all') {
+    document.getElementById('planOutput').innerHTML =
+      '<div class="empty-state"><div class="empty-icon">📋</div>Complete sections 1–6 above, then click "Generate AI Roadmap" to build your personalized 12-month plan.</div>';
+  }
+  saveAll();
+  closeModal('resetModal');
+  showToast('↺ Fields cleared');
+}
+
+function resetCard(key) {
+  var el = document.querySelector('[data-save="' + key + '"]');
+  if (el) { el.value = ''; saveAll(); showToast('↺ Section cleared'); }
+}
 
 // ══════════════════════════════════
-// SHARE / PUBLISH
+// VERSION SYSTEM
 // ══════════════════════════════════
+function getVersions() {
+  try {
+    return JSON.parse(localStorage.getItem(VERSIONS_KEY) || '[]');
+  } catch(e) { return []; }
+}
 
+function saveVersions(versions) {
+  localStorage.setItem(VERSIONS_KEY, JSON.stringify(versions));
+}
+
+function saveVersion() {
+  var name = document.getElementById('versionNameInput').value.trim();
+  if (!name) { document.getElementById('versionNameInput').focus(); return; }
+  var versions = getVersions();
+  var data = getAllFields();
+  var planHTML = document.getElementById('planOutput').innerHTML;
+  if (planHTML.indexOf('empty-state') === -1) data._generatedPlan = planHTML;
+  versions.unshift({
+    id: Date.now(),
+    name: name,
+    date: new Date().toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'}),
+    time: new Date().toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit'}),
+    data: data
+  });
+  // Keep max 20 versions
+  if (versions.length > 20) versions = versions.slice(0, 20);
+  saveVersions(versions);
+  document.getElementById('versionNameInput').value = '';
+  renderVersionList();
+  refreshVersionDropdown();
+  showToast('💾 Version saved: ' + name);
+}
+
+function loadVersion(id) {
+  if (!id || id === 'current') return;
+  var versions = getVersions();
+  var ver = versions.find(function(v) { return String(v.id) === String(id); });
+  if (!ver) return;
+  applyFields(ver.data);
+  if (ver.data._generatedPlan) {
+    document.getElementById('planOutput').innerHTML = ver.data._generatedPlan;
+  } else {
+    document.getElementById('planOutput').innerHTML =
+      '<div class="empty-state"><div class="empty-icon">📋</div>No generated plan in this version.</div>';
+  }
+  saveAll();
+  showToast('✓ Loaded: ' + ver.name);
+  // Reset selector to "current"
+  document.getElementById('versionSelect').value = 'current';
+}
+
+function deleteVersion(id) {
+  var versions = getVersions().filter(function(v) { return String(v.id) !== String(id); });
+  saveVersions(versions);
+  renderVersionList();
+  refreshVersionDropdown();
+  showToast('🗑 Version deleted');
+}
+
+function renderVersionList() {
+  var versions = getVersions();
+  var container = document.getElementById('versionListContainer');
+  if (!versions.length) {
+    container.innerHTML = '<div style="text-align:center; padding: 20px; color: var(--muted); font-size:13px;">No saved versions yet.<br><span style="font-size:11px;">Save your first version below.</span></div>';
+    return;
+  }
+  container.innerHTML = versions.map(function(v) {
+    return '<div class="version-item">' +
+      '<div class="version-item-info">' +
+        '<strong>' + escHtml(v.name) + '</strong>' +
+        '<span>' + v.date + ' at ' + v.time + '</span>' +
+      '</div>' +
+      '<div class="version-item-actions">' +
+        '<button class="ver-btn restore" onclick="loadVersionFromModal(' + v.id + ')">Restore</button>' +
+        '<button class="ver-btn del" onclick="deleteVersion(' + v.id + ')">Delete</button>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function loadVersionFromModal(id) {
+  loadVersion(id);
+  closeModal('versionModal');
+}
+
+function refreshVersionDropdown() {
+  var sel = document.getElementById('versionSelect');
+  var versions = getVersions();
+  // Keep first option
+  while (sel.options.length > 1) sel.remove(1);
+  versions.forEach(function(v) {
+    var opt = document.createElement('option');
+    opt.value = v.id;
+    opt.textContent = v.name + ' (' + v.date + ')';
+    sel.appendChild(opt);
+  });
+}
+
+function openVersionModal() {
+  renderVersionList();
+  openModalEl('versionModal');
+}
+
+// ══════════════════════════════════
+// MODAL HELPERS
+// ══════════════════════════════════
+function openModal(id) { document.getElementById(id).classList.add('open'); document.body.style.overflow = 'hidden'; }
+function openModalEl(id) { openModal(id); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); document.body.style.overflow = ''; }
+
+document.addEventListener('click', function(e) {
+  ['shareModal','resetModal','versionModal'].forEach(function(id) {
+    if (e.target.id === id) closeModal(id);
+  });
+});
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    ['shareModal','resetModal','versionModal'].forEach(closeModal);
+  }
+});
+
+// ══════════════════════════════════
+// AI PLAN GENERATION
+// ══════════════════════════════════
 function getFieldVal(key) {
   var el = document.querySelector('[data-save="' + key + '"]');
   return el ? el.value.trim() : '';
 }
 
+async function generateAIPlan() {
+  var goals = getFieldVal('card1');
+  var loves = getFieldVal('card2');
+  var learning = getFieldVal('card3');
+  var skills = getFieldVal('card4');
+  var experiences = getFieldVal('card5');
+  var support = getFieldVal('card6');
+  var role = getFieldVal('currentRole');
+  var name = getFieldVal('empName');
+  var timeInRole = getFieldVal('timeInRole');
+  var planDate = getFieldVal('planDate');
+
+  if (!goals && !learning && !skills && !experiences) {
+    document.getElementById('planOutput').innerHTML =
+      '<div class="empty-state"><div class="empty-icon" style="font-size:24px;">⚠</div>' +
+      '<p>Please complete at least sections 1, 3, 4, or 5 before generating your roadmap.</p></div>';
+    return;
+  }
+
+  // Show loading state
+  var btn = document.getElementById('generateBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="ai-spinner" style="width:14px;height:14px;border-width:2px;"></div> Generating your plan...';
+
+  document.getElementById('planOutput').innerHTML =
+    '<div class="ai-loading"><div class="ai-spinner"></div>Claude is analyzing your inputs and building a personalized quarterly roadmap...</div>';
+
+  // Build date context
+  var startDate = new Date();
+  if (planDate) {
+    var parts = planDate.split('/');
+    if (parts.length === 3) {
+      var parsed = new Date(parseInt(parts[2]), parseInt(parts[0])-1, parseInt(parts[1]));
+      if (!isNaN(parsed.getTime())) startDate = parsed;
+    }
+  }
+  var mNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var qDates = [];
+  for (var i = 0; i < 4; i++) {
+    var d = new Date(startDate);
+    d.setMonth(d.getMonth() + (i * 3));
+    var ed = new Date(d); ed.setMonth(ed.getMonth() + 2);
+    var qNum = Math.ceil((d.getMonth() + 1) / 3);
+    qDates.push('Q' + qNum + ' ' + d.getFullYear() + ' (' + mNames[d.getMonth()] + '–' + mNames[ed.getMonth()] + ')');
+  }
+
+  var prompt = `You are a career development expert helping create a personalized quarterly Individual Development Plan (IDP).
+
+EMPLOYEE CONTEXT:
+${name ? '- Name: ' + name : ''}
+${role ? '- Current Role: ' + role : ''}
+${timeInRole ? '- Time in Role: ' + timeInRole + ' years' : ''}
+- Plan Start: ${startDate.toLocaleDateString('en-US', {month:'long', year:'numeric'})}
+
+THEIR INPUTS:
+${goals ? '1. CAREER GOALS (3-5 year):\n' + goals : ''}
+${loves ? '\n2. WHAT THEY LOVE ABOUT THEIR ROLE:\n' + loves : ''}
+${learning ? '\n3. CURRENT LEARNING GOALS (6-12 month):\n' + learning : ''}
+${skills ? '\n4. SKILLS TO DEVELOP:\n' + skills : ''}
+${experiences ? '\n5. EXPERIENCES TO GAIN:\n' + experiences : ''}
+${support ? '\n6. MANAGER SUPPORT NEEDED:\n' + support : ''}
+
+Create a specific, actionable quarterly roadmap for the next 12 months. Format your response as an HTML table ONLY — no preamble, no explanation outside the table.
+
+Use this EXACT HTML structure:
+<table class="quarterly-plan">
+<thead><tr>
+<th style="width:120px;">Quarter</th>
+<th>Development Actions</th>
+<th style="width:90px;">Owner</th>
+<th style="width:90px;">Status</th>
+</tr></thead>
+<tbody>
+[FOR EACH OF THE 4 QUARTERS: ${qDates.join(', ')}]
+[Each quarter should have 3-4 action rows + 1 check-in row]
+[First action row uses rowspan on the quarter cell]
+[Quarter badges: Q1=<span class="q-badge q1">, Q2=<span class="q-badge q2">, Q3=<span class="q-badge q3">, Q4=<span class="q-badge q4">]
+[Check-in rows use style="background:var(--bg);" and bold text]
+[Status: Q1 rows get <span class="status-indicator"><span class="status-dot" style="background:var(--cyan)"></span> Active</span>]
+[Status: Q2-Q4 rows get <span class="status-indicator"><span class="status-dot" style="background:var(--light-gray)"></span> Planned</span>]
+[Owner values: "Self", "Manager", "Both", "Self + Mgr"]
+</tbody>
+</table>
+
+Make each action SPECIFIC to their actual goals, skills, and experiences — not generic. Reference their specific words where possible. Each action should be concrete and achievable within the quarter.`;
+
+  try {
+    var response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    var data = await response.json();
+    var text = (data.content || []).map(function(b) { return b.text || ''; }).join('');
+
+    // Extract table from response
+    var tableMatch = text.match(/<table[\s\S]*<\/table>/i);
+    var tableHTML = tableMatch ? tableMatch[0] : null;
+
+    if (tableHTML) {
+      document.getElementById('planOutput').innerHTML =
+        '<div class="ai-plan-output">' +
+          '<div class="ai-plan-header">✦ AI-Generated Roadmap &nbsp;·&nbsp; Personalized by Claude</div>' +
+          tableHTML +
+        '</div>';
+    } else {
+      // Fallback: display whatever came back, wrapped nicely
+      document.getElementById('planOutput').innerHTML =
+        '<div class="ai-plan-output">' +
+          '<div class="ai-plan-header">✦ AI-Generated Roadmap</div>' +
+          '<div style="padding: 16px; font-size: 13px; line-height: 1.7; color: var(--text); white-space: pre-wrap;">' + escHtml(text) + '</div>' +
+        '</div>';
+    }
+    saveAll();
+
+  } catch (err) {
+    document.getElementById('planOutput').innerHTML =
+      '<div class="empty-state" style="color:var(--pink);">' +
+      '<div class="empty-icon">⚠</div>' +
+      '<p><strong>Could not connect to AI.</strong><br>' +
+      '<span style="font-size:12px;">Check your connection and try again. Error: ' + escHtml(err.message) + '</span></p></div>';
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = '<span>✦</span> Regenerate AI Roadmap <span class="ai-badge">AI</span>';
+}
+
+function escHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ══════════════════════════════════
+// BUILD PLAN TEXT (for email/print)
+// ══════════════════════════════════
 function buildPlanText() {
   var lines = [];
   var sep = '────────────────────────────────────────';
-
-  lines.push('360 IDP - INDIVIDUAL DEVELOPMENT PLAN');
+  lines.push('360 IDP — INDIVIDUAL DEVELOPMENT PLAN');
   lines.push('GPS Training 360 Framework');
-  lines.push(sep);
-  lines.push('');
-
-  // Plan Details
-  var empName = getFieldVal('empName');
-  var mgrName = getFieldVal('mgrName');
-  var planDate = getFieldVal('planDate');
-  var role = getFieldVal('currentRole');
-  var timeRole = getFieldVal('timeInRole');
-  var timeCompany = getFieldVal('timeAtCompany');
-
-  if (empName) lines.push('Employee: ' + empName);
-  if (mgrName) lines.push('Manager: ' + mgrName);
-  if (planDate) lines.push('Date: ' + planDate);
-  if (role) lines.push('Current Role: ' + role);
-  if (timeRole) lines.push('Time in Role: ' + timeRole + ' years');
-  if (timeCompany) lines.push('Time at UiPath: ' + timeCompany + ' years');
-  lines.push('');
-  lines.push(sep);
-
-  // Phase 1
-  lines.push('');
-  lines.push('PHASE 1: DISCOVER - KNOW YOURSELF');
-  lines.push('');
-
-  var c1 = getFieldVal('card1');
-  if (c1) {
-    lines.push('[1] Career Goals (3-5 Year Horizon)');
-    lines.push(c1);
-    lines.push('');
-  }
-
-  var c2 = getFieldVal('card2');
-  if (c2) {
-    lines.push('[2] What I Love About My Role');
-    lines.push(c2);
-    lines.push('');
-  }
-
-  var c3 = getFieldVal('card3');
-  if (c3) {
-    lines.push('[3] Current Learning Goals (6-12 Month Focus)');
-    lines.push(c3);
-    lines.push('');
-  }
-
-  // Phase 2
-  lines.push(sep);
-  lines.push('');
-  lines.push('PHASE 2: DEFINE - BUILD THE PLAN');
-  lines.push('');
-
-  var c4 = getFieldVal('card4');
-  if (c4) {
-    lines.push('[4] Skills I Want to Develop');
-    lines.push(c4);
-    lines.push('');
-  }
-
-  var c5 = getFieldVal('card5');
-  if (c5) {
-    lines.push('[5] Experiences I Want to Gain');
-    lines.push(c5);
-    lines.push('');
-  }
-
-  var c6 = getFieldVal('card6');
-  if (c6) {
-    lines.push('[6] Support From My Manager');
-    lines.push(c6);
-    lines.push('');
-  }
-
-  // Phase 3 - Quarterly Plan
-  lines.push(sep);
-  lines.push('');
-  lines.push('PHASE 3: ACTIVATE - EXECUTE & EVOLVE');
-  lines.push('');
-  lines.push('[7] Quarterly Development Plan');
-
+  lines.push(sep); lines.push('');
+  var flds = [['Employee', 'empName'],['Manager','mgrName'],['Date','planDate'],
+              ['Current Role','currentRole'],['Time in Role','timeInRole'],['Time at Company','timeAtCompany']];
+  flds.forEach(function(f) {
+    var v = getFieldVal(f[1]);
+    if (v) lines.push(f[0] + ': ' + v + (f[1]==='timeInRole'||f[1]==='timeAtCompany' ? ' years' : ''));
+  });
+  lines.push(''); lines.push(sep); lines.push('');
+  lines.push('PHASE 1: DISCOVER — KNOW YOURSELF'); lines.push('');
+  [['1. Career Goals (3-5 Year Horizon)','card1'],
+   ['2. What I Love About My Role','card2'],
+   ['3. Current Learning Goals (6-12 Month Focus)','card3']].forEach(function(s) {
+    var v = getFieldVal(s[1]); if (v) { lines.push(s[0]); lines.push(v); lines.push(''); }
+  });
+  lines.push(sep); lines.push('');
+  lines.push('PHASE 2: DEFINE — BUILD THE PLAN'); lines.push('');
+  [['4. Skills I Want to Develop','card4'],
+   ['5. Experiences I Want to Gain','card5'],
+   ['6. Support From My Manager','card6']].forEach(function(s) {
+    var v = getFieldVal(s[1]); if (v) { lines.push(s[0]); lines.push(v); lines.push(''); }
+  });
+  lines.push(sep); lines.push('');
+  lines.push('PHASE 3: ACTIVATE — EXECUTE & EVOLVE'); lines.push('');
+  lines.push('7. Quarterly Development Plan');
   var planEl = document.getElementById('planOutput');
   if (planEl && planEl.querySelector('table')) {
     var rows = planEl.querySelectorAll('tbody tr');
-    var currentQ = '';
-    for (var r = 0; r < rows.length; r++) {
-      var cells = rows[r].querySelectorAll('td');
-      for (var c = 0; c < cells.length; c++) {
-        var badge = cells[c].querySelector('.q-badge');
-        if (badge) {
-          currentQ = badge.textContent.trim();
-          lines.push('');
-          lines.push('  ' + currentQ);
-        } else {
-          var txt = cells[c].textContent.trim();
-          if (txt && txt !== 'Active' && txt !== 'Planned' && txt !== 'Self' && txt !== 'Both' && txt !== 'Manager' && txt.indexOf('Self +') === -1) {
-            lines.push('    - ' + txt);
-          }
+    rows.forEach(function(row) {
+      var cells = row.querySelectorAll('td');
+      var qBadge = row.querySelector('.q-badge');
+      if (qBadge) { lines.push(''); lines.push('  ' + qBadge.textContent.trim()); }
+      cells.forEach(function(cell) {
+        if (!cell.querySelector('.q-badge') && !cell.querySelector('.status-indicator')) {
+          var t = cell.textContent.trim();
+          if (t) lines.push('    • ' + t);
         }
-      }
-    }
-  } else {
-    lines.push('  (Not yet generated)');
-  }
+      });
+    });
+  } else { lines.push('  (Not yet generated)'); }
   lines.push('');
-
-  var c8 = getFieldVal('card8');
-  if (c8) {
-    lines.push('[8] Wins & Progress Log');
-    lines.push(c8);
-    lines.push('');
-  }
-
-  var c9 = getFieldVal('card9');
-  if (c9) {
-    lines.push('[9] Future Opportunities to Explore');
-    lines.push(c9);
-    lines.push('');
-  }
-
-  lines.push(sep);
-  lines.push('GPS Training 360');
-
+  var c8 = getFieldVal('card8'); if (c8) { lines.push('8. Wins & Progress Log'); lines.push(c8); lines.push(''); }
+  var c9 = getFieldVal('card9'); if (c9) { lines.push('9. Future Opportunities to Explore'); lines.push(c9); lines.push(''); }
+  lines.push(sep); lines.push('GPS Training 360°');
   return lines.join('\n');
 }
 
+// ══════════════════════════════════
+// SHARE / EMAIL
+// ══════════════════════════════════
 function openShareModal() {
   var empName = getFieldVal('empName');
   var subjectEl = document.getElementById('shareSubject');
   if (subjectEl && !subjectEl.value) {
-    var subj = '360 IDP';
-    if (empName) subj += ' - ' + empName;
-    subjectEl.value = subj;
+    subjectEl.value = '360 IDP' + (empName ? ' — ' + empName : '');
   }
-  document.getElementById('shareModal').classList.add('open');
-  document.body.style.overflow = 'hidden';
+  openModal('shareModal');
 }
 
-function closeShareModal() {
-  document.getElementById('shareModal').classList.remove('open');
-  document.body.style.overflow = '';
-}
+function openResetModal() { openModal('resetModal'); }
 
 function togglePreview() {
   var preview = document.getElementById('emailPreview');
   var icon = document.getElementById('previewToggleIcon');
   if (preview.style.display === 'none') {
     preview.style.display = 'block';
-    icon.innerHTML = '&#9660;';
+    icon.textContent = '▼';
     document.getElementById('emailPreviewContent').textContent = buildPlanText();
   } else {
     preview.style.display = 'none';
-    icon.innerHTML = '&#9654;';
+    icon.textContent = '▶';
+  }
+}
+
+function copyPlanToClipboard() {
+  var text = buildPlanText();
+  var msg = document.getElementById('shareMessage').value.trim();
+  if (msg) text = msg + '\n\n' + text;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(function() {
+      var btn = document.getElementById('copyBtn');
+      btn.textContent = '✓ Copied!';
+      setTimeout(function() { btn.innerHTML = '📋 Copy Plan Text'; }, 2000);
+    });
+  } else {
+    // Fallback for older browsers / SSO contexts
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    var btn = document.getElementById('copyBtn');
+    btn.textContent = '✓ Copied!';
+    setTimeout(function() { btn.innerHTML = '📋 Copy Plan Text'; }, 2000);
   }
 }
 
 function sendEmail() {
   var to = document.getElementById('shareTo').value.trim();
   var cc = document.getElementById('shareCc').value.trim();
-  var subject = document.getElementById('shareSubject').value.trim() || '360 IDP - Individual Development Plan';
+  var subject = document.getElementById('shareSubject').value.trim() || '360 IDP — Individual Development Plan';
   var message = document.getElementById('shareMessage').value.trim();
 
   if (!to) {
-    document.getElementById('shareTo').style.borderColor = '#E8588C';
+    document.getElementById('shareTo').style.borderColor = 'var(--pink)';
     document.getElementById('shareTo').focus();
     return;
   }
 
-  var body = '';
-  if (message) {
-    body += message + '\n\n';
-  }
-  body += buildPlanText();
+  var body = (message ? message + '\n\n' : '') + buildPlanText();
 
-  // Build mailto URL (max ~2000 chars for URL, but modern clients handle more)
-  var mailto = 'mailto:' + encodeURIComponent(to);
+  // Build mailto — works with desktop clients and SSO-connected apps (Outlook, Apple Mail)
   var params = [];
   if (cc) params.push('cc=' + encodeURIComponent(cc));
   params.push('subject=' + encodeURIComponent(subject));
   params.push('body=' + encodeURIComponent(body));
-  mailto += '?' + params.join('&');
+  var mailto = 'mailto:' + encodeURIComponent(to) + '?' + params.join('&');
 
-  // Open email client
-  window.location.href = mailto;
-  closeShareModal();
+  // Use window.open for better SSO mail client compatibility
+  var win = window.open(mailto, '_blank');
+  // Some browsers block window.open for mailto — fallback to location.href
+  if (!win || win.closed || typeof win.closed === 'undefined') {
+    window.location.href = mailto;
+  }
 
-  // Show confirmation
-  var ind = document.getElementById('saveIndicator');
-  ind.textContent = 'Opening email client...';
-  ind.classList.add('show');
-  setTimeout(function() {
-    ind.classList.remove('show');
-    ind.textContent = 'Saved locally';
-  }, 2500);
+  closeModal('shareModal');
+  showToast('✉ Opening email client...', 2500);
 }
 
+// ══════════════════════════════════
+// PRINT / DOWNLOAD
+// ══════════════════════════════════
 function downloadPrintVersion() {
-  var planText = buildPlanText();
-
-  // Build a clean print-ready HTML document
   var empName = getFieldVal('empName') || 'Team Member';
-  var planDate = getFieldVal('planDate') || new Date().toLocaleDateString();
 
   var printHTML = '<!DOCTYPE html><html><head><meta charset="UTF-8">' +
-    '<title>360 IDP - ' + empName + '</title>' +
+    '<title>360 IDP — ' + escHtml(empName) + '</title>' +
     '<style>' +
-    'body { font-family: Segoe UI, Helvetica, Arial, sans-serif; margin: 36px 48px; color: #263238; line-height: 1.7; font-size: 12px; }' +
-    '.header { text-align: center; border-bottom: 2px solid #00BCD4; padding-bottom: 16px; margin-bottom: 20px; }' +
-    '.header h1 { font-size: 22px; margin: 0 0 4px; color: #263238; }' +
-    '.header .sub { font-size: 11px; color: #78909C; letter-spacing: 1.5px; text-transform: uppercase; }' +
-    '.info-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px 20px; margin-bottom: 20px; padding: 12px 16px; background: #F7F8FA; border-radius: 8px; }' +
-    '.info-item { font-size: 11px; }' +
-    '.info-item strong { display: block; font-size: 9px; text-transform: uppercase; letter-spacing: 0.8px; color: #78909C; margin-bottom: 1px; }' +
-    '.phase { margin-top: 18px; }' +
-    '.phase-title { font-size: 14px; font-weight: 700; color: #263238; border-bottom: 1px solid #ECEFF1; padding-bottom: 6px; margin-bottom: 10px; }' +
-    '.card { margin-bottom: 14px; }' +
-    '.card h4 { font-size: 12px; font-weight: 700; color: #37474F; margin: 0 0 3px; }' +
-    '.card p { margin: 0; white-space: pre-wrap; color: #3C4858; }' +
-    '.quarterly-table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 11px; }' +
-    '.quarterly-table th { text-align: left; background: #F7F8FA; padding: 6px 10px; font-size: 9px; text-transform: uppercase; letter-spacing: 0.8px; color: #78909C; border-bottom: 2px solid #ECEFF1; }' +
-    '.quarterly-table td { padding: 6px 10px; border-bottom: 1px solid #ECEFF1; vertical-align: top; }' +
-    '.q-label { display: inline-block; font-weight: 700; font-size: 11px; padding: 2px 8px; border-radius: 8px; }' +
-    '.q1 { background: #E5F7FA; color: #00BCD4; } .q2 { background: #F0EDF8; color: #7B68C8; } .q3 { background: #E6F6F2; color: #1AAB8A; } .q4 { background: #FDF3E0; color: #F0A030; }' +
-    '.footer { text-align: center; margin-top: 24px; padding-top: 12px; border-top: 1px solid #ECEFF1; font-size: 10px; color: #78909C; }' +
-    '@media print { body { margin: 24px; } }' +
+    'body{font-family:Segoe UI,Helvetica,Arial,sans-serif;margin:36px 48px;color:#263238;line-height:1.7;font-size:12px;}' +
+    '.header{text-align:center;border-bottom:2px solid #00BCD4;padding-bottom:16px;margin-bottom:20px;}' +
+    '.header h1{font-size:22px;margin:0 0 4px;}.header .sub{font-size:11px;color:#78909C;letter-spacing:1.5px;text-transform:uppercase;}' +
+    '.info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px 20px;margin-bottom:20px;padding:12px 16px;background:#F7F8FA;border-radius:8px;}' +
+    '.info-item{font-size:11px;}.info-item strong{display:block;font-size:9px;text-transform:uppercase;letter-spacing:0.8px;color:#78909C;margin-bottom:1px;}' +
+    '.phase{margin-top:18px;}.phase-title{font-size:14px;font-weight:700;color:#263238;border-bottom:1px solid #ECEFF1;padding-bottom:6px;margin-bottom:10px;}' +
+    '.card{margin-bottom:14px;}.card h4{font-size:12px;font-weight:700;color:#37474F;margin:0 0 3px;}.card p{margin:0;white-space:pre-wrap;color:#3C4858;}' +
+    'table{width:100%;border-collapse:collapse;margin-top:8px;font-size:11px;}' +
+    'th{text-align:left;background:#F7F8FA;padding:6px 10px;font-size:9px;text-transform:uppercase;letter-spacing:0.8px;color:#78909C;border-bottom:2px solid #ECEFF1;}' +
+    'td{padding:6px 10px;border-bottom:1px solid #ECEFF1;vertical-align:top;}' +
+    '.q-badge{display:inline-block;font-weight:700;font-size:11px;padding:2px 8px;border-radius:8px;}' +
+    '.q1{background:#E5F7FA;color:#00BCD4;}.q2{background:#F0EDF8;color:#7B68C8;}.q3{background:#E6F6F2;color:#1AAB8A;}.q4{background:#FDF3E0;color:#F0A030;}' +
+    '.status-indicator{display:inline-flex;align-items:center;gap:4px;font-size:11px;}.status-dot{width:6px;height:6px;border-radius:50%;display:inline-block;}' +
+    '.footer{text-align:center;margin-top:24px;padding-top:12px;border-top:1px solid #ECEFF1;font-size:10px;color:#78909C;}' +
+    '@media print{body{margin:24px;}}' +
     '</style></head><body>';
 
-  printHTML += '<div class="header">';
-  printHTML += '<div class="sub">GPS Training 360 Framework</div>';
-  printHTML += '<h1>360 IDP &mdash; Individual Development Plan</h1>';
-  printHTML += '</div>';
+  printHTML += '<div class="header"><div class="sub">GPS Training 360 Framework</div><h1>360 IDP &mdash; Individual Development Plan</h1></div>';
 
   // Info grid
   printHTML += '<div class="info-grid">';
-  var infoFields = [
-    ['Employee', getFieldVal('empName')],
-    ['Manager', getFieldVal('mgrName')],
-    ['Date', getFieldVal('planDate')],
-    ['Current Role', getFieldVal('currentRole')],
-    ['Time in Role', getFieldVal('timeInRole') ? getFieldVal('timeInRole') + ' years' : ''],
-    ['Time at UiPath', getFieldVal('timeAtCompany') ? getFieldVal('timeAtCompany') + ' years' : '']
-  ];
-  for (var fi = 0; fi < infoFields.length; fi++) {
-    if (infoFields[fi][1]) {
-      printHTML += '<div class="info-item"><strong>' + infoFields[fi][0] + '</strong>' + infoFields[fi][1] + '</div>';
-    }
-  }
+  [['Employee','empName'],['Manager','mgrName'],['Date','planDate'],
+   ['Current Role','currentRole'],['Time in Role','timeInRole'],['Time at Company','timeAtCompany']].forEach(function(f) {
+    var v = getFieldVal(f[1]);
+    if (v) printHTML += '<div class="info-item"><strong>' + f[0] + '</strong>' + escHtml(v) + '</div>';
+  });
   printHTML += '</div>';
 
-  // Phases
-  var sections = [
-    { title: 'Phase 1: Discover &mdash; Know Yourself', cards: [
-      { num: 1, name: 'Career Goals', key: 'card1' },
-      { num: 2, name: 'What I Love About My Role', key: 'card2' },
-      { num: 3, name: 'Current Learning Goals', key: 'card3' }
-    ]},
-    { title: 'Phase 2: Define &mdash; Build the Plan', cards: [
-      { num: 4, name: 'Skills I Want to Develop', key: 'card4' },
-      { num: 5, name: 'Experiences I Want to Gain', key: 'card5' },
-      { num: 6, name: 'Support From My Manager', key: 'card6' }
-    ]}
-  ];
-
-  for (var si = 0; si < sections.length; si++) {
-    var sec = sections[si];
+  // Phases 1 & 2
+  [{ title:'Phase 1: Discover &mdash; Know Yourself', cards:[
+    {n:1,name:'Career Goals',key:'card1'},{n:2,name:'What I Love About My Role',key:'card2'},{n:3,name:'Current Learning Goals',key:'card3'}]},
+   { title:'Phase 2: Define &mdash; Build the Plan', cards:[
+    {n:4,name:'Skills I Want to Develop',key:'card4'},{n:5,name:'Experiences I Want to Gain',key:'card5'},{n:6,name:'Support From My Manager',key:'card6'}]}
+  ].forEach(function(sec) {
     printHTML += '<div class="phase"><div class="phase-title">' + sec.title + '</div>';
-    for (var ci = 0; ci < sec.cards.length; ci++) {
-      var card = sec.cards[ci];
-      var val = getFieldVal(card.key);
-      if (val) {
-        printHTML += '<div class="card"><h4>' + card.num + '. ' + card.name + '</h4>';
-        printHTML += '<p>' + val.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>') + '</p></div>';
-      }
-    }
+    sec.cards.forEach(function(c) {
+      var v = getFieldVal(c.key);
+      if (v) printHTML += '<div class="card"><h4>' + c.n + '. ' + c.name + '</h4><p>' + escHtml(v).replace(/\n/g,'<br>') + '</p></div>';
+    });
     printHTML += '</div>';
-  }
+  });
 
-  // Phase 3 - Quarterly Plan
+  // Phase 3
   printHTML += '<div class="phase"><div class="phase-title">Phase 3: Activate &mdash; Execute &amp; Evolve</div>';
   printHTML += '<div class="card"><h4>7. Quarterly Development Plan</h4>';
-
   var planTableEl = document.querySelector('#planOutput table');
   if (planTableEl) {
-    printHTML += '<table class="quarterly-table">' + planTableEl.innerHTML + '</table>';
-  } else {
-    printHTML += '<p>(Not yet generated)</p>';
-  }
+    printHTML += '<table>' + planTableEl.innerHTML + '</table>';
+  } else { printHTML += '<p>(Not yet generated)</p>'; }
   printHTML += '</div>';
-
-  var c8val = getFieldVal('card8');
-  if (c8val) {
-    printHTML += '<div class="card"><h4>8. Wins &amp; Progress Log</h4>';
-    printHTML += '<p>' + c8val.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>') + '</p></div>';
-  }
-
-  var c9val = getFieldVal('card9');
-  if (c9val) {
-    printHTML += '<div class="card"><h4>9. Future Opportunities to Explore</h4>';
-    printHTML += '<p>' + c9val.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>') + '</p></div>';
-  }
-
+  var c8 = getFieldVal('card8');
+  if (c8) printHTML += '<div class="card"><h4>8. Wins &amp; Progress Log</h4><p>' + escHtml(c8).replace(/\n/g,'<br>') + '</p></div>';
+  var c9 = getFieldVal('card9');
+  if (c9) printHTML += '<div class="card"><h4>9. Future Opportunities to Explore</h4><p>' + escHtml(c9).replace(/\n/g,'<br>') + '</p></div>';
   printHTML += '</div>';
-  printHTML += '<div class="footer">GPS Training 360&deg;</div>';
-  printHTML += '</body></html>';
+  printHTML += '<div class="footer">GPS Training 360&deg;</div></body></html>';
 
-  // Open in new window for print/save
   var printWin = window.open('', '_blank');
   if (printWin) {
     printWin.document.write(printHTML);
     printWin.document.close();
-    // Auto-trigger print dialog after a brief delay
     setTimeout(function() { printWin.print(); }, 500);
   }
-
-  var ind = document.getElementById('saveIndicator');
-  ind.textContent = 'Print preview opened';
-  ind.classList.add('show');
-  setTimeout(function() {
-    ind.classList.remove('show');
-    ind.textContent = 'Saved locally';
-  }, 2000);
+  showToast('Print preview opened', 2000);
 }
 
-// Close modal on overlay click
-document.addEventListener('click', function(e) {
-  if (e.target.id === 'shareModal') closeShareModal();
+// ══════════════════════════════════
+// INIT
+// ══════════════════════════════════
+document.addEventListener('DOMContentLoaded', function() {
+  loadSaved();
+  // Auto-fill today's date if empty
+  var dateEl = document.getElementById('planDate');
+  if (dateEl && !dateEl.value) {
+    var today = new Date();
+    dateEl.value = (today.getMonth()+1).toString().padStart(2,'0') + '/' +
+                   today.getDate().toString().padStart(2,'0') + '/' +
+                   today.getFullYear();
+    saveAll();
+  }
 });
-
-// Close modal on Escape key
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') closeShareModal();
-});
-
 </script>
 
 </body>
