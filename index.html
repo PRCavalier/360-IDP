@@ -1211,9 +1211,6 @@ body {
       </button>
     </div>
     <div class="toolbar-right">
-      <button class="toolbar-btn" id="apiKeyBtn" onclick="openApiKeyModal()" title="Set your Anthropic API key for AI roadmap generation">
-        🔑 API Key
-      </button>
       <button class="toolbar-btn" onclick="openResetModal()" title="Clear fields">
         ↺ Reset Fields
       </button>
@@ -1227,7 +1224,7 @@ body {
   <div class="header">
     <div class="header-label">GPS Training 360° Framework</div>
     <h1>360 IDP — The Comprehensive <em>Individual Development Plan</em></h1>
-    <p class="subtitle">9 components, 3 phases — each tagged with the learning types it activates. Complete sections 1–6, then generate your AI-powered quarterly roadmap.</p>
+    <p class="subtitle">9 components, 3 phases — each tagged with the learning types it activates. Complete sections 1–6, then generate your personalized quarterly roadmap.</p>
   </div>
 
   <!-- PROGRESS BAR -->
@@ -1460,7 +1457,7 @@ body {
         <div class="card-icon" style="background:var(--purple-light); color:var(--purple); width:40px; height:40px; font-size:18px;">✦</div>
         <div>
           <h3>Quarterly Development Plan</h3>
-          <div class="timeframe">Next 12 Months — AI-Generated from Your Entries</div>
+          <div class="timeframe">Next 12 Months — Generated from Your Entries</div>
         </div>
       </div>
       <div class="learning-tags">
@@ -1468,16 +1465,16 @@ body {
         <span class="ltag ltag-formal">Formal Training</span>
         <span class="ltag ltag-mentoring">Mentoring</span>
       </div>
-      <p class="card-desc">Claude AI analyzes everything you've written across sections 1–6 and generates a personalized, specific quarterly roadmap — with real actions, timelines, and check-in milestones tailored to your goals.</p>
+      <p class="card-desc">Your entries across sections 1–6 are analyzed and sequenced into a personalized quarterly roadmap — with specific actions, ownership, and built-in check-in milestones tied to your actual goals, skills, and experiences.</p>
 
       <button class="generate-btn" id="generateBtn" onclick="generateAIPlan()">
-        <span>✦</span> Generate AI Roadmap <span class="ai-badge">AI</span>
+        <span>✦</span> Generate My Roadmap
       </button>
 
       <div id="planOutput">
         <div class="empty-state">
           <div class="empty-icon">📋</div>
-          Complete sections 1–6 above, then click "Generate AI Roadmap" to build your personalized 12-month plan.
+          Complete sections 1–6 above, then click "Generate My Roadmap" to build your personalized 12-month plan.
         </div>
       </div>
     </div>
@@ -1698,31 +1695,6 @@ Example:
   </div>
 </div>
 
-<!-- API KEY MODAL -->
-<div class="modal-overlay" id="apiKeyModal">
-  <div class="modal confirm-modal" style="max-width:460px;">
-    <button class="modal-close" onclick="closeModal('apiKeyModal')">&times;</button>
-    <div class="modal-header">
-      <div class="modal-icon" style="background:linear-gradient(135deg,var(--purple-light),var(--blue-light));">🔑</div>
-      <h2>Anthropic API Key</h2>
-      <p id="apiKeyModalDesc">Your key is stored only in your browser and sent directly to Anthropic — never to any third party.</p>
-    </div>
-    <div class="modal-body">
-      <div class="email-info-box" style="background:var(--purple-light);border-color:rgba(123,104,200,0.2);color:var(--purple);">
-        <strong>How to get a key:</strong> Visit <a href="https://console.anthropic.com/keys" target="_blank" style="color:var(--purple);">console.anthropic.com/keys</a> → create an API key → paste it below.
-      </div>
-      <div class="modal-field">
-        <label>API Key</label>
-        <input type="password" id="apiKeyInput" placeholder="sk-ant-api03-..." autocomplete="off" style="font-family:monospace;letter-spacing:0.5px;" onkeydown="if(event.key==='Enter')saveApiKey()">
-      </div>
-      <div id="apiKeyStatus" style="font-size:12px;color:var(--muted);margin-top:-6px;margin-bottom:8px;min-height:16px;"></div>
-    </div>
-    <div class="modal-footer">
-      <button class="publish-btn secondary" onclick="clearApiKey()">🗑 Remove Key</button>
-      <button class="publish-btn primary" onclick="saveApiKey()">Save Key</button>
-    </div>
-  </div>
-</div>
 
 <script>
 // ══════════════════════════════════
@@ -1829,7 +1801,7 @@ function resetSection(section) {
   });
   if (section === 'phase3' || section === 'all') {
     document.getElementById('planOutput').innerHTML =
-      '<div class="empty-state"><div class="empty-icon">📋</div>Complete sections 1–6 above, then click "Generate AI Roadmap" to build your personalized 12-month plan.</div>';
+      '<div class="empty-state"><div class="empty-icon">📋</div>Complete sections 1–6 above, then click "Generate My Roadmap" to build your personalized 12-month plan.</div>';
   }
   saveAll();
   closeModal('resetModal');
@@ -1955,14 +1927,14 @@ function openModalEl(id) { openModal(id); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); document.body.style.overflow = ''; }
 
 document.addEventListener('click', function(e) {
-  ['shareModal','resetModal','versionModal','apiKeyModal'].forEach(function(id) {
+  ['shareModal','resetModal','versionModal'].forEach(function(id) {
     if (e.target.id === id) closeModal(id);
   });
 });
 
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') {
-    ['shareModal','resetModal','versionModal','apiKeyModal'].forEach(closeModal);
+    ['shareModal','resetModal','versionModal'].forEach(closeModal);
   }
 });
 
@@ -1974,498 +1946,287 @@ function getFieldVal(key) {
   return el ? el.value.trim() : '';
 }
 
-async function generateAIPlan() {
-  var goals = getFieldVal('card1');
-  var loves = getFieldVal('card2');
-  var learning = getFieldVal('card3');
-  var skills = getFieldVal('card4');
-  var experiences = getFieldVal('card5');
-  var support = getFieldVal('card6');
-  var role = getFieldVal('currentRole');
-  var name = getFieldVal('empName');
-  var timeInRole = getFieldVal('timeInRole');
-  var planDate = getFieldVal('planDate');
+function generateAIPlan() {
+  var goals      = getFieldVal('card1');
+  var loves      = getFieldVal('card2');
+  var learning   = getFieldVal('card3');
+  var skills     = getFieldVal('card4');
+  var experiences= getFieldVal('card5');
+  var support    = getFieldVal('card6');
+  var role       = getFieldVal('currentRole');
+  var empName    = getFieldVal('empName');
+  var planDate   = getFieldVal('planDate');
 
   if (!goals && !learning && !skills && !experiences) {
     document.getElementById('planOutput').innerHTML =
-      '<div class="empty-state"><div class="empty-icon" style="font-size:24px;">⚠</div>' +
+      '<div class="empty-state"><div class="empty-icon" style="font-size:24px;">&#9888;</div>' +
       '<p>Please complete at least sections 1, 3, 4, or 5 before generating your roadmap.</p></div>';
     return;
   }
 
-  // Show loading state
   var btn = document.getElementById('generateBtn');
   btn.disabled = true;
-  btn.innerHTML = '<div class="ai-spinner" style="width:14px;height:14px;border-width:2px;"></div> Generating your plan...';
+  btn.innerHTML = '<div class="ai-spinner" style="width:14px;height:14px;border-width:2px;margin-right:6px;display:inline-block;vertical-align:middle;"></div> Building your roadmap...';
 
-  document.getElementById('planOutput').innerHTML =
-    '<div class="ai-loading"><div class="ai-spinner"></div>Claude is analyzing your inputs and building a personalized quarterly roadmap...</div>';
-
-  // Build date context
+  // ── DATE & QUARTER SETUP ────────────────────────────
   var startDate = new Date();
   if (planDate) {
     var parts = planDate.split('/');
     if (parts.length === 3) {
-      var parsed = new Date(parseInt(parts[2]), parseInt(parts[0])-1, parseInt(parts[1]));
-      if (!isNaN(parsed.getTime())) startDate = parsed;
+      var pd = new Date(parseInt(parts[2]), parseInt(parts[0])-1, parseInt(parts[1]));
+      if (!isNaN(pd.getTime())) startDate = pd;
     }
   }
-  var mNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  var qDates = [];
+  var MN = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var MNS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var quarters = [];
   for (var i = 0; i < 4; i++) {
-    var d = new Date(startDate);
-    d.setMonth(d.getMonth() + (i * 3));
-    var ed = new Date(d); ed.setMonth(ed.getMonth() + 2);
-    var qNum = Math.ceil((d.getMonth() + 1) / 3);
-    qDates.push('Q' + qNum + ' ' + d.getFullYear() + ' (' + mNames[d.getMonth()] + '–' + mNames[ed.getMonth()] + ')');
+    var d  = new Date(startDate); d.setMonth(d.getMonth() + i*3);
+    var d2 = new Date(d);         d2.setMonth(d2.getMonth() + 2);
+    var qn = Math.ceil((d.getMonth()+1)/3);
+    quarters.push({
+      label : 'Q'+qn+' '+d.getFullYear(),
+      range : MNS[d.getMonth()]+'\u2013'+MNS[d2.getMonth()],
+      cls   : 'q'+(i+1),
+      active: i===0
+    });
   }
 
-  var prompt = `You are a career development expert. Analyze this employee's IDP inputs and create a personalized 12-month quarterly development plan.
+  // ── TEXT INTELLIGENCE ENGINE ────────────────────────
+  // Extract meaningful items from free-text, preserving user's own words
+  function extractItems(text, max) {
+    if (!text) return [];
+    max = max || 6;
+    var items = [];
 
-EMPLOYEE CONTEXT:
-${name ? '- Name: ' + name : ''}
-${role ? '- Current Role: ' + role : ''}
-${timeInRole ? '- Time in Role: ' + timeInRole + ' years' : ''}
-- Plan Start: ${startDate.toLocaleDateString('en-US', {month:'long', year:'numeric'})}
-- Quarters: ${qDates.join(' | ')}
-
-IDP INPUTS:
-${goals ? '1. CAREER GOALS:\n' + goals + '\n' : ''}
-${loves ? '2. WHAT THEY LOVE:\n' + loves + '\n' : ''}
-${learning ? '3. LEARNING GOALS:\n' + learning + '\n' : ''}
-${skills ? '4. SKILLS TO DEVELOP:\n' + skills + '\n' : ''}
-${experiences ? '5. EXPERIENCES TO GAIN:\n' + experiences + '\n' : ''}
-${support ? '6. MANAGER SUPPORT NEEDED:\n' + support + '\n' : ''}
-
-Return ONLY a valid JSON object. No markdown, no code fences, no explanation — raw JSON only.
-
-Schema:
-{
-  "quarters": [
-    {
-      "label": "Q1 2026",
-      "range": "March-May",
-      "actions": [
-        { "action": "specific action text here", "owner": "Self", "checkin": false },
-        { "action": "Q1 Check-in: review progress with manager", "owner": "Both", "checkin": true }
-      ]
-    }
-  ]
-}
-
-Rules:
-- Exactly 4 quarter objects
-- Use these quarter labels and ranges: ${qDates.map(function(q){var m=q.match(/^(.+?) \((.+?)\)$/); return m ? m[1]+'|'+m[2] : q;}).join(', ')}
-- Each quarter: 3-4 regular action objects (checkin:false) + exactly 1 check-in object (checkin:true)
-- Make every action SPECIFIC to this person's actual words — not generic career advice
-- owner values must be one of: "Self", "Manager", "Both", "Self + Mgr"`;
-
-
-  try {
-    // API key stored in localStorage — user-supplied, stays in their browser only
-    var apiKey = localStorage.getItem('360idp_apikey') || '';
-    if (!apiKey) {
-      showApiKeyPrompt();
-      btn.disabled = false;
-      btn.innerHTML = '<span>\u2746</span> Generate AI Roadmap <span class="ai-badge">AI</span>';
-      document.getElementById('planOutput').innerHTML =
-        '<div class="empty-state"><div class="empty-icon">\uD83D\uDD11</div>' +
-        '<p><strong>API key required.</strong><br>' +
-        '<span style="font-size:12px;">Enter your Anthropic API key using the \u{1F511} button above to enable AI generation.</span></p></div>';
-      return;
-    }
-
-    var DIRECT_URL = 'https://api.anthropic.com/v1/messages';
-
-    var response = await fetch(DIRECT_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1500,
-        messages: [{ role: 'user', content: prompt }]
-      })
+    // 1. Try bullet / numbered lines first
+    var lines = text.split(/\n/);
+    lines.forEach(function(line) {
+      var clean = line.replace(/^[\s\u2022\-\*\u2013\u2014\d\.\)\]]+/, '').trim();
+      if (clean.length > 8 && clean.length < 200) items.push(clean);
     });
 
-    if (response.status === 401) {
-      localStorage.removeItem('360idp_apikey');
-      showApiKeyPrompt('invalid');
-      throw new Error('Invalid API key. Please re-enter a valid Anthropic key.');
-    }
-
-    if (!response.ok) {
-      var errBody = await response.text();
-      throw new Error('API error ' + response.status + ': ' + errBody.substring(0, 300));
-    }
-
-    var data = await response.json();
-    var content_blocks = data.content || [];
-    var rawText = content_blocks.map(function(b) { return b.text || ''; }).join('').trim();
-
-    // Strip any markdown code fences
-    var jsonText = rawText.replace(/^```[\w]*\n?/gim, '').replace(/^```$/gim, '').trim();
-
-    var plan = null;
-    try {
-      plan = JSON.parse(jsonText);
-    } catch(parseErr) {
-      var jsonMatch = jsonText.match(/\{[\s\S]*\}/);
-      if (jsonMatch) {
-        try { plan = JSON.parse(jsonMatch[0]); } catch(e2) {}
-      }
-    }
-
-    if (plan && plan.quarters && plan.quarters.length) {
-      var qClasses = ['q1','q2','q3','q4'];
-      var html = '<table class="quarterly-plan"><thead><tr>' +
-        '<th style="width:120px;">Quarter</th>' +
-        '<th>Development Action</th>' +
-        '<th style="width:90px;">Owner</th>' +
-        '<th style="width:100px;">Status</th>' +
-        '</tr></thead><tbody>';
-
-      plan.quarters.forEach(function(q, qi) {
-        var acts = q.actions || [];
-        var qClass = qClasses[qi] || 'q1';
-        var isActive = qi === 0;
-        var statusDotColor = isActive ? '#00BCD4' : '#ECEFF1';
-        var statusLabel = isActive ? 'Active' : 'Planned';
-
-        acts.forEach(function(row, ri) {
-          var rowStyle = row.checkin ? ' style="background:var(--bg);"' : '';
-          html += '<tr' + rowStyle + '>';
-          if (ri === 0) {
-            html += '<td rowspan="' + acts.length + '" style="vertical-align:middle;">';
-            html += '<span class="q-badge ' + qClass + '">' + escHtml(q.label) + '</span>';
-            if (q.range) html += '<br><span style="font-size:10px;color:var(--muted);">' + escHtml(q.range) + '</span>';
-            html += '</td>';
-          }
-          html += '<td>' + (row.checkin ? '<strong>' : '') + escHtml(row.action) + (row.checkin ? '</strong>' : '') + '</td>';
-          html += '<td>' + escHtml(row.owner || 'Self') + '</td>';
-          html += '<td><span class="status-indicator"><span class="status-dot" style="background:' + statusDotColor + '"></span> ' + statusLabel + '</span></td>';
-          html += '</tr>';
-        });
+    // 2. If we got <=1 item, try splitting on sentence boundaries
+    if (items.length <= 1) {
+      items = [];
+      text.split(/[.;]+/).forEach(function(s) {
+        var clean = s.trim();
+        if (clean.length > 8 && clean.length < 200) items.push(clean);
       });
-
-      html += '</tbody></table>';
-      document.getElementById('planOutput').innerHTML =
-        '<div class="ai-plan-output">' +
-          '<div class="ai-plan-header">\u2746 AI-Generated Roadmap \u00b7 Personalized by Claude</div>' +
-          html +
-        '</div>';
-
-    } else {
-      // Show raw response so it's never blank — visible for debugging
-      document.getElementById('planOutput').innerHTML =
-        '<div class="ai-plan-output">' +
-          '<div class="ai-plan-header">\u2746 AI Response</div>' +
-          '<div style="padding:16px;font-size:12px;line-height:1.7;color:var(--text);white-space:pre-wrap;">' + escHtml(rawText || 'Empty response received.') + '</div>' +
-        '</div>';
     }
-    saveAll();
 
-  } catch (err) {
-    var errMsg = String(err.message || err);
-    document.getElementById('planOutput').innerHTML =
-      '<div class="empty-state" style="color:var(--pink);">' +
-      '<div class="empty-icon">\u26A0</div>' +
-      '<p><strong>Generation failed.</strong><br>' +
-      '<span style="font-size:12px;">' + escHtml(errMsg) + '</span></p></div>';
+    // 3. Final fallback: whole text as one item (trimmed)
+    if (items.length === 0 && text.trim().length > 5) {
+      items.push(text.trim().substring(0, 160));
+    }
+
+    // Deduplicate and cap
+    var seen = {};
+    var out  = [];
+    items.forEach(function(it) {
+      var key = it.toLowerCase().substring(0, 30);
+      if (!seen[key]) { seen[key] = true; out.push(it); }
+    });
+    return out.slice(0, max);
   }
 
+  // Capitalise first letter
+  function cap(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
+
+  // Truncate to a comfortable display length
+  function trunc(s, n) { n=n||90; return s.length>n ? s.substring(0,n-1).replace(/\s+\S*$/,'')+'...' : s; }
+
+  // Classify a skill/goal item into a rough category
+  function classify(text) {
+    var t = text.toLowerCase();
+    if (/lead|manag|coach|strateg|influenc|execut|direct|vision|sponsor|stakeholder/.test(t)) return 'leadership';
+    if (/present|communicat|facilitat|storytell|write|writ|pitch|speak|meeting/.test(t)) return 'communication';
+    if (/data|analyt|metric|report|dashboard|excel|sql|python|code|tool|system|platform|tech|software|certif|train|course/.test(t)) return 'technical';
+    if (/cross.function|collaborat|partner|network|relationship|shadow|observe|team/.test(t)) return 'social';
+    if (/feedback|review|coach|mentor|1.1|check.in|calibrat/.test(t)) return 'feedback';
+    return 'general';
+  }
+
+  // ── BUILD ACTION POOLS ──────────────────────────────
+  var goalItems  = extractItems(goals, 5);
+  var learnItems = extractItems(learning, 5);
+  var skillItems = extractItems(skills, 6);
+  var expItems   = extractItems(experiences, 5);
+  var suppItems  = extractItems(support, 4);
+  var loveItems  = extractItems(loves, 3);
+
+  // pick(arr, idx) — safe array accessor with wrap-around
+  function pick(arr, idx) {
+    if (!arr || arr.length === 0) return null;
+    return arr[idx % arr.length];
+  }
+
+  // Action verb sets by quarter intent
+  var Q1verbs = ['Begin','Launch','Establish','Kick off','Start','Initiate'];
+  var Q2verbs = ['Build on','Deepen','Develop','Advance','Continue','Strengthen'];
+  var Q3verbs = ['Apply','Demonstrate','Lead','Own','Practise','Leverage'];
+  var Q4verbs = ['Complete','Consolidate','Showcase','Reflect on','Sustain','Finalise'];
+
+  function verb(arr, idx) { return arr[idx % arr.length]; }
+
+  // Determine manager support phrasing
+  var suppPhrase = suppItems.length
+    ? 'Confirm with manager: ' + trunc(pick(suppItems, 0), 75)
+    : 'Align IDP priorities and confirm manager support commitments';
+
+  // ── QUARTER PLAN ASSEMBLY ───────────────────────────
+  // Strategy: Q1=foundation (learning + skills base), Q2=build (skills + social),
+  //           Q3=apply (experiences + visibility), Q4=sustain+goals progress
+
+  var plan = [];
+
+  // ── Q1: Foundation ──────────────────────────────────
+  var q1actions = [];
+
+  if (learnItems.length) {
+    q1actions.push({ action: verb(Q1verbs,0)+': '+trunc(cap(learnItems[0]),85), owner:'Self' });
+  }
+  if (skillItems.length) {
+    var sk0 = pick(skillItems, 0);
+    var cat = classify(sk0);
+    var prefix = cat==='technical' ? 'Skill focus \u2014 Technical: ' :
+                 cat==='leadership'? 'Skill focus \u2014 Leadership: ' :
+                 cat==='communication'? 'Skill focus \u2014 Communication: ' : 'Skill focus: ';
+    q1actions.push({ action: prefix+trunc(cap(sk0),80), owner:'Self' });
+  }
+  if (suppItems.length) {
+    q1actions.push({ action: 'Establish with manager: '+trunc(cap(pick(suppItems,0)),80), owner:'Both' });
+  } else if (goalItems.length) {
+    q1actions.push({ action: 'Define milestones toward: '+trunc(cap(pick(goalItems,0)),75), owner:'Self' });
+  }
+  if (learnItems.length > 1) {
+    q1actions.push({ action: verb(Q1verbs,2)+': '+trunc(cap(learnItems[1]),85), owner:'Self' });
+  }
+  q1actions.push({ action: 'Q1 Check-in: Review IDP priorities and align on Q1\u2013Q2 milestones with manager', owner:'Both', checkin:true });
+  plan.push(q1actions);
+
+  // ── Q2: Build ───────────────────────────────────────
+  var q2actions = [];
+  if (skillItems.length > 1) {
+    q2actions.push({ action: verb(Q2verbs,0)+' \u2014 '+trunc(cap(pick(skillItems,1)),85), owner:'Self' });
+  } else if (skillItems.length === 1) {
+    q2actions.push({ action: verb(Q2verbs,1)+' skill: '+trunc(cap(skillItems[0]),80), owner:'Self' });
+  }
+  if (expItems.length) {
+    q2actions.push({ action: verb(Q2verbs,4)+' experience: '+trunc(cap(expItems[0]),80), owner:'Self + Mgr' });
+  }
+  if (learnItems.length) {
+    q2actions.push({ action: verb(Q2verbs,2)+': '+trunc(cap(pick(learnItems,1)),85), owner:'Self' });
+  }
+  if (suppItems.length > 1) {
+    q2actions.push({ action: 'Leverage: '+trunc(cap(pick(suppItems,1)),82), owner:'Manager' });
+  } else if (loveItems.length) {
+    q2actions.push({ action: 'Expand scope in area of strength: '+trunc(cap(loveItems[0]),70), owner:'Self' });
+  }
+  q2actions.push({ action: 'Q2 Check-in: Mid-year review \u2014 assess progress, adjust priorities for H2', owner:'Both', checkin:true });
+  plan.push(q2actions);
+
+  // ── Q3: Apply ───────────────────────────────────────
+  var q3actions = [];
+  if (expItems.length > 1) {
+    q3actions.push({ action: verb(Q3verbs,0)+': '+trunc(cap(expItems[1]),85), owner:'Self + Mgr' });
+  } else if (expItems.length === 1) {
+    q3actions.push({ action: verb(Q3verbs,2)+' experience gained: '+trunc(cap(expItems[0]),75), owner:'Self' });
+  }
+  if (skillItems.length > 2) {
+    q3actions.push({ action: verb(Q3verbs,3)+': '+trunc(cap(pick(skillItems,2)),85), owner:'Self' });
+  } else if (skillItems.length) {
+    q3actions.push({ action: verb(Q3verbs,0)+' skill in real work context: '+trunc(cap(pick(skillItems,0)),70), owner:'Self' });
+  }
+  if (goalItems.length) {
+    q3actions.push({ action: 'Progress toward career goal: '+trunc(cap(pick(goalItems,0)),75), owner:'Self' });
+  }
+  if (suppItems.length > 2) {
+    q3actions.push({ action: verb(Q3verbs,4)+': '+trunc(cap(pick(suppItems,2)),82), owner:'Manager' });
+  } else if (learnItems.length > 2) {
+    q3actions.push({ action: verb(Q3verbs,0)+': '+trunc(cap(pick(learnItems,2)),85), owner:'Self' });
+  }
+  q3actions.push({ action: 'Q3 Check-in: Assess growth against career goals and development plan', owner:'Both', checkin:true });
+  plan.push(q3actions);
+
+  // ── Q4: Sustain ─────────────────────────────────────
+  var q4actions = [];
+  if (goalItems.length) {
+    q4actions.push({ action: verb(Q4verbs,0)+' progress toward: '+trunc(cap(pick(goalItems,0)),78), owner:'Self' });
+  }
+  if (expItems.length > 2) {
+    q4actions.push({ action: verb(Q4verbs,0)+': '+trunc(cap(pick(expItems,2)),85), owner:'Self' });
+  } else if (skillItems.length > 3) {
+    q4actions.push({ action: verb(Q4verbs,3)+': '+trunc(cap(pick(skillItems,3)),85), owner:'Self' });
+  } else if (skillItems.length) {
+    q4actions.push({ action: verb(Q4verbs,4)+' and demonstrate: '+trunc(cap(pick(skillItems,0)),75), owner:'Self' });
+  }
+  if (learnItems.length) {
+    q4actions.push({ action: verb(Q4verbs,0)+' learning goal: '+trunc(cap(pick(learnItems,0)),78), owner:'Self' });
+  }
+  if (role) {
+    q4actions.push({ action: 'Document key wins and contributions in '+escHtml(role)+' role for year-end review', owner:'Self' });
+  } else {
+    q4actions.push({ action: 'Document key wins, completed skills, and measurable contributions for year-end review', owner:'Self' });
+  }
+  q4actions.push({ action: 'Q4 Review: Celebrate wins, close out '+quarters[3].label+' IDP, and set priorities for next year', owner:'Both', checkin:true });
+  plan.push(q4actions);
+
+  // ── RENDER TABLE ────────────────────────────────────
+  var qClasses = ['q1','q2','q3','q4'];
+  var html = '<table class="quarterly-plan"><thead><tr>' +
+    '<th style="width:120px;">Quarter</th>' +
+    '<th>Development Action</th>' +
+    '<th style="width:90px;">Owner</th>' +
+    '<th style="width:100px;">Status</th>' +
+    '</tr></thead><tbody>';
+
+  plan.forEach(function(acts, qi) {
+    var q = quarters[qi];
+    var statusDot   = qi===0 ? '#00BCD4' : '#ECEFF1';
+    var statusLabel = qi===0 ? 'Active'  : 'Planned';
+
+    acts.forEach(function(row, ri) {
+      var isCheckin = !!row.checkin;
+      html += '<tr' + (isCheckin?' style="background:var(--bg);"':'') + '>';
+      if (ri === 0) {
+        html += '<td rowspan="'+acts.length+'" style="vertical-align:middle;">';
+        html += '<span class="q-badge '+q.cls+'">'+q.label+'</span>';
+        html += '<br><span style="font-size:10px;color:var(--muted);">'+q.range+'</span>';
+        html += '</td>';
+      }
+      html += '<td>'+(isCheckin?'<strong>':'')+escHtml(row.action)+(isCheckin?'</strong>':'')+'</td>';
+      html += '<td>'+escHtml(row.owner||'Self')+'</td>';
+      html += '<td><span class="status-indicator"><span class="status-dot" style="background:'+statusDot+'"></span> '+statusLabel+'</span></td>';
+      html += '</tr>';
+    });
+  });
+
+  html += '</tbody></table>';
+
+  document.getElementById('planOutput').innerHTML =
+    '<div class="ai-plan-output">' +
+      '<div class="ai-plan-header">\u2746 Quarterly Roadmap \u00b7 Generated from Your Plan</div>' +
+      html +
+    '</div>';
+
+  saveAll();
+
   btn.disabled = false;
-  btn.innerHTML = '<span>✦</span> Regenerate AI Roadmap <span class="ai-badge">AI</span>';
+  btn.innerHTML = '<span>\u2746</span> Regenerate Roadmap';
 }
+
 
 function escHtml(str) {
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-// ══════════════════════════════════
-// API KEY MANAGEMENT
-// ══════════════════════════════════
-function openApiKeyModal(mode) {
-  var existing = localStorage.getItem('360idp_apikey') || '';
-  var input = document.getElementById('apiKeyInput');
-  var desc = document.getElementById('apiKeyModalDesc');
-  var status = document.getElementById('apiKeyStatus');
-  input.value = existing ? '••••••••••••' + existing.slice(-6) : '';
-  input.placeholder = existing ? 'Key saved — enter new key to replace' : 'sk-ant-api03-...';
-  status.textContent = existing ? '✓ Key is saved' : '';
-  status.style.color = 'var(--green)';
-  if (mode === 'invalid') {
-    desc.textContent = 'Your key was rejected by Anthropic (401). Please check it and try again.';
-    status.textContent = '✗ Invalid key — please re-enter';
-    status.style.color = 'var(--pink)';
-  } else {
-    desc.textContent = 'Your key is stored only in your browser and sent directly to Anthropic — never to any third party.';
-  }
-  // Update toolbar button indicator
-  updateApiKeyBtn();
-  openModal('apiKeyModal');
-  setTimeout(function(){ if(!existing) document.getElementById('apiKeyInput').focus(); }, 100);
-}
-
-function showApiKeyPrompt(mode) { openApiKeyModal(mode); }
-
-function saveApiKey() {
-  var val = document.getElementById('apiKeyInput').value.trim();
-  if (!val || val.startsWith('••')) {
-    closeModal('apiKeyModal');
-    return;
-  }
-  if (!val.startsWith('sk-ant-')) {
-    document.getElementById('apiKeyStatus').textContent = '✗ Keys should start with sk-ant- — double-check your key';
-    document.getElementById('apiKeyStatus').style.color = 'var(--pink)';
-    return;
-  }
-  localStorage.setItem('360idp_apikey', val);
-  document.getElementById('apiKeyStatus').textContent = '✓ Key saved!';
-  document.getElementById('apiKeyStatus').style.color = 'var(--green)';
-  updateApiKeyBtn();
-  setTimeout(function(){ closeModal('apiKeyModal'); }, 800);
-}
-
-function clearApiKey() {
-  localStorage.removeItem('360idp_apikey');
-  document.getElementById('apiKeyInput').value = '';
-  document.getElementById('apiKeyStatus').textContent = 'Key removed.';
-  document.getElementById('apiKeyStatus').style.color = 'var(--muted)';
-  updateApiKeyBtn();
-}
-
-function updateApiKeyBtn() {
-  var btn = document.getElementById('apiKeyBtn');
-  if (!btn) return;
-  var hasKey = !!localStorage.getItem('360idp_apikey');
-  btn.innerHTML = hasKey ? '🔑 API Key <span style="color:var(--green);font-size:10px;">✓</span>' : '🔑 API Key';
-  btn.title = hasKey ? 'API key is set — click to manage' : 'Set your Anthropic API key for AI roadmap generation';
-}
-
-
-// ══════════════════════════════════
-// BUILD PLAN TEXT (for email/print)
-// ══════════════════════════════════
-function buildPlanText() {
-  var lines = [];
-  var sep = '────────────────────────────────────────';
-  lines.push('360 IDP — INDIVIDUAL DEVELOPMENT PLAN');
-  lines.push('GPS Training 360 Framework');
-  lines.push(sep); lines.push('');
-  var flds = [['Employee', 'empName'],['Manager','mgrName'],['Date','planDate'],
-              ['Current Role','currentRole'],['Time in Role','timeInRole'],['Time at Company','timeAtCompany']];
-  flds.forEach(function(f) {
-    var v = getFieldVal(f[1]);
-    if (v) lines.push(f[0] + ': ' + v + (f[1]==='timeInRole'||f[1]==='timeAtCompany' ? ' years' : ''));
-  });
-  lines.push(''); lines.push(sep); lines.push('');
-  lines.push('PHASE 1: DISCOVER — KNOW YOURSELF'); lines.push('');
-  [['1. Career Goals (3-5 Year Horizon)','card1'],
-   ['2. What I Love About My Role','card2'],
-   ['3. Current Learning Goals (6-12 Month Focus)','card3']].forEach(function(s) {
-    var v = getFieldVal(s[1]); if (v) { lines.push(s[0]); lines.push(v); lines.push(''); }
-  });
-  lines.push(sep); lines.push('');
-  lines.push('PHASE 2: DEFINE — BUILD THE PLAN'); lines.push('');
-  [['4. Skills I Want to Develop','card4'],
-   ['5. Experiences I Want to Gain','card5'],
-   ['6. Support From My Manager','card6']].forEach(function(s) {
-    var v = getFieldVal(s[1]); if (v) { lines.push(s[0]); lines.push(v); lines.push(''); }
-  });
-  lines.push(sep); lines.push('');
-  lines.push('PHASE 3: ACTIVATE — EXECUTE & EVOLVE'); lines.push('');
-  lines.push('7. Quarterly Development Plan');
-  var planEl = document.getElementById('planOutput');
-  if (planEl && planEl.querySelector('table')) {
-    var rows = planEl.querySelectorAll('tbody tr');
-    rows.forEach(function(row) {
-      var cells = row.querySelectorAll('td');
-      var qBadge = row.querySelector('.q-badge');
-      if (qBadge) { lines.push(''); lines.push('  ' + qBadge.textContent.trim()); }
-      cells.forEach(function(cell) {
-        if (!cell.querySelector('.q-badge') && !cell.querySelector('.status-indicator')) {
-          var t = cell.textContent.trim();
-          if (t) lines.push('    • ' + t);
-        }
-      });
-    });
-  } else { lines.push('  (Not yet generated)'); }
-  lines.push('');
-  var c8 = getFieldVal('card8'); if (c8) { lines.push('8. Wins & Progress Log'); lines.push(c8); lines.push(''); }
-  var c9 = getFieldVal('card9'); if (c9) { lines.push('9. Future Opportunities to Explore'); lines.push(c9); lines.push(''); }
-  lines.push(sep); lines.push('GPS Training 360°');
-  return lines.join('\n');
-}
-
-// ══════════════════════════════════
-// SHARE / EMAIL
-// ══════════════════════════════════
-function openShareModal() {
-  var empName = getFieldVal('empName');
-  var subjectEl = document.getElementById('shareSubject');
-  if (subjectEl && !subjectEl.value) {
-    subjectEl.value = '360 IDP' + (empName ? ' — ' + empName : '');
-  }
-  openModal('shareModal');
-}
-
-function openResetModal() { openModal('resetModal'); }
-
-function togglePreview() {
-  var preview = document.getElementById('emailPreview');
-  var icon = document.getElementById('previewToggleIcon');
-  if (preview.style.display === 'none') {
-    preview.style.display = 'block';
-    icon.textContent = '▼';
-    document.getElementById('emailPreviewContent').textContent = buildPlanText();
-  } else {
-    preview.style.display = 'none';
-    icon.textContent = '▶';
-  }
-}
-
-function copyPlanToClipboard() {
-  var text = buildPlanText();
-  var msg = document.getElementById('shareMessage').value.trim();
-  if (msg) text = msg + '\n\n' + text;
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(text).then(function() {
-      var btn = document.getElementById('copyBtn');
-      btn.textContent = '✓ Copied!';
-      setTimeout(function() { btn.innerHTML = '📋 Copy Plan Text'; }, 2000);
-    });
-  } else {
-    // Fallback for older browsers / SSO contexts
-    var ta = document.createElement('textarea');
-    ta.value = text;
-    ta.style.position = 'fixed'; ta.style.opacity = '0';
-    document.body.appendChild(ta);
-    ta.select(); document.execCommand('copy');
-    document.body.removeChild(ta);
-    var btn = document.getElementById('copyBtn');
-    btn.textContent = '✓ Copied!';
-    setTimeout(function() { btn.innerHTML = '📋 Copy Plan Text'; }, 2000);
-  }
-}
-
-function sendEmail() {
-  var to = document.getElementById('shareTo').value.trim();
-  var cc = document.getElementById('shareCc').value.trim();
-  var subject = document.getElementById('shareSubject').value.trim() || '360 IDP — Individual Development Plan';
-  var message = document.getElementById('shareMessage').value.trim();
-
-  if (!to) {
-    document.getElementById('shareTo').style.borderColor = 'var(--pink)';
-    document.getElementById('shareTo').focus();
-    return;
-  }
-
-  var body = (message ? message + '\n\n' : '') + buildPlanText();
-
-  // Build mailto — works with desktop clients and SSO-connected apps (Outlook, Apple Mail)
-  var params = [];
-  if (cc) params.push('cc=' + encodeURIComponent(cc));
-  params.push('subject=' + encodeURIComponent(subject));
-  params.push('body=' + encodeURIComponent(body));
-  var mailto = 'mailto:' + encodeURIComponent(to) + '?' + params.join('&');
-
-  // Use window.open for better SSO mail client compatibility
-  var win = window.open(mailto, '_blank');
-  // Some browsers block window.open for mailto — fallback to location.href
-  if (!win || win.closed || typeof win.closed === 'undefined') {
-    window.location.href = mailto;
-  }
-
-  closeModal('shareModal');
-  showToast('✉ Opening email client...', 2500);
-}
-
-// ══════════════════════════════════
-// PRINT / DOWNLOAD
-// ══════════════════════════════════
-function downloadPrintVersion() {
-  var empName = getFieldVal('empName') || 'Team Member';
-
-  var printHTML = '<!DOCTYPE html><html><head><meta charset="UTF-8">' +
-    '<title>360 IDP — ' + escHtml(empName) + '</title>' +
-    '<style>' +
-    'body{font-family:Segoe UI,Helvetica,Arial,sans-serif;margin:36px 48px;color:#263238;line-height:1.7;font-size:12px;}' +
-    '.header{text-align:center;border-bottom:2px solid #00BCD4;padding-bottom:16px;margin-bottom:20px;}' +
-    '.header h1{font-size:22px;margin:0 0 4px;}.header .sub{font-size:11px;color:#78909C;letter-spacing:1.5px;text-transform:uppercase;}' +
-    '.info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px 20px;margin-bottom:20px;padding:12px 16px;background:#F7F8FA;border-radius:8px;}' +
-    '.info-item{font-size:11px;}.info-item strong{display:block;font-size:9px;text-transform:uppercase;letter-spacing:0.8px;color:#78909C;margin-bottom:1px;}' +
-    '.phase{margin-top:18px;}.phase-title{font-size:14px;font-weight:700;color:#263238;border-bottom:1px solid #ECEFF1;padding-bottom:6px;margin-bottom:10px;}' +
-    '.card{margin-bottom:14px;}.card h4{font-size:12px;font-weight:700;color:#37474F;margin:0 0 3px;}.card p{margin:0;white-space:pre-wrap;color:#3C4858;}' +
-    'table{width:100%;border-collapse:collapse;margin-top:8px;font-size:11px;}' +
-    'th{text-align:left;background:#F7F8FA;padding:6px 10px;font-size:9px;text-transform:uppercase;letter-spacing:0.8px;color:#78909C;border-bottom:2px solid #ECEFF1;}' +
-    'td{padding:6px 10px;border-bottom:1px solid #ECEFF1;vertical-align:top;}' +
-    '.q-badge{display:inline-block;font-weight:700;font-size:11px;padding:2px 8px;border-radius:8px;}' +
-    '.q1{background:#E5F7FA;color:#00BCD4;}.q2{background:#F0EDF8;color:#7B68C8;}.q3{background:#E6F6F2;color:#1AAB8A;}.q4{background:#FDF3E0;color:#F0A030;}' +
-    '.status-indicator{display:inline-flex;align-items:center;gap:4px;font-size:11px;}.status-dot{width:6px;height:6px;border-radius:50%;display:inline-block;}' +
-    '.footer{text-align:center;margin-top:24px;padding-top:12px;border-top:1px solid #ECEFF1;font-size:10px;color:#78909C;}' +
-    '@media print{body{margin:24px;}}' +
-    '</style></head><body>';
-
-  printHTML += '<div class="header"><div class="sub">GPS Training 360 Framework</div><h1>360 IDP &mdash; Individual Development Plan</h1></div>';
-
-  // Info grid
-  printHTML += '<div class="info-grid">';
-  [['Employee','empName'],['Manager','mgrName'],['Date','planDate'],
-   ['Current Role','currentRole'],['Time in Role','timeInRole'],['Time at Company','timeAtCompany']].forEach(function(f) {
-    var v = getFieldVal(f[1]);
-    if (v) printHTML += '<div class="info-item"><strong>' + f[0] + '</strong>' + escHtml(v) + '</div>';
-  });
-  printHTML += '</div>';
-
-  // Phases 1 & 2
-  [{ title:'Phase 1: Discover &mdash; Know Yourself', cards:[
-    {n:1,name:'Career Goals',key:'card1'},{n:2,name:'What I Love About My Role',key:'card2'},{n:3,name:'Current Learning Goals',key:'card3'}]},
-   { title:'Phase 2: Define &mdash; Build the Plan', cards:[
-    {n:4,name:'Skills I Want to Develop',key:'card4'},{n:5,name:'Experiences I Want to Gain',key:'card5'},{n:6,name:'Support From My Manager',key:'card6'}]}
-  ].forEach(function(sec) {
-    printHTML += '<div class="phase"><div class="phase-title">' + sec.title + '</div>';
-    sec.cards.forEach(function(c) {
-      var v = getFieldVal(c.key);
-      if (v) printHTML += '<div class="card"><h4>' + c.n + '. ' + c.name + '</h4><p>' + escHtml(v).replace(/\n/g,'<br>') + '</p></div>';
-    });
-    printHTML += '</div>';
-  });
-
-  // Phase 3
-  printHTML += '<div class="phase"><div class="phase-title">Phase 3: Activate &mdash; Execute &amp; Evolve</div>';
-  printHTML += '<div class="card"><h4>7. Quarterly Development Plan</h4>';
-  var planTableEl = document.querySelector('#planOutput table');
-  if (planTableEl) {
-    printHTML += '<table>' + planTableEl.innerHTML + '</table>';
-  } else { printHTML += '<p>(Not yet generated)</p>'; }
-  printHTML += '</div>';
-  var c8 = getFieldVal('card8');
-  if (c8) printHTML += '<div class="card"><h4>8. Wins &amp; Progress Log</h4><p>' + escHtml(c8).replace(/\n/g,'<br>') + '</p></div>';
-  var c9 = getFieldVal('card9');
-  if (c9) printHTML += '<div class="card"><h4>9. Future Opportunities to Explore</h4><p>' + escHtml(c9).replace(/\n/g,'<br>') + '</p></div>';
-  printHTML += '</div>';
-  printHTML += '<div class="footer">GPS Training 360&deg;</div></body></html>';
-
-  var printWin = window.open('', '_blank');
-  if (printWin) {
-    printWin.document.write(printHTML);
-    printWin.document.close();
-    setTimeout(function() { printWin.print(); }, 500);
-  }
-  showToast('Print preview opened', 2000);
-}
 
 // ══════════════════════════════════
 // INIT
 // ══════════════════════════════════
 document.addEventListener('DOMContentLoaded', function() {
   loadSaved();
-  updateApiKeyBtn();
   // Auto-fill today's date if empty
   var dateEl = document.getElementById('planDate');
   if (dateEl && !dateEl.value) {
