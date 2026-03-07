@@ -649,17 +649,82 @@ body {
   font-size: 12.5px;
 }
 
-/* Header row — purple banner matching the reference */
+/* Header row — dark grey banner with cyan button */
 .roadmap-header-row td {
-  background: linear-gradient(135deg, var(--purple), #6A5ACD);
+  background: #2D2D2D;
   color: #fff;
-  font-family: 'DM Serif Display', serif;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.3px;
-  padding: 10px 14px;
+  padding: 10px 16px;
   border: none;
-  text-transform: uppercase;
+}
+
+.roadmap-header-inner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.roadmap-gen-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 18px;
+  background: var(--cyan);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+  white-space: nowrap;
+}
+
+.roadmap-gen-btn:hover { background: #00A5C0; transform: translateY(-1px); }
+.roadmap-gen-btn:active { transform: translateY(0); }
+
+.roadmap-phase-text {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.75);
+  letter-spacing: 0.3px;
+}
+
+/* Outcomes prompt above table */
+.roadmap-outcomes-prompt {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 12.5px;
+  color: var(--muted);
+  font-style: italic;
+  margin: 14px 0 6px;
+  padding: 0;
+}
+
+/* Owner checkboxes */
+.owner-checkboxes {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 4px;
+}
+
+.owner-chk-label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  color: var(--text);
+  cursor: pointer;
+  user-select: none;
+}
+
+.owner-chk {
+  width: 14px;
+  height: 14px;
+  accent-color: var(--purple);
+  cursor: pointer;
+  flex-shrink: 0;
 }
 
 /* Quarter label row */
@@ -2105,8 +2170,128 @@ function openVersionModal() {
 }
 
 // ══════════════════════════════════
-// MODAL HELPERS
+// SHARE & EMAIL
 // ══════════════════════════════════
+function openShareModal() {
+  var name = getFieldVal('empName') || 'My';
+  var sub  = document.getElementById('shareSubject');
+  if (sub && !sub.value) sub.value = name + "'s 360 Individual Development Plan";
+  openModal('shareModal');
+}
+
+function buildPlanText() {
+  var lines = [];
+  var name = getFieldVal('empName');
+  var mgr  = getFieldVal('mgrName');
+  var date = getFieldVal('planDate');
+  var role = getFieldVal('currentRole');
+  lines.push('360 INDIVIDUAL DEVELOPMENT PLAN');
+  lines.push('================================');
+  if (name) lines.push('Employee: ' + name);
+  if (mgr)  lines.push('Manager: '  + mgr);
+  if (role) lines.push('Role: '     + role);
+  if (date) lines.push('Date: '     + date);
+  lines.push('');
+  var sections = [
+    ['1. Career Goals',              'card1'],
+    ['2. What I Love',               'card2'],
+    ['3. Current Learning Goals',    'card3'],
+    ['4. Skills to Develop',         'card4'],
+    ['5. Experiences to Gain',       'card5'],
+    ['6. Support From My Manager',   'card6'],
+    ['8. Wins & Progress Log',       'card8'],
+    ['9. Future Opportunities',      'card9'],
+  ];
+  sections.forEach(function(s) {
+    var val = getFieldVal(s[1]);
+    if (val) {
+      lines.push(s[0]);
+      lines.push(new Array(s[0].length + 1).join('-'));
+      lines.push(val);
+      lines.push('');
+    }
+  });
+  return lines.join('\n');
+}
+
+function togglePreview() {
+  var pane = document.getElementById('emailPreview');
+  var icon = document.getElementById('previewToggleIcon');
+  var content = document.getElementById('emailPreviewContent');
+  if (pane.style.display === 'none') {
+    pane.style.display = 'block';
+    icon.textContent = '▼';
+    content.innerText = buildPlanText();
+  } else {
+    pane.style.display = 'none';
+    icon.textContent = '▶';
+  }
+}
+
+function sendEmail() {
+  var to      = (document.getElementById('shareTo')      || {}).value || '';
+  var cc      = (document.getElementById('shareCc')      || {}).value || '';
+  var subject = (document.getElementById('shareSubject') || {}).value || '360 IDP';
+  var message = (document.getElementById('shareMessage') || {}).value || '';
+  var body    = (message ? message + '\n\n---\n\n' : '') + buildPlanText();
+
+  var mailto = 'mailto:' + encodeURIComponent(to) +
+    '?subject=' + encodeURIComponent(subject) +
+    (cc      ? '&cc='   + encodeURIComponent(cc)   : '') +
+    '&body='    + encodeURIComponent(body);
+
+  // Try window.open first, fall back to location.href for SSO environments
+  try {
+    var w = window.open(mailto, '_self');
+    if (!w) location.href = mailto;
+  } catch(e) {
+    location.href = mailto;
+  }
+}
+
+function copyPlanToClipboard() {
+  var text = buildPlanText();
+  var btn  = document.getElementById('copyBtn');
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(function() {
+      btn.textContent = '✓ Copied!';
+      setTimeout(function() { btn.innerHTML = '📋 Copy Plan Text'; }, 2000);
+    }).catch(function() { fallbackCopy(text, btn); });
+  } else {
+    fallbackCopy(text, btn);
+  }
+}
+
+function fallbackCopy(text, btn) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed'; ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try {
+    document.execCommand('copy');
+    if (btn) { btn.textContent = '✓ Copied!'; setTimeout(function() { btn.innerHTML = '📋 Copy Plan Text'; }, 2000); }
+  } catch(e) {
+    if (btn) btn.textContent = 'Could not copy';
+  }
+  document.body.removeChild(ta);
+}
+
+function downloadPrintVersion() {
+  var name = getFieldVal('empName') || 'IDP';
+  var plan = buildPlanText();
+  var win  = window.open('', '_blank');
+  if (!win) { alert('Please allow pop-ups to download the print version.'); return; }
+  win.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>' + name + ' \u2014 360 IDP</title>' +
+    '<style>body{font-family:Arial,sans-serif;max-width:800px;margin:40px auto;padding:0 20px;color:#222;line-height:1.6;}' +
+    'h1{font-size:22px;margin-bottom:4px;}h2{font-size:15px;border-bottom:2px solid #ccc;padding-bottom:4px;margin-top:28px;}' +
+    'pre{white-space:pre-wrap;font-family:inherit;font-size:13px;}</style></head>' +
+    '<body><pre>' + plan.replace(/</g,'&lt;').replace(/>/g,'&gt;') + '</pre></body></html>');
+  win.document.close();
+  setTimeout(function() { win.print(); }, 400);
+}
+
+
 function openModal(id) { document.getElementById(id).classList.add('open'); document.body.style.overflow = 'hidden'; }
 function openModalEl(id) { openModal(id); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); document.body.style.overflow = ''; }
@@ -2460,11 +2645,21 @@ function generateAIPlan() {
     return best;
   }
 
-  var html = '<table class="roadmap-table">';
+  var html = '';
 
-  // ── ROW 1: Banner header ──
+  // ── OUTCOMES PROMPT — above the table ──────────────
+  html += '<p class="roadmap-outcomes-prompt">Enter the outcomes you envision for each quarter in the space provided.</p>';
+
+  html += '<table class="roadmap-table">';
+
+  // ── ROW 1: Banner header — dark bg, cyan button, phase text ──
   html += '<tr class="roadmap-header-row">';
-  html += '<td colspan="4">\u2746 Quarterly Roadmap &nbsp;&middot;&nbsp; Generated from Your Entries</td>';
+  html += '<td colspan="4">';
+  html += '<div class="roadmap-header-inner">';
+  html += '<button class="roadmap-gen-btn" onclick="generateAIPlan()" id="regenBtn">\u2746 Generate My Roadmap</button>';
+  html += '<span class="roadmap-phase-text">4 Phases of Development</span>';
+  html += '</div>';
+  html += '</td>';
   html += '</tr>';
 
   // ── ROW 2: Quarter labels ──
@@ -2503,8 +2698,7 @@ function generateAIPlan() {
     try { savedVal = JSON.parse(localStorage.getItem('360idp_data') || '{}')[savedKey] || ''; } catch(e){}
     html += '<td>';
     html += '<div class="outcome-box">';
-    html += '<span class="outcome-label">What outcome(s) do you envision for this quarter?</span>';
-    html += '<textarea class="outcome-textarea" data-save="'+savedKey+'" placeholder="Describe the outcome you want to achieve by end of '+escHtml(q.label)+'..." rows="3">'+escHtml(savedVal)+'</textarea>';
+    html += '<textarea class="outcome-textarea" data-save="'+savedKey+'" placeholder="Describe the outcome you envision by end of '+escHtml(q.label)+'..." rows="3">'+escHtml(savedVal)+'</textarea>';
     html += '</div>';
     html += '</td>';
   });
@@ -2524,12 +2718,26 @@ function generateAIPlan() {
   });
   html += '</tr>';
 
-  // ── ROW 6: Owner ──
+  // ── ROW 6: Owner — checkboxes ──
   html += '<tr class="roadmap-owner-row">';
   plan.forEach(function(acts, qi) {
+    var suggested = dominantOwner(acts);
+    var uid = 'own_q' + qi;
+    var savedOwner = '';
+    try { savedOwner = JSON.parse(localStorage.getItem('360idp_data') || '{}')['roadmap_owner_q' + qi] || ''; } catch(e){}
+    var effective = savedOwner || suggested;
     html += '<td>';
     html += '<span class="owner-label">Owner</span>';
-    html += escHtml(dominantOwner(acts));
+    html += '<div class="owner-checkboxes">';
+    ['Self','Manager','Both'].forEach(function(opt) {
+      var chkId = uid + '_' + opt.toLowerCase();
+      var checked = effective === opt ? ' checked' : '';
+      html += '<label class="owner-chk-label">';
+      html += '<input type="checkbox" class="owner-chk" data-quarter="'+qi+'" data-option="'+opt+'"' + checked + '> ';
+      html += escHtml(opt);
+      html += '</label>';
+    });
+    html += '</div>';
     html += '</td>';
   });
   html += '</tr>';
@@ -2540,6 +2748,24 @@ function generateAIPlan() {
     '<div class="ai-plan-output" style="margin-top:16px;border:none;border-radius:10px;overflow:hidden;">' +
       html +
     '</div>';
+
+  // Wire owner checkbox mutual-exclusivity and save
+  document.querySelectorAll('.owner-chk').forEach(function(chk) {
+    chk.addEventListener('change', function() {
+      var qi = this.getAttribute('data-quarter');
+      var opt = this.getAttribute('data-option');
+      // Uncheck siblings
+      document.querySelectorAll('.owner-chk[data-quarter="'+qi+'"]').forEach(function(c) {
+        c.checked = c.getAttribute('data-option') === opt && chk.checked;
+      });
+      // Save selection
+      var stored = {};
+      try { stored = JSON.parse(localStorage.getItem('360idp_data') || '{}'); } catch(e){}
+      stored['roadmap_owner_q' + qi] = chk.checked ? opt : '';
+      try { localStorage.setItem('360idp_data', JSON.stringify(stored)); } catch(e){}
+      showToast('\u2713 Saved locally');
+    });
+  });
 
   saveAll();
 
