@@ -660,7 +660,15 @@ body {
 .roadmap-header-inner {
   display: flex;
   align-items: center;
-  gap: 16px;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.roadmap-header-btns {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
 }
 
 .roadmap-gen-btn {
@@ -682,22 +690,52 @@ body {
 
 .roadmap-gen-btn:hover { background: #00A5C0; transform: translateY(-1px); }
 .roadmap-gen-btn:active { transform: translateY(0); }
+.roadmap-gen-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+.roadmap-redo-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.35);
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  font-size: 17px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+  line-height: 1;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.roadmap-redo-btn:hover { background: rgba(255,255,255,0.22); border-color: rgba(255,255,255,0.6); transform: rotate(-30deg); }
+.roadmap-redo-btn:active { transform: rotate(-60deg); }
+.roadmap-redo-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 
 .roadmap-phase-text {
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 12px;
   font-weight: 600;
-  color: rgba(255,255,255,0.75);
+  color: rgba(255,255,255,0.78);
   letter-spacing: 0.3px;
 }
 
-/* Outcomes prompt above table */
+/* Outcomes prompt — full-width row between areas of focus and textarea row */
+.roadmap-prompt-row td {
+  background: var(--white);
+  border: 1px solid var(--light-gray);
+  border-top: none;
+  padding: 8px 14px;
+}
+
 .roadmap-outcomes-prompt {
   font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 12.5px;
+  font-size: 11.5px;
   color: var(--muted);
   font-style: italic;
-  margin: 14px 0 6px;
+  margin: 0;
   padding: 0;
 }
 
@@ -1717,14 +1755,10 @@ body {
       </div>
       <p class="card-desc">Your entries across sections 1–6 are analyzed and sequenced into a personalized quarterly roadmap — with specific actions, ownership, and built-in check-in milestones tied to your actual goals, skills, and experiences.</p>
 
-      <button class="generate-btn" id="generateBtn" onclick="generateAIPlan()">
-        <span>✦</span> Generate My Roadmap
-      </button>
-
       <div id="planOutput">
         <div class="empty-state">
           <div class="empty-icon">📋</div>
-          Complete sections 1–6 above, then click "Generate My Roadmap" to build your personalized 12-month plan.
+          Complete sections 1–6 above, then click <strong>✦ Generate My Roadmap</strong> in the roadmap header below to build your personalized 12-month plan.
         </div>
       </div>
     </div>
@@ -2334,9 +2368,11 @@ function generateAIPlan() {
     return;
   }
 
+  // Disable whichever generate buttons are currently in the DOM
   var btn = document.getElementById('generateBtn');
-  btn.disabled = true;
-  btn.innerHTML = '<div class="ai-spinner" style="width:14px;height:14px;border-width:2px;margin-right:6px;display:inline-block;vertical-align:middle;"></div> Building your roadmap...';
+  var redoBtn = document.querySelector('.roadmap-redo-btn');
+  if (btn) { btn.disabled = true; btn.innerHTML = '&#8635; Building...'; }
+  if (redoBtn) { redoBtn.disabled = true; }
 
   // ── DATE & QUARTER SETUP ────────────────────────────
   var startDate = new Date();
@@ -2645,19 +2681,17 @@ function generateAIPlan() {
     return best;
   }
 
-  var html = '';
+  var html = '<table class="roadmap-table">';
 
-  // ── OUTCOMES PROMPT — above the table ──────────────
-  html += '<p class="roadmap-outcomes-prompt">Enter the outcomes you envision for each quarter in the space provided.</p>';
-
-  html += '<table class="roadmap-table">';
-
-  // ── ROW 1: Banner header — dark bg, cyan button, phase text ──
+  // ── ROW 1: Header bar — text LEFT, buttons RIGHT ──
   html += '<tr class="roadmap-header-row">';
   html += '<td colspan="4">';
   html += '<div class="roadmap-header-inner">';
-  html += '<button class="roadmap-gen-btn" onclick="generateAIPlan()" id="regenBtn">\u2746 Generate My Roadmap</button>';
-  html += '<span class="roadmap-phase-text">4 Phases of Development</span>';
+  html += '<span class="roadmap-phase-text">&#10022; 4 Phases of Development</span>';
+  html += '<div class="roadmap-header-btns">';
+  html += '<button class="roadmap-gen-btn" id="generateBtn" onclick="generateAIPlan()">&#10022; Generate My Roadmap</button>';
+  html += '<button class="roadmap-redo-btn" onclick="generateAIPlan()" title="Regenerate roadmap" aria-label="Regenerate roadmap">&#8635;</button>';
+  html += '</div>';
   html += '</div>';
   html += '</td>';
   html += '</tr>';
@@ -2690,6 +2724,11 @@ function generateAIPlan() {
   });
   html += '</tr>';
 
+  // ── ROW 3b: Outcomes prompt — full-width instruction row ──
+  html += '<tr class="roadmap-prompt-row">';
+  html += '<td colspan="4"><span class="roadmap-outcomes-prompt">Enter the outcomes you envision for each quarter in the space provided.</span></td>';
+  html += '</tr>';
+
   // ── ROW 4: User-editable outcomes textarea ──
   html += '<tr class="roadmap-outcomes-row">';
   quarters.forEach(function(q, qi) {
@@ -2698,7 +2737,7 @@ function generateAIPlan() {
     try { savedVal = JSON.parse(localStorage.getItem('360idp_data') || '{}')[savedKey] || ''; } catch(e){}
     html += '<td>';
     html += '<div class="outcome-box">';
-    html += '<textarea class="outcome-textarea" data-save="'+savedKey+'" placeholder="Describe the outcome you envision by end of '+escHtml(q.label)+'..." rows="3">'+escHtml(savedVal)+'</textarea>';
+    html += '<textarea class="outcome-textarea" data-save="'+savedKey+'" placeholder="Outcomes I envision..." rows="3">'+escHtml(savedVal)+'</textarea>';
     html += '</div>';
     html += '</td>';
   });
@@ -2722,7 +2761,6 @@ function generateAIPlan() {
   html += '<tr class="roadmap-owner-row">';
   plan.forEach(function(acts, qi) {
     var suggested = dominantOwner(acts);
-    var uid = 'own_q' + qi;
     var savedOwner = '';
     try { savedOwner = JSON.parse(localStorage.getItem('360idp_data') || '{}')['roadmap_owner_q' + qi] || ''; } catch(e){}
     var effective = savedOwner || suggested;
@@ -2730,7 +2768,6 @@ function generateAIPlan() {
     html += '<span class="owner-label">Owner</span>';
     html += '<div class="owner-checkboxes">';
     ['Self','Manager','Both'].forEach(function(opt) {
-      var chkId = uid + '_' + opt.toLowerCase();
       var checked = effective === opt ? ' checked' : '';
       html += '<label class="owner-chk-label">';
       html += '<input type="checkbox" class="owner-chk" data-quarter="'+qi+'" data-option="'+opt+'"' + checked + '> ';
@@ -2754,11 +2791,9 @@ function generateAIPlan() {
     chk.addEventListener('change', function() {
       var qi = this.getAttribute('data-quarter');
       var opt = this.getAttribute('data-option');
-      // Uncheck siblings
       document.querySelectorAll('.owner-chk[data-quarter="'+qi+'"]').forEach(function(c) {
         c.checked = c.getAttribute('data-option') === opt && chk.checked;
       });
-      // Save selection
       var stored = {};
       try { stored = JSON.parse(localStorage.getItem('360idp_data') || '{}'); } catch(e){}
       stored['roadmap_owner_q' + qi] = chk.checked ? opt : '';
@@ -2769,8 +2804,11 @@ function generateAIPlan() {
 
   saveAll();
 
-  btn.disabled = false;
-  btn.innerHTML = '<span>\u2746</span> Regenerate Roadmap';
+  // Reset the card-level button if it still exists
+  var cardBtn = document.getElementById('generateBtn');
+  if (cardBtn && cardBtn.closest('#planOutput')) {
+    // generateBtn is now inside the roadmap table header — leave it alone
+  }
 }
 
 
