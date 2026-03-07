@@ -759,6 +759,21 @@ body {
   display: block;
 }
 
+.outcome-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: none;
+  background: transparent;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text);
+  resize: vertical;
+  outline: none;
+  padding: 0;
+  min-height: 56px;
+}
+
 /* Status row */
 .roadmap-status-row td {
   background: var(--white);
@@ -2342,33 +2357,107 @@ function generateAIPlan() {
   q4actions.push({ action: 'Q4 Review: Celebrate wins, close out '+quarters[3].label+' IDP, and set priorities for next year', owner:'Both', checkin:true });
   plan.push(q4actions);
 
+  // ── SYNTHESIZE FOCUS AREAS ──────────────────────────
+  // Rather than echoing partial action sentences, extract clean concept labels
+  // from the user's raw text across all relevant sections per quarter.
+
+  function synthesizeFocusAreas(sourceTexts, maxItems) {
+    maxItems = maxItems || 4;
+
+    // Concept library: pattern → clean label (ordered, first match wins per text chunk)
+    var concepts = [
+      // Leadership & influence
+      [/\b(executi|senior|vp|direct|c-suite|board|executive)/i,       'Executive engagement'],
+      [/\bstrateg/i,                                                    'Strategic thinking'],
+      [/\b(lead|leadership|manag)/i,                                    'Leadership development'],
+      [/\b(influen|sponsor|stakeholder|visibility)/i,                   'Stakeholder influence'],
+      [/\b(coach|mentor)/i,                                             'Coaching & mentoring'],
+      [/\b(cross.function|collaborat|partner)/i,                        'Cross-functional collaboration'],
+      [/\b(team|people manag|direct report)/i,                          'People management'],
+      // Communication & presence
+      [/\b(present|storytell|narrativ|pitch)/i,                         'Executive presentation'],
+      [/\b(communicat|messag|writ)/i,                                   'Communication skills'],
+      [/\b(facilitat|workshop|training)/i,                              'Facilitation'],
+      // Technical & analytical
+      [/\b(data|analyt|metric|dashboard|report)/i,                      'Data & analytics'],
+      [/\b(ai|machine learning|ml|automation|automat)/i,                'AI & automation'],
+      [/\b(sql|python|code|programming|engineer)/i,                     'Technical skills'],
+      [/\b(certif|accredit|qualif)/i,                                   'Certifications'],
+      [/\b(product|platform|system|tool|tech|software)/i,               'Product & technology'],
+      [/\b(project manag|pm |scrum|agile|deliverable)/i,                'Project management'],
+      // Business & commercial
+      [/\b(sales|revenue|pipeline|quota|close)/i,                       'Sales effectiveness'],
+      [/\b(customer|client|account|retention)/i,                        'Customer success'],
+      [/\b(market|go-to-market|gtm|segment)/i,                          'Market strategy'],
+      [/\b(financ|budget|p&l|forecast)/i,                               'Financial acumen'],
+      [/\b(operat|process|efficien|optimis)/i,                          'Operational excellence'],
+      // Personal growth
+      [/\b(feedback|self.aware|reflect)/i,                              'Feedback & self-awareness'],
+      [/\b(network|relationship|connect)/i,                             'Network building'],
+      [/\b(innovat|creat|problem.solv|design think)/i,                  'Innovation & problem-solving'],
+      [/\b(resilience|confidence|mindset|wellbeing)/i,                  'Personal effectiveness'],
+      [/\b(career|promotion|next level|role)/i,                         'Career progression'],
+    ];
+
+    var found = {};
+    var ordered = [];
+
+    // Run each source text against all concept patterns
+    sourceTexts.forEach(function(text) {
+      if (!text) return;
+      // Split into sentences / bullet lines for finer matching
+      var chunks = text.split(/[\n.;]+/).map(function(s){ return s.trim(); }).filter(Boolean);
+      chunks.forEach(function(chunk) {
+        concepts.forEach(function(pair) {
+          if (pair[0].test(chunk) && !found[pair[1]]) {
+            found[pair[1]] = true;
+            ordered.push(pair[1]);
+          }
+        });
+      });
+    });
+
+    // Fallback: if nothing matched, pull meaningful nouns from the text
+    if (ordered.length === 0) {
+      sourceTexts.forEach(function(text) {
+        if (!text || ordered.length >= maxItems) return;
+        // Take first real phrase (5–35 chars) from each source
+        var lines = text.split(/[\n.;•\-\*]+/);
+        lines.forEach(function(line) {
+          var clean = line.replace(/^[\s\d\.\)\]]+/,'').trim();
+          if (clean.length >= 5 && clean.length <= 40 && ordered.length < maxItems) {
+            // Title-case it
+            clean = clean.charAt(0).toUpperCase() + clean.slice(1).toLowerCase();
+            if (!found[clean]) { found[clean] = true; ordered.push(clean); }
+          }
+        });
+      });
+    }
+
+    return ordered.slice(0, maxItems);
+  }
+
+  // Define which source sections each quarter draws from
+  var qSourceTexts = [
+    [learning, skills, support],                   // Q1: Foundation
+    [skills, experiences, loves],                  // Q2: Build
+    [experiences, goals, skills],                  // Q3: Apply
+    [goals, learning, experiences],                // Q4: Sustain
+  ];
+
   // ── RENDER 4-COLUMN ROADMAP ──────────────────────────
   var qPhases = ['Foundation', 'Build', 'Apply', 'Sustain'];
   var qColors = ['var(--cyan)', 'var(--purple)', 'var(--green)', 'var(--orange)'];
 
-  // Separate themes (non-checkin) and checkin from each quarter's actions
-  var qThemes   = plan.map(function(acts){ return acts.filter(function(a){ return !a.checkin; }); });
   var qCheckins = plan.map(function(acts){ return acts.find(function(a){ return a.checkin; }); });
 
-  // Determine dominant owner per quarter (most common non-checkin owner)
+  // Determine dominant owner per quarter
   function dominantOwner(acts) {
     var counts = {};
     acts.forEach(function(a){ if(!a.checkin){ counts[a.owner] = (counts[a.owner]||0)+1; } });
     var best = 'Self', bestN = 0;
     Object.keys(counts).forEach(function(k){ if(counts[k]>bestN){ bestN=counts[k]; best=k; } });
     return best;
-  }
-
-  function buildThemeList(acts) {
-    if (!acts.length) return '<li style="color:var(--muted);font-style:italic;">Complete sections above to populate themes.</li>';
-    return acts.map(function(a){ return '<li>'+escHtml(a.action)+'</li>'; }).join('');
-  }
-
-  // Build the outcome summary — the checkin action text, cleaned up
-  function outcomeText(checkin, qi) {
-    if (!checkin) return 'Review progress and adjust priorities with your manager.';
-    // Strip the "Q# Check-in:" prefix for cleaner display
-    return checkin.action.replace(/^Q\d[\s\S]*?:\s*/i, '');
   }
 
   var html = '<table class="roadmap-table">';
@@ -2389,23 +2478,33 @@ function generateAIPlan() {
   });
   html += '</tr>';
 
-  // ── ROW 3: Key themes ──
+  // ── ROW 3: Areas of focus (synthesized) ──
   html += '<tr class="roadmap-themes-row">';
-  qThemes.forEach(function(acts) {
+  qSourceTexts.forEach(function(srcs, qi) {
+    var focusAreas = synthesizeFocusAreas(srcs, 4);
     html += '<td>';
-    html += '<span class="themes-label">Key themes from your entries</span>';
-    html += '<ul>'+buildThemeList(acts)+'</ul>';
+    html += '<span class="themes-label">Areas of Focus</span>';
+    if (focusAreas.length) {
+      html += '<ul>';
+      focusAreas.forEach(function(f){ html += '<li>'+escHtml(f)+'</li>'; });
+      html += '</ul>';
+    } else {
+      html += '<p style="color:var(--muted);font-style:italic;font-size:11px;">Complete sections 1\u20136 to populate focus areas.</p>';
+    }
     html += '</td>';
   });
   html += '</tr>';
 
-  // ── ROW 4: Outcomes box ──
+  // ── ROW 4: User-editable outcomes textarea ──
   html += '<tr class="roadmap-outcomes-row">';
-  qCheckins.forEach(function(ci, qi) {
+  quarters.forEach(function(q, qi) {
+    var savedKey = 'roadmap_outcome_q' + qi;
+    var savedVal = '';
+    try { savedVal = JSON.parse(localStorage.getItem('360idp_data') || '{}')[savedKey] || ''; } catch(e){}
     html += '<td>';
     html += '<div class="outcome-box">';
-    html += '<span class="outcome-label">Quarter outcome &amp; check-in</span>';
-    html += escHtml(outcomeText(ci, qi));
+    html += '<span class="outcome-label">What outcome(s) do you envision for this quarter?</span>';
+    html += '<textarea class="outcome-textarea" data-save="'+savedKey+'" placeholder="Describe the outcome you want to achieve by end of '+escHtml(q.label)+'..." rows="3">'+escHtml(savedVal)+'</textarea>';
     html += '</div>';
     html += '</td>';
   });
