@@ -2544,19 +2544,56 @@ function sendEmail() {
   var cc      = (document.getElementById('shareCc')      || {}).value || '';
   var subject = (document.getElementById('shareSubject') || {}).value || '360 IDP';
   var message = (document.getElementById('shareMessage') || {}).value || '';
-  var body    = (message ? message + '\n\n---\n\n' : '') + buildPlanText();
+
+  // Build a concise summary for the email body — full plan text can exceed
+  // mailto URL limits (~2000 chars) causing silent failures in most browsers.
+  var name          = getFieldVal('empName');
+  var role          = getFieldVal('currentRole');
+  var date          = getFieldVal('planDate');
+  var goals         = getFieldVal('card1');
+  var learning      = getFieldVal('card3');
+  var skills        = getFieldVal('card4');
+
+  var summary = '360 INDIVIDUAL DEVELOPMENT PLAN\n';
+  summary    += '================================\n';
+  if (name)     summary += 'Employee: ' + name + '\n';
+  if (role)     summary += 'Role: '     + role + '\n';
+  if (date)     summary += 'Date: '     + date + '\n';
+  summary    += '\n';
+  if (goals)    summary += '1. Career Goals\n' + goals.substring(0, 300) + (goals.length > 300 ? '...' : '') + '\n\n';
+  if (learning) summary += '3. Learning Goals\n' + learning.substring(0, 300) + (learning.length > 300 ? '...' : '') + '\n\n';
+  if (skills)   summary += '4. Skills to Develop\n' + skills.substring(0, 300) + (skills.length > 300 ? '...' : '') + '\n\n';
+
+  // Add outcomes from roadmap if available
+  var table = document.querySelector('#planOutput .roadmap-table');
+  if (table) {
+    var outcomeTAs = table.querySelectorAll('.roadmap-outcomes-row td textarea');
+    var qLabels    = table.querySelectorAll('.roadmap-qlabel-row .q-badge');
+    var hasOutcomes = false;
+    outcomeTAs.forEach(function(ta, i) {
+      if (ta.value.trim()) hasOutcomes = true;
+    });
+    if (hasOutcomes) {
+      summary += '7. Quarterly Development Plan — Outcomes\n';
+      outcomeTAs.forEach(function(ta, i) {
+        var label = qLabels[i] ? qLabels[i].textContent.trim() : ('Q'+(i+1));
+        if (ta.value.trim()) summary += label + ': ' + ta.value.trim() + '\n';
+      });
+      summary += '\n';
+    }
+  }
+
+  summary += '---\nFull plan available at: ' + window.location.href;
+
+  var body = (message ? message + '\n\n' : '') + summary;
 
   var mailto = 'mailto:' + encodeURIComponent(to) +
     '?subject=' + encodeURIComponent(subject) +
     (cc ? '&cc=' + encodeURIComponent(cc) : '') +
     '&body=' + encodeURIComponent(body);
 
-  try {
-    var w = window.open(mailto, '_self');
-    if (!w) location.href = mailto;
-  } catch(e) {
-    location.href = mailto;
-  }
+  // location.href is the most reliable cross-browser approach for mailto
+  location.href = mailto;
 }
 
 function copyPlanToClipboard() {
