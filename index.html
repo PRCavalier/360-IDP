@@ -2545,55 +2545,57 @@ function sendEmail() {
   var subject = (document.getElementById('shareSubject') || {}).value || '360 IDP';
   var message = (document.getElementById('shareMessage') || {}).value || '';
 
-  // Build a concise summary for the email body — full plan text can exceed
-  // mailto URL limits (~2000 chars) causing silent failures in most browsers.
-  var name          = getFieldVal('empName');
-  var role          = getFieldVal('currentRole');
-  var date          = getFieldVal('planDate');
-  var goals         = getFieldVal('card1');
-  var learning      = getFieldVal('card3');
-  var skills        = getFieldVal('card4');
+  // Build a body that stays safely under mailto URL limits (~2000 chars encoded)
+  var name     = getFieldVal('empName');
+  var role     = getFieldVal('currentRole');
+  var date     = getFieldVal('planDate');
+  var goals    = getFieldVal('card1');
+  var learning = getFieldVal('card3');
+  var skills   = getFieldVal('card4');
 
-  var summary = '360 INDIVIDUAL DEVELOPMENT PLAN\n';
-  summary    += '================================\n';
-  if (name)     summary += 'Employee: ' + name + '\n';
-  if (role)     summary += 'Role: '     + role + '\n';
-  if (date)     summary += 'Date: '     + date + '\n';
-  summary    += '\n';
-  if (goals)    summary += '1. Career Goals\n' + goals.substring(0, 300) + (goals.length > 300 ? '...' : '') + '\n\n';
-  if (learning) summary += '3. Learning Goals\n' + learning.substring(0, 300) + (learning.length > 300 ? '...' : '') + '\n\n';
-  if (skills)   summary += '4. Skills to Develop\n' + skills.substring(0, 300) + (skills.length > 300 ? '...' : '') + '\n\n';
+  function cap(s, n) { s = s || ''; return s.length > n ? s.substring(0, n) + '...' : s; }
 
-  // Add outcomes from roadmap if available
+  var body = '';
+  if (message) body += message + '\n\n';
+  body += '360 INDIVIDUAL DEVELOPMENT PLAN\n================================\n';
+  if (name)  body += 'Employee: ' + name + '\n';
+  if (role)  body += 'Role: '     + role + '\n';
+  if (date)  body += 'Date: '     + date + '\n';
+  body += '\n';
+  if (goals)    body += '1. Career Goals\n'        + cap(goals, 250)    + '\n\n';
+  if (learning) body += '3. Learning Goals\n'      + cap(learning, 250) + '\n\n';
+  if (skills)   body += '4. Skills to Develop\n'   + cap(skills, 250)   + '\n\n';
+
+  // Quarterly outcomes
   var table = document.querySelector('#planOutput .roadmap-table');
   if (table) {
-    var outcomeTAs = table.querySelectorAll('.roadmap-outcomes-row td textarea');
-    var qLabels    = table.querySelectorAll('.roadmap-qlabel-row .q-badge');
-    var hasOutcomes = false;
-    outcomeTAs.forEach(function(ta, i) {
-      if (ta.value.trim()) hasOutcomes = true;
+    var qTAs    = table.querySelectorAll('.roadmap-outcomes-row td textarea');
+    var qBadges = table.querySelectorAll('.roadmap-qlabel-row .q-badge');
+    var outcomeLines = '';
+    qTAs.forEach(function(ta, i) {
+      if (ta.value.trim()) {
+        var lbl = qBadges[i] ? qBadges[i].textContent.trim() : ('Q'+(i+1));
+        outcomeLines += lbl + ': ' + cap(ta.value.trim(), 120) + '\n';
+      }
     });
-    if (hasOutcomes) {
-      summary += '7. Quarterly Development Plan — Outcomes\n';
-      outcomeTAs.forEach(function(ta, i) {
-        var label = qLabels[i] ? qLabels[i].textContent.trim() : ('Q'+(i+1));
-        if (ta.value.trim()) summary += label + ': ' + ta.value.trim() + '\n';
-      });
-      summary += '\n';
-    }
+    if (outcomeLines) body += '7. Quarterly Outcomes\n' + outcomeLines + '\n';
   }
 
-  summary += '---\nFull plan available at: ' + window.location.href;
-
-  var body = (message ? message + '\n\n' : '') + summary;
+  body += 'Full plan: ' + window.location.href;
 
   var mailto = 'mailto:' + encodeURIComponent(to) +
     '?subject=' + encodeURIComponent(subject) +
     (cc ? '&cc=' + encodeURIComponent(cc) : '') +
     '&body=' + encodeURIComponent(body);
 
-  // location.href is the most reliable cross-browser approach for mailto
-  location.href = mailto;
+  // Use a temporary <a> click — most reliable mailto trigger across browsers
+  // including SSO environments where window.open is blocked
+  var a = document.createElement('a');
+  a.href = mailto;
+  a.style.display = 'none';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(function() { document.body.removeChild(a); }, 200);
 }
 
 function copyPlanToClipboard() {
@@ -2625,8 +2627,16 @@ function fallbackCopy(text, btn) {
 }
 
 
+function openModal(id) {
+  var el = document.getElementById(id);
+  if (el) { el.classList.add('open'); document.body.style.overflow = 'hidden'; }
+}
 function openModalEl(id) { openModal(id); }
-function closeModal(id) { document.getElementById(id).classList.remove('open'); document.body.style.overflow = ''; }
+function closeModal(id) {
+  var el = document.getElementById(id);
+  if (el) { el.classList.remove('open'); document.body.style.overflow = ''; }
+}
+function openResetModal() { openModal('resetModal'); }
 
 document.addEventListener('click', function(e) {
   ['shareModal','resetModal','versionModal'].forEach(function(id) {
