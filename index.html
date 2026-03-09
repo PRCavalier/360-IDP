@@ -1755,10 +1755,14 @@ body {
       </div>
       <p class="card-desc">Your entries across sections 1–6 are analyzed and sequenced into a personalized quarterly roadmap — with specific actions, ownership, and built-in check-in milestones tied to your actual goals, skills, and experiences.</p>
 
+      <button class="generate-btn" id="generateBtn" onclick="generateAIPlan()">
+        <span>✦</span> Generate My Roadmap
+      </button>
+
       <div id="planOutput">
         <div class="empty-state">
           <div class="empty-icon">📋</div>
-          Complete sections 1–6 above, then click <strong>✦ Generate My Roadmap</strong> in the roadmap header below to build your personalized 12-month plan.
+          Complete sections 1–6 above, then click <strong>✦ Generate My Roadmap</strong> to build your personalized 12-month plan.
         </div>
       </div>
     </div>
@@ -2368,10 +2372,12 @@ function generateAIPlan() {
     return;
   }
 
-  // Disable whichever generate buttons are currently in the DOM
+  // Disable all generate/redo buttons currently in the DOM
   var btn = document.getElementById('generateBtn');
+  var regenBtn = document.getElementById('regenBtn');
   var redoBtn = document.querySelector('.roadmap-redo-btn');
-  if (btn) { btn.disabled = true; btn.innerHTML = '&#8635; Building...'; }
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span>&#8635;</span> Building...'; }
+  if (regenBtn) { regenBtn.disabled = true; regenBtn.innerHTML = '&#8635; Building...'; }
   if (redoBtn) { redoBtn.disabled = true; }
 
   // ── DATE & QUARTER SETUP ────────────────────────────
@@ -2689,7 +2695,7 @@ function generateAIPlan() {
   html += '<div class="roadmap-header-inner">';
   html += '<span class="roadmap-phase-text">&#10022; 4 Phases of Development</span>';
   html += '<div class="roadmap-header-btns">';
-  html += '<button class="roadmap-gen-btn" id="generateBtn" onclick="generateAIPlan()">&#10022; Generate My Roadmap</button>';
+  html += '<button class="roadmap-gen-btn" id="regenBtn" onclick="generateAIPlan()">&#10022; Generate My Roadmap</button>';
   html += '<button class="roadmap-redo-btn" onclick="generateAIPlan()" title="Regenerate roadmap" aria-label="Regenerate roadmap">&#8635;</button>';
   html += '</div>';
   html += '</div>';
@@ -2804,11 +2810,9 @@ function generateAIPlan() {
 
   saveAll();
 
-  // Reset the card-level button if it still exists
+  // Restore the permanent card-level button
   var cardBtn = document.getElementById('generateBtn');
-  if (cardBtn && cardBtn.closest('#planOutput')) {
-    // generateBtn is now inside the roadmap table header — leave it alone
-  }
+  if (cardBtn) { cardBtn.disabled = false; cardBtn.innerHTML = '<span>\u2746</span> Regenerate Roadmap'; }
 }
 
 
