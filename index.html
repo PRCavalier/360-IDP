@@ -739,15 +739,15 @@ body {
   padding: 0;
 }
 
-/* Owner checkboxes */
-.owner-checkboxes {
+/* Owner radio buttons */
+.owner-radios {
   display: flex;
   flex-direction: column;
   gap: 5px;
   margin-top: 4px;
 }
 
-.owner-chk-label {
+.owner-radio-label {
   display: flex;
   align-items: center;
   gap: 7px;
@@ -757,7 +757,7 @@ body {
   user-select: none;
 }
 
-.owner-chk {
+.owner-radio {
   width: 14px;
   height: 14px;
   accent-color: var(--purple);
@@ -2031,7 +2031,19 @@ function loadSaved() {
     var data = JSON.parse(raw);
     applyFields(data);
     if (data._generatedPlan) {
-      document.getElementById('planOutput').innerHTML = data._generatedPlan;
+      // If the saved plan HTML contains old checkbox markup, discard it and re-generate
+      if (data._generatedPlan.indexOf('type="checkbox"') !== -1 ||
+          data._generatedPlan.indexOf("type='checkbox'") !== -1 ||
+          data._generatedPlan.indexOf('owner-chk') !== -1) {
+        // Wipe stale HTML from storage and re-render fresh
+        delete data._generatedPlan;
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        setTimeout(generateAIPlan, 100);
+      } else {
+        document.getElementById('planOutput').innerHTML = data._generatedPlan;
+        // Re-wire radio buttons after restoring HTML
+        wireOwnerRadios();
+      }
     }
   } catch(e) {}
   updateProgress();
@@ -2158,14 +2170,20 @@ function loadVersion(id) {
   if (!ver) return;
   applyFields(ver.data);
   if (ver.data._generatedPlan) {
-    document.getElementById('planOutput').innerHTML = ver.data._generatedPlan;
+    // Discard stale checkbox HTML — re-generate instead
+    if (ver.data._generatedPlan.indexOf('type="checkbox"') !== -1 ||
+        ver.data._generatedPlan.indexOf('owner-chk') !== -1) {
+      setTimeout(generateAIPlan, 100);
+    } else {
+      document.getElementById('planOutput').innerHTML = ver.data._generatedPlan;
+      wireOwnerRadios();
+    }
   } else {
     document.getElementById('planOutput').innerHTML =
       '<div class="empty-state"><div class="empty-icon">📋</div>No generated plan in this version.</div>';
   }
   saveAll();
   showToast('✓ Loaded: ' + ver.name);
-  // Reset selector to "current"
   document.getElementById('versionSelect').value = 'current';
 }
 
@@ -2231,19 +2249,95 @@ function openShareModal() {
   openModal('shareModal');
 }
 
+function buildRoadmapText() {
+  // Reads the rendered roadmap from the DOM and formats it as plain text
+  var lines = [];
+  var table = document.querySelector('#planOutput .roadmap-table');
+  if (!table) return '';
+
+  var qPhases = ['Q1 — Foundation', 'Q2 — Build', 'Q3 — Apply', 'Q4 — Sustain'];
+
+  // Read quarter labels from the qlabel row
+  var qlabelCells = table.querySelectorAll('.roadmap-qlabel-row td');
+  var qLabels = [];
+  qlabelCells.forEach(function(td) {
+    var badge = td.querySelector('.q-badge');
+    var range = td.querySelector('span:last-child');
+    qLabels.push((badge ? badge.textContent.trim() : '') + (range ? ' (' + range.textContent.trim() + ')' : ''));
+  });
+
+  // Read focus areas per quarter
+  var themeCells = table.querySelectorAll('.roadmap-themes-row td');
+  var qFocus = [];
+  themeCells.forEach(function(td) {
+    var items = td.querySelectorAll('li');
+    var focusList = [];
+    items.forEach(function(li) { focusList.push(li.textContent.trim()); });
+    qFocus.push(focusList);
+  });
+
+  // Read outcome textareas per quarter
+  var outcomeCells = table.querySelectorAll('.roadmap-outcomes-row td textarea');
+  var qOutcomes = [];
+  outcomeCells.forEach(function(ta) { qOutcomes.push(ta.value.trim()); });
+
+  // Read owner checkboxes per quarter
+  var qOwners = [];
+  for (var qi = 0; qi < 4; qi++) {
+    var checked = table.querySelector('.owner-radio[data-quarter="'+qi+'"]:checked');
+    qOwners.push(checked ? checked.getAttribute('data-option') : '—');
+  }
+
+  // Read status per quarter
+  var statusCells = table.querySelectorAll('.roadmap-status-row td');
+  var qStatus = [];
+  statusCells.forEach(function(td) {
+    var s = td.querySelector('.status-active, .status-planned');
+    qStatus.push(s ? s.textContent.trim() : '');
+  });
+
+  lines.push('7. QUARTERLY DEVELOPMENT PLAN');
+  lines.push(new Array(32).join('-'));
+  lines.push('');
+
+  for (var i = 0; i < 4; i++) {
+    var label = qLabels[i] || qPhases[i];
+    lines.push(label.toUpperCase());
+    if (qFocus[i] && qFocus[i].length) {
+      lines.push('  Areas of Focus:');
+      qFocus[i].forEach(function(f) { lines.push('    \u2022 ' + f); });
+    }
+    if (qOutcomes[i]) {
+      lines.push('  Outcomes I Envision:');
+      lines.push('    ' + qOutcomes[i]);
+    }
+    if (qStatus[i])  lines.push('  Status: ' + qStatus[i]);
+    if (qOwners[i])  lines.push('  Owner: '  + qOwners[i]);
+    lines.push('');
+  }
+
+  return lines.join('\n');
+}
+
 function buildPlanText() {
   var lines = [];
   var name = getFieldVal('empName');
   var mgr  = getFieldVal('mgrName');
   var date = getFieldVal('planDate');
   var role = getFieldVal('currentRole');
+  var timeInRole    = getFieldVal('timeInRole');
+  var timeAtCompany = getFieldVal('timeAtCompany');
+
   lines.push('360 INDIVIDUAL DEVELOPMENT PLAN');
   lines.push('================================');
-  if (name) lines.push('Employee: ' + name);
-  if (mgr)  lines.push('Manager: '  + mgr);
-  if (role) lines.push('Role: '     + role);
-  if (date) lines.push('Date: '     + date);
+  if (name)          lines.push('Employee: '        + name);
+  if (mgr)           lines.push('Manager: '         + mgr);
+  if (role)          lines.push('Role: '            + role);
+  if (timeInRole)    lines.push('Time in Role: '    + timeInRole + ' yrs');
+  if (timeAtCompany) lines.push('Time at Company: ' + timeAtCompany + ' yrs');
+  if (date)          lines.push('Date: '            + date);
   lines.push('');
+
   var sections = [
     ['1. Career Goals',              'card1'],
     ['2. What I Love',               'card2'],
@@ -2251,9 +2345,8 @@ function buildPlanText() {
     ['4. Skills to Develop',         'card4'],
     ['5. Experiences to Gain',       'card5'],
     ['6. Support From My Manager',   'card6'],
-    ['8. Wins & Progress Log',       'card8'],
-    ['9. Future Opportunities',      'card9'],
   ];
+
   sections.forEach(function(s) {
     var val = getFieldVal(s[1]);
     if (val) {
@@ -2263,12 +2356,178 @@ function buildPlanText() {
       lines.push('');
     }
   });
+
+  // Include the quarterly roadmap if it has been generated
+  var roadmapText = buildRoadmapText();
+  if (roadmapText) {
+    lines.push(roadmapText);
+  }
+
+  var winsVal = getFieldVal('card8');
+  if (winsVal) {
+    lines.push('8. Wins & Progress Log');
+    lines.push(new Array(23).join('-'));
+    lines.push(winsVal);
+    lines.push('');
+  }
+
+  var futureVal = getFieldVal('card9');
+  if (futureVal) {
+    lines.push('9. Future Opportunities');
+    lines.push(new Array(24).join('-'));
+    lines.push(futureVal);
+    lines.push('');
+  }
+
   return lines.join('\n');
 }
 
+function buildRoadmapHTML() {
+  // Returns a styled HTML string of the roadmap for the print view
+  var table = document.querySelector('#planOutput .roadmap-table');
+  if (!table) return '';
+
+  var qPhases = ['Foundation', 'Build', 'Apply', 'Sustain'];
+  var qColors = ['#00BCD4','#7B68C8','#1AAB8A','#F0A030'];
+  var qBg     = ['#E0F7FA','#EDE7F6','#E8F5E9','#FFF3E0'];
+
+  // Read all data from DOM
+  var qlabelCells = table.querySelectorAll('.roadmap-qlabel-row td');
+  var themeCells  = table.querySelectorAll('.roadmap-themes-row td');
+  var outcomeTAs  = table.querySelectorAll('.roadmap-outcomes-row td textarea');
+  var statusCells = table.querySelectorAll('.roadmap-status-row td');
+
+  var quarters = [];
+  for (var i = 0; i < 4; i++) {
+    var badge = qlabelCells[i] ? qlabelCells[i].querySelector('.q-badge') : null;
+    var rangeEl = qlabelCells[i] ? qlabelCells[i].querySelectorAll('span') : [];
+    var range = rangeEl.length > 1 ? rangeEl[rangeEl.length-1].textContent.trim() : '';
+
+    var focusItems = themeCells[i] ? themeCells[i].querySelectorAll('li') : [];
+    var focus = [];
+    focusItems.forEach(function(li){ focus.push(li.textContent.trim()); });
+
+    var outcome = outcomeTAs[i] ? outcomeTAs[i].value.trim() : '';
+
+    var statusEl = statusCells[i] ? statusCells[i].querySelector('.status-active,.status-planned') : null;
+    var status = statusEl ? statusEl.textContent.trim() : '';
+
+    var ownerChk = table.querySelector('.owner-radio[data-quarter="'+i+'"]:checked');
+    var owner = ownerChk ? ownerChk.getAttribute('data-option') : '—';
+
+    quarters.push({ label: badge ? badge.textContent.trim() : ('Q'+(i+1)), range: range, phase: qPhases[i], color: qColors[i], bg: qBg[i], focus: focus, outcome: outcome, status: status, owner: owner });
+  }
+
+  var h = '<h2 style="font-family:Arial,sans-serif;font-size:16px;margin:32px 0 8px;color:#222;">7. Quarterly Development Plan</h2>';
+  h += '<table style="width:100%;border-collapse:collapse;font-family:Arial,sans-serif;font-size:12px;">';
+
+  // Header row
+  h += '<tr style="background:#2D2D2D;">';
+  quarters.forEach(function(q) {
+    h += '<th style="padding:10px 12px;text-align:left;color:#fff;font-size:11px;font-weight:700;width:25%;">';
+    h += '<span style="background:'+q.color+';color:#fff;padding:2px 8px;border-radius:8px;font-size:10px;">'+q.label+'</span>';
+    h += ' <span style="color:rgba(255,255,255,0.7);font-weight:400;">'+q.phase+'</span>';
+    if (q.range) h += '<br><span style="color:rgba(255,255,255,0.5);font-size:10px;font-weight:400;">'+q.range+'</span>';
+    h += '</th>';
+  });
+  h += '</tr>';
+
+  // Focus areas row
+  h += '<tr>';
+  quarters.forEach(function(q) {
+    h += '<td style="background:'+q.bg+';padding:10px 12px;vertical-align:top;border:1px solid #e0e0e0;">';
+    h += '<div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#666;margin-bottom:5px;">Areas of Focus</div>';
+    if (q.focus.length) {
+      h += '<ul style="margin:0;padding-left:14px;">';
+      q.focus.forEach(function(f){ h += '<li style="margin-bottom:3px;">'+escHtml(f)+'</li>'; });
+      h += '</ul>';
+    } else {
+      h += '<em style="color:#aaa;font-size:11px;">—</em>';
+    }
+    h += '</td>';
+  });
+  h += '</tr>';
+
+  // Outcomes row
+  h += '<tr>';
+  quarters.forEach(function(q) {
+    h += '<td style="background:#fff;padding:10px 12px;vertical-align:top;border:1px solid #e0e0e0;">';
+    h += '<div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#666;margin-bottom:5px;">Outcomes I Envision</div>';
+    h += '<div style="font-size:12px;color:#333;min-height:40px;">'+(q.outcome ? escHtml(q.outcome) : '<em style="color:#aaa;">—</em>')+'</div>';
+    h += '</td>';
+  });
+  h += '</tr>';
+
+  // Status + Owner row
+  h += '<tr>';
+  quarters.forEach(function(q) {
+    h += '<td style="background:#f9f9f9;padding:8px 12px;border:1px solid #e0e0e0;">';
+    h += '<div style="font-size:10px;color:#666;margin-bottom:2px;"><strong>Status:</strong> '+escHtml(q.status || '—')+'</div>';
+    h += '<div style="font-size:10px;color:#666;"><strong>Owner:</strong> '+escHtml(q.owner)+'</div>';
+    h += '</td>';
+  });
+  h += '</tr>';
+
+  h += '</table>';
+  return h;
+}
+
+function downloadPrintVersion() {
+  var name          = getFieldVal('empName') || 'IDP';
+  var mgr           = getFieldVal('mgrName');
+  var role          = getFieldVal('currentRole');
+  var date          = getFieldVal('planDate');
+  var timeInRole    = getFieldVal('timeInRole');
+  var timeAtCompany = getFieldVal('timeAtCompany');
+
+  var win = window.open('', '_blank');
+  if (!win) { alert('Please allow pop-ups to download the print version.'); return; }
+
+  function section(title, content) {
+    if (!content) return '';
+    return '<h2>'+escHtml(title)+'</h2><p>'+escHtml(content).replace(/\n/g,'<br>')+'</p>';
+  }
+
+  var meta = '';
+  if (name)          meta += '<strong>Employee:</strong> '+escHtml(name)+'<br>';
+  if (mgr)           meta += '<strong>Manager:</strong> '  +escHtml(mgr)+'<br>';
+  if (role)          meta += '<strong>Role:</strong> '     +escHtml(role)+'<br>';
+  if (timeInRole)    meta += '<strong>Time in Role:</strong> '+escHtml(timeInRole)+' yrs<br>';
+  if (timeAtCompany) meta += '<strong>Time at Company:</strong> '+escHtml(timeAtCompany)+' yrs<br>';
+  if (date)          meta += '<strong>Date:</strong> '     +escHtml(date)+'<br>';
+
+  var body = '';
+  body += section('1. Career Goals',           getFieldVal('card1'));
+  body += section('2. What I Love',             getFieldVal('card2'));
+  body += section('3. Current Learning Goals',  getFieldVal('card3'));
+  body += section('4. Skills to Develop',       getFieldVal('card4'));
+  body += section('5. Experiences to Gain',     getFieldVal('card5'));
+  body += section('6. Support From My Manager', getFieldVal('card6'));
+  body += buildRoadmapHTML();
+  body += section('8. Wins & Progress Log',     getFieldVal('card8'));
+  body += section('9. Future Opportunities',    getFieldVal('card9'));
+
+  win.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'+escHtml(name)+' — 360 IDP</title>' +
+    '<style>' +
+    'body{font-family:Arial,sans-serif;max-width:900px;margin:40px auto;padding:0 24px;color:#222;line-height:1.6;}' +
+    'h1{font-size:22px;color:#333;margin-bottom:4px;}' +
+    '.meta{font-size:13px;color:#555;margin-bottom:24px;padding:12px 16px;background:#f5f5f5;border-radius:6px;border-left:4px solid #7B68C8;}' +
+    'h2{font-size:14px;font-weight:700;color:#7B68C8;border-bottom:1px solid #e0e0e0;padding-bottom:4px;margin-top:28px;text-transform:uppercase;letter-spacing:0.5px;}' +
+    'p{font-size:13px;margin:8px 0 0;white-space:pre-wrap;}' +
+    '@media print{body{margin:20px;} h2{color:#333;}}' +
+    '</style></head><body>' +
+    '<h1>360 Individual Development Plan</h1>' +
+    (meta ? '<div class="meta">'+meta+'</div>' : '') +
+    body +
+    '</body></html>');
+  win.document.close();
+  setTimeout(function() { win.print(); }, 500);
+}
+
+
 function togglePreview() {
-  var pane = document.getElementById('emailPreview');
-  var icon = document.getElementById('previewToggleIcon');
+  var pane    = document.getElementById('emailPreview');
+  var icon    = document.getElementById('previewToggleIcon');
   var content = document.getElementById('emailPreviewContent');
   if (pane.style.display === 'none') {
     pane.style.display = 'block';
@@ -2289,10 +2548,9 @@ function sendEmail() {
 
   var mailto = 'mailto:' + encodeURIComponent(to) +
     '?subject=' + encodeURIComponent(subject) +
-    (cc      ? '&cc='   + encodeURIComponent(cc)   : '') +
-    '&body='    + encodeURIComponent(body);
+    (cc ? '&cc=' + encodeURIComponent(cc) : '') +
+    '&body=' + encodeURIComponent(body);
 
-  // Try window.open first, fall back to location.href for SSO environments
   try {
     var w = window.open(mailto, '_self');
     if (!w) location.href = mailto;
@@ -2329,22 +2587,7 @@ function fallbackCopy(text, btn) {
   document.body.removeChild(ta);
 }
 
-function downloadPrintVersion() {
-  var name = getFieldVal('empName') || 'IDP';
-  var plan = buildPlanText();
-  var win  = window.open('', '_blank');
-  if (!win) { alert('Please allow pop-ups to download the print version.'); return; }
-  win.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>' + name + ' \u2014 360 IDP</title>' +
-    '<style>body{font-family:Arial,sans-serif;max-width:800px;margin:40px auto;padding:0 20px;color:#222;line-height:1.6;}' +
-    'h1{font-size:22px;margin-bottom:4px;}h2{font-size:15px;border-bottom:2px solid #ccc;padding-bottom:4px;margin-top:28px;}' +
-    'pre{white-space:pre-wrap;font-family:inherit;font-size:13px;}</style></head>' +
-    '<body><pre>' + plan.replace(/</g,'&lt;').replace(/>/g,'&gt;') + '</pre></body></html>');
-  win.document.close();
-  setTimeout(function() { win.print(); }, 400);
-}
 
-
-function openModal(id) { document.getElementById(id).classList.add('open'); document.body.style.overflow = 'hidden'; }
 function openModalEl(id) { openModal(id); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); document.body.style.overflow = ''; }
 
@@ -2777,20 +3020,21 @@ function generateAIPlan() {
   });
   html += '</tr>';
 
-  // ── ROW 6: Owner — checkboxes ──
+  // ── ROW 6: Owner — radio buttons ──
   html += '<tr class="roadmap-owner-row">';
   plan.forEach(function(acts, qi) {
     var suggested = dominantOwner(acts);
     var savedOwner = '';
     try { savedOwner = JSON.parse(localStorage.getItem('360idp_data') || '{}')['roadmap_owner_q' + qi] || ''; } catch(e){}
     var effective = savedOwner || suggested;
+    var groupName = 'owner_q' + qi;
     html += '<td>';
     html += '<span class="owner-label">Owner</span>';
-    html += '<div class="owner-checkboxes">';
+    html += '<div class="owner-radios">';
     ['Self','Manager','Both'].forEach(function(opt) {
       var checked = effective === opt ? ' checked' : '';
-      html += '<label class="owner-chk-label">';
-      html += '<input type="checkbox" class="owner-chk" data-quarter="'+qi+'" data-option="'+opt+'"' + checked + '> ';
+      html += '<label class="owner-radio-label">';
+      html += '<input type="radio" class="owner-radio" name="'+groupName+'" data-quarter="'+qi+'" data-option="'+opt+'"'+checked+'> ';
       html += escHtml(opt);
       html += '</label>';
     });
@@ -2806,21 +3050,8 @@ function generateAIPlan() {
       html +
     '</div>';
 
-  // Wire owner checkbox mutual-exclusivity and save
-  document.querySelectorAll('.owner-chk').forEach(function(chk) {
-    chk.addEventListener('change', function() {
-      var qi = this.getAttribute('data-quarter');
-      var opt = this.getAttribute('data-option');
-      document.querySelectorAll('.owner-chk[data-quarter="'+qi+'"]').forEach(function(c) {
-        c.checked = c.getAttribute('data-option') === opt && chk.checked;
-      });
-      var stored = {};
-      try { stored = JSON.parse(localStorage.getItem('360idp_data') || '{}'); } catch(e){}
-      stored['roadmap_owner_q' + qi] = chk.checked ? opt : '';
-      try { localStorage.setItem('360idp_data', JSON.stringify(stored)); } catch(e){}
-      showToast('\u2713 Saved locally');
-    });
-  });
+  // Wire owner radio save — mutual exclusivity handled natively by radio name groups
+  wireOwnerRadios();
 
   saveAll();
 
@@ -2829,6 +3060,21 @@ function generateAIPlan() {
   if (cardBtn) { cardBtn.disabled = false; cardBtn.innerHTML = '&#10022; Generate My Roadmap'; }
 }
 
+
+function wireOwnerRadios() {
+  document.querySelectorAll('.owner-radio').forEach(function(radio) {
+    radio.addEventListener('change', function() {
+      if (!this.checked) return;
+      var qi  = this.getAttribute('data-quarter');
+      var opt = this.getAttribute('data-option');
+      var stored = {};
+      try { stored = JSON.parse(localStorage.getItem('360idp_data') || '{}'); } catch(e){}
+      stored['roadmap_owner_q' + qi] = opt;
+      try { localStorage.setItem('360idp_data', JSON.stringify(stored)); } catch(e){}
+      showToast('\u2713 Saved locally');
+    });
+  });
+}
 
 function escHtml(str) {
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
