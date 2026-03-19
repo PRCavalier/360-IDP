@@ -430,6 +430,13 @@ body{font-family:var(--font-body);background:var(--dark);color:var(--chalk);min-
   font-size:11px;color:#1a4a5c;padding:2px 0;line-height:1.5;
 }
 .themes-row li::before{content:'· ';color:var(--teal);}
+.focus-textarea {
+  width:100%;border:none;background:transparent;outline:none;
+  font-family:var(--font-classic);font-size:12px;color:#1a4a5c;
+  min-height:72px;resize:none;line-height:1.65;padding:0;
+}
+.focus-textarea::placeholder{color:#7ab0c4;font-style:italic;}
+
 .roadmap-table .prompt-row td{
   background:#F8FAFB;padding:8px 14px;
   font-size:11px;font-style:italic;color:#5a7280;
@@ -515,77 +522,203 @@ body{font-family:var(--font-body);background:var(--dark);color:var(--chalk);min-
 .chalk-puff{font-size:14px;}
 
 /* ═══════════════════════════════════════════════
-   CLASSIC MODE
+   CLASSIC MODE — matches original design exactly
 ═══════════════════════════════════════════════ */
 #classicMode{
   padding-top:52px;display:none;
-  background:#F0EEE9;color:var(--text);min-height:100vh;
+  font-family:'Plus Jakarta Sans',-apple-system,sans-serif;
+  background:#F7F8FA;color:#3C4858;min-height:100vh;
+  line-height:1.6;-webkit-font-smoothing:antialiased;
 }
-.cl-topbar{
-  background:linear-gradient(135deg,#1C1F23 0%,#2E3138 100%);
-  padding:24px 28px 20px;
-  border-bottom:3px solid var(--orange);
+.cl-app{max-width:960px;margin:0 auto;padding:28px 24px 80px;}
+/* Classic toolbar — white card */
+.cl-toolbar{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  background:#fff;border:1px solid #ECEFF1;border-radius:12px;
+  padding:10px 16px;margin-bottom:24px;flex-wrap:wrap;
 }
-.cl-topbar h1{
-  font-family:var(--font-display);font-size:28px;font-weight:700;
-  text-transform:uppercase;letter-spacing:0.06em;color:var(--chalk);
+.cl-toolbar-left,.cl-toolbar-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.cl-tbtn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:7px 14px;border-radius:7px;
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:600;
+  cursor:pointer;border:1px solid #ECEFF1;background:#F7F8FA;color:#3C4858;
+  transition:all 0.2s;white-space:nowrap;
 }
-.cl-topbar p{font-size:13px;color:rgba(255,255,255,0.55);margin-top:4px;}
-.cl-progress-wrap{margin-top:14px;}
-.cl-prog-bar-outer{
-  height:5px;background:rgba(255,255,255,0.12);border-radius:3px;overflow:hidden;
+.cl-tbtn:hover{background:#ECEFF1;}
+.cl-tbtn.primary{
+  background:linear-gradient(135deg,#00BCD4,#4A7FBF);color:#fff;border-color:transparent;
 }
-.cl-prog-bar-fill{
-  height:100%;background:linear-gradient(90deg,var(--orange),var(--yellow));
-  border-radius:3px;width:0%;transition:width 0.6s ease;
+.cl-tbtn.primary:hover{box-shadow:0 3px 12px rgba(0,188,212,0.3);transform:translateY(-1px);}
+.cl-ver-sel{
+  padding:6px 10px;border:1px solid #ECEFF1;border-radius:6px;
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:600;
+  color:#3C4858;background:#F7F8FA;cursor:pointer;max-width:180px;
 }
-.cl-prog-lbl{font-size:10px;color:rgba(255,255,255,0.4);margin-top:5px;letter-spacing:0.08em;}
-.cl-content{max-width:860px;margin:0 auto;padding:24px 20px 60px;}
-.cl-phase-lbl{
-  font-family:var(--font-display);font-size:10px;font-weight:600;
-  letter-spacing:0.16em;text-transform:uppercase;color:var(--orange);
-  margin:28px 0 10px;
+.cl-ver-sel:focus{outline:none;border-color:#00BCD4;}
+/* Classic header */
+.cl-header{text-align:center;margin-bottom:32px;}
+.cl-header-label{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:10.5px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;
+  color:#00BCD4;margin-bottom:8px;
 }
+.cl-header-label::before,.cl-header-label::after{
+  content:'';width:24px;height:2px;
+  background:linear-gradient(90deg,#00BCD4,#7B68C8);border-radius:1px;
+}
+.cl-header h1{
+  font-family:'DM Serif Display',serif;font-size:32px;color:#263238;
+  letter-spacing:-0.5px;line-height:1.2;margin-bottom:6px;
+}
+.cl-header h1 em{
+  font-style:italic;
+  background:linear-gradient(135deg,#00BCD4,#7B68C8);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.cl-subtitle{font-size:14px;color:#78909C;max-width:600px;margin:0 auto;}
+/* Progress bar */
+.cl-prog-wrap{
+  background:#fff;border:1px solid #ECEFF1;border-radius:12px;
+  padding:14px 20px;margin-bottom:24px;
+}
+.cl-prog-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.cl-prog-head span{font-size:11px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:#78909C;}
+.cl-prog-head .cl-prog-pct{font-size:13px;font-weight:700;color:#00BCD4;}
+.cl-prog-track{height:6px;background:#ECEFF1;border-radius:3px;margin-bottom:12px;overflow:hidden;}
+.cl-prog-fill{
+  height:100%;background:linear-gradient(90deg,#00BCD4,#7B68C8);
+  border-radius:3px;transition:width 0.5s ease;width:0%;
+}
+.cl-prog-fields{display:flex;gap:6px;flex-wrap:wrap;}
+.cl-pf{
+  display:flex;align-items:center;gap:5px;font-size:10.5px;font-weight:600;
+  padding:3px 10px;border-radius:10px;transition:all 0.3s;
+}
+.cl-pf .cl-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.cl-pf.empty{background:#F7F8FA;color:#78909C;}
+.cl-pf.empty .cl-dot{background:#ECEFF1;}
+.cl-pf.filled{background:#E5F7FA;color:#00BCD4;}
+.cl-pf.filled .cl-dot{background:#00BCD4;}
+/* Info section — dark */
+.cl-info-section{
+  background:#263238;border-radius:12px;padding:28px 32px;
+  margin-bottom:28px;position:relative;overflow:hidden;
+}
+.cl-info-section::before{
+  content:'';position:absolute;top:-60px;right:-40px;
+  width:200px;height:200px;border-radius:50%;
+  background:radial-gradient(circle,rgba(0,188,212,0.1),transparent 70%);pointer-events:none;
+}
+.cl-info-section h2{font-family:'DM Serif Display',serif;font-size:18px;color:#fff;margin-bottom:16px;}
+.cl-info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.cl-info-field label{
+  display:block;font-size:10px;font-weight:700;letter-spacing:1px;
+  text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:4px;
+}
+.cl-info-input{
+  width:100%;padding:8px 12px;background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.12);border-radius:6px;
+  color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;
+  transition:border-color 0.2s,background 0.2s;
+}
+.cl-info-input:focus{outline:none;border-color:#00BCD4;background:rgba(255,255,255,0.12);}
+.cl-info-input::placeholder{color:rgba(255,255,255,0.3);}
+/* Phase */
+.cl-phase{margin-bottom:28px;}
+.cl-phase-header{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.cl-phase-badge{
+  font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  padding:4px 14px;border-radius:16px;white-space:nowrap;
+}
+.cl-phase-title{font-family:'DM Serif Display',serif;font-size:16px;color:#263238;}
+.cl-phase-line{flex:1;height:1px;opacity:0.2;}
+.cl-ph1 .cl-phase-badge{background:#E5F7FA;color:#00BCD4;}
+.cl-ph1 .cl-phase-line{background:#00BCD4;}
+.cl-ph2 .cl-phase-badge{background:#F0EDF8;color:#7B68C8;}
+.cl-ph2 .cl-phase-line{background:#7B68C8;}
+.cl-ph3 .cl-phase-badge{background:#E6F6F2;color:#1AAB8A;}
+.cl-ph3 .cl-phase-line{background:#1AAB8A;}
+/* Card grid */
+.cl-card-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+@media(max-width:768px){.cl-card-row{grid-template-columns:1fr;}.cl-info-grid{grid-template-columns:repeat(2,1fr);}}
 .cl-card{
-  background:var(--white);border:1px solid #E0DDD8;
-  border-radius:14px;padding:22px 24px;margin-bottom:12px;
-  box-shadow:0 1px 4px rgba(0,0,0,0.05);
+  background:#fff;border-radius:12px;padding:22px 20px 20px;
+  border:1px solid rgba(0,0,0,0.06);position:relative;
+  transition:box-shadow 0.3s,transform 0.3s;
 }
-.cl-card-head{display:flex;align-items:flex-start;gap:14px;margin-bottom:12px;}
-.cl-num{
-  font-family:var(--font-display);font-size:32px;font-weight:700;
-  color:#D8D4CC;line-height:1;flex-shrink:0;
+.cl-card:hover{box-shadow:0 8px 28px rgba(0,0,0,0.07);transform:translateY(-2px);}
+.cl-card-num{
+  position:absolute;top:8px;right:14px;
+  font-family:'DM Serif Display',serif;font-size:40px;
+  opacity:0.08;color:#263238;line-height:1;pointer-events:none;
 }
-.cl-card-info h3{
-  font-family:var(--font-classic);font-size:16px;font-weight:600;color:var(--text);margin-bottom:2px;
+.cl-card-top{display:flex;align-items:flex-start;gap:12px;margin-bottom:8px;}
+.cl-card-icon{
+  width:36px;height:36px;border-radius:9px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px;
 }
-.cl-card-info .cl-tf{font-size:11px;color:var(--muted);letter-spacing:0.05em;}
-.cl-desc{
-  font-size:12px;color:var(--muted);line-height:1.65;margin-bottom:14px;font-style:italic;
+.cl-card h3{font-family:'DM Serif Display',serif;font-size:15px;color:#263238;line-height:1.3;}
+.cl-card .cl-tf-sm{
+  font-size:9.5px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;
+  color:#78909C;margin-top:1px;
 }
-.cl-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
-.cl-tag{
-  font-family:var(--font-classic);font-size:10px;font-weight:500;
-  padding:3px 9px;border-radius:20px;letter-spacing:0.04em;
+.cl-ltags{display:flex;flex-wrap:wrap;gap:4px;margin:10px 0;}
+.cl-ltag{font-size:9px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;padding:2px 8px;border-radius:3px;}
+.cl-ltag-self{background:#E5F7FA;color:#00BCD4;}
+.cl-ltag-formal{background:#EBF1F8;color:#4A7FBF;}
+.cl-ltag-exp{background:#F0EDF8;color:#7B68C8;}
+.cl-ltag-social{background:#E6F6F2;color:#1AAB8A;}
+.cl-ltag-mentor{background:#FDF3E0;color:#F0A030;}
+.cl-ltag-feedback{background:#FCE8F0;color:#E8588C;}
+.cl-card-desc{font-size:12.5px;color:#78909C;line-height:1.6;margin-bottom:10px;}
+.cl-entry-label{
+  font-size:10px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;
+  color:#78909C;margin-bottom:5px;display:block;
 }
-.cl-ta{
-  width:100%;background:#F7F5F1;border:1px solid #E0DDD8;border-radius:8px;
-  padding:12px 14px;color:var(--text);
-  font-family:var(--font-classic);font-size:13px;
-  resize:vertical;min-height:90px;outline:none;transition:border-color 0.2s;
+.cl-entry-area textarea{
+  width:100%;min-height:80px;padding:10px 12px;
+  border:1.5px solid #ECEFF1;border-radius:8px;
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:12.5px;
+  color:#3C4858;background:#F7F8FA;resize:vertical;
+  transition:border-color 0.2s,box-shadow 0.2s;line-height:1.6;
 }
-.cl-ta:focus{border-color:var(--orange);}
-.cl-ta::placeholder{color:#B0A9A0;font-size:12px;}
-/* plan details */
-.cl-details-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
-.cl-field label{font-size:11px;color:var(--muted);margin-bottom:4px;display:block;letter-spacing:0.05em;}
-.cl-input{
-  width:100%;background:#F7F5F1;border:1px solid #E0DDD8;border-radius:8px;
-  padding:9px 12px;color:var(--text);font-family:var(--font-classic);font-size:13px;
-  outline:none;transition:border-color 0.2s;
+.cl-entry-area textarea:focus{
+  outline:none;border-color:#00BCD4;
+  box-shadow:0 0 0 3px rgba(0,188,212,0.1);background:#fff;
 }
-.cl-input:focus{border-color:var(--orange);}
-.cl-input::placeholder{color:#B0A9A0;}
+.cl-entry-area textarea::placeholder{color:#B0BEC5;font-size:12px;}
+/* Full width cards */
+.cl-full-card{
+  background:#fff;border-radius:12px;padding:24px 28px;
+  border:1px solid rgba(0,0,0,0.06);margin-bottom:14px;position:relative;
+  transition:box-shadow 0.3s;
+}
+.cl-full-card:hover{box-shadow:0 6px 24px rgba(0,0,0,0.06);}
+.cl-full-card .cl-card-num{font-size:52px;top:10px;right:20px;}
+.cl-full-card-header{display:flex;align-items:flex-start;gap:14px;margin-bottom:12px;}
+.cl-full-card h3{font-family:'DM Serif Display',serif;font-size:18px;color:#263238;}
+.cl-full-card .cl-tf-sm{font-size:10px;font-weight:600;letter-spacing:0.6px;text-transform:uppercase;color:#78909C;}
+.cl-full-card-desc{font-size:13px;color:#78909C;max-width:700px;line-height:1.6;margin-bottom:10px;}
+.cl-full-ta{
+  width:100%;min-height:90px;padding:10px 12px;
+  border:1.5px solid #ECEFF1;border-radius:8px;
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;
+  color:#3C4858;background:#F7F8FA;resize:vertical;
+  transition:border-color 0.2s;line-height:1.6;
+}
+.cl-full-ta:focus{outline:none;border-color:#00BCD4;background:#fff;}
+.cl-full-ta::placeholder{color:#B0BEC5;font-size:12px;}
+/* Classic generate button area */
+.cl-generate-wrap{margin-top:16px;}
+.cl-gen-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:9px 20px;border-radius:8px;
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;
+  cursor:pointer;background:linear-gradient(135deg,#7B68C8,#4A7FBF);
+  color:#fff;border:none;transition:all 0.2s;
+}
+.cl-gen-btn:hover{box-shadow:0 4px 14px rgba(123,104,200,0.35);transform:translateY(-1px);}
 
 /* ═══════════════════════════════════════════════
    MODALS  (shared across both modes)
@@ -714,7 +847,9 @@ body{font-family:var(--font-body);background:var(--dark);color:var(--chalk);min-
   <div class="wall-strip" id="wallStrip">
     <img class="wall-img" id="wallImg"
       src="GPS_Ascent_Journeys.jpeg"
-      alt="Climbing wall — GPS Ascent">
+      alt="Climbing wall — GPS Ascent"
+      onerror="this.style.display='none';document.getElementById('wallFallback').style.display='block'">
+    <div id="wallFallback" style="display:none;position:absolute;inset:0;background:linear-gradient(135deg,#1C1F23 0%,#E8541A 20%,#F5F2EB 45%,#F0B429 65%,#2E9FAB 100%);"></div>
     <div class="wall-dim"></div>
     <div class="wall-dim-top"></div>
 
@@ -741,17 +876,7 @@ body{font-family:var(--font-body);background:var(--dark);color:var(--chalk);min-
 <!-- ══════════════════════════════════ -->
 <!-- CLASSIC MODE -->
 <!-- ══════════════════════════════════ -->
-<div id="classicMode">
-  <div class="cl-topbar">
-    <h1>GPS 360° Individual Development Plan</h1>
-    <p>Complete all sections to build your personalized quarterly roadmap.</p>
-    <div class="cl-progress-wrap">
-      <div class="cl-prog-bar-outer"><div class="cl-prog-bar-fill" id="clProgFill"></div></div>
-      <div class="cl-prog-lbl" id="clProgLbl">0 of 8 sections complete</div>
-    </div>
-  </div>
-  <div class="cl-content" id="clContent"></div>
-</div>
+<div id="classicMode"></div>
 
 <!-- MODALS -->
 <div class="modal-overlay" id="shareModal">
@@ -1025,10 +1150,23 @@ function updateProgress() {
   var keys = ['empName','card1','card2','card3','card4','card5','card6','card8'];
   var done = keys.filter(function(k){ return !!getFieldVal(k); }).length;
   var pct  = Math.round((done/keys.length)*100);
+  // Classic mode progress bar
   var fill = document.getElementById('clProgFill');
   var lbl  = document.getElementById('clProgLbl');
   if (fill) fill.style.width = pct+'%';
   if (lbl)  lbl.textContent  = done+' of '+keys.length+' sections complete';
+  // Classic mode progress field dots — re-color
+  var pfMap = {empName:0,card1:1,card2:2,card3:3,card4:4,card5:5,card6:6,card8:7};
+  var pfs = document.querySelectorAll('.cl-pf');
+  if (pfs.length) {
+    keys.forEach(function(k,i){
+      if (pfs[i]) {
+        pfs[i].className = 'cl-pf '+(getFieldVal(k)?'filled':'empty');
+      }
+    });
+    var pctEl = document.querySelector('.cl-prog-pct');
+    if (pctEl) pctEl.textContent = pct+'%';
+  }
 }
 
 // ── VERSIONS ──
@@ -1130,7 +1268,18 @@ function toggleMode() {
   sw.classList.toggle('off', !ascentMode);
   document.getElementById('ascentMode').style.display  = ascentMode ? 'block' : 'none';
   document.getElementById('classicMode').style.display = ascentMode ? 'none'  : 'block';
-  if (!ascentMode) buildClassicMode();
+  if (!ascentMode) {
+    buildClassicMode();
+    // Restore roadmap if saved
+    var stored = {};
+    try { stored = JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}'); } catch(e){}
+    if (stored._generatedPlan && document.getElementById('planOutput')) {
+      if (stored._generatedPlan.indexOf('type="checkbox"') === -1) {
+        document.getElementById('planOutput').innerHTML = stored._generatedPlan;
+        wireOwnerRadios();
+      }
+    }
+  }
   saveAll();
 }
 
@@ -1405,49 +1554,23 @@ function renderSummitReveal() {
 }
 
 function unlockRoadmap() {
-  var stage = document.getElementById('cardStage');
-  // Check if roadmap already generated
-  var poHTML = getFieldVal('_generatedPlan') || '';
-  stage.innerHTML = '<div class="roadmap-section">'+
-    '<div class="rm-header-bar">'+
-      '<div class="rm-title-group">'+
-        '<div class="rm-eyebrow">▲ Summit Unlocked</div>'+
-        '<div class="rm-title">Your Ascent Plan · Next 12 Months</div>'+
-      '</div>'+
-      '<div class="rm-btns">'+
-        '<button class="rm-gen-btn" id="generateBtn" onclick="generateAIPlan()">✦ Generate Roadmap</button>'+
-        '<button class="rm-redo-btn" onclick="generateAIPlan()" title="Regenerate">↻</button>'+
-      '</div>'+
-    '</div>'+
-    '<div id="planOutput">'+
-      '<div style="text-align:center;padding:24px;color:rgba(255,255,255,0.35);font-size:13px;font-style:italic;">'+
-      'Click ✦ Generate Roadmap to build your personalized plan</div>'+
-    '</div>'+
-    '<div class="extra-card">'+
-      '<div class="extra-card-head">'+
-        '<div class="extra-icon" style="background:var(--green-light);">📈</div>'+
-        '<div><div class="extra-title">Wins & Progress Log</div><div class="extra-sub">Running Record — Add Entries Over Time</div></div>'+
-      '</div>'+
-      '<textarea class="extra-ta" data-save="card8" placeholder="Log your wins, milestones, and progress here. Date each entry.\n\nExample:\n03/15 — Led first cross-functional alignment session">'+escHtml(getFieldVal('card8'))+'</textarea>'+
-    '</div>'+
-    '<div class="extra-card">'+
-      '<div class="extra-card-head">'+
-        '<div class="extra-icon" style="background:var(--blue-light);">🔭</div>'+
-        '<div><div class="extra-title">Future Opportunities to Explore</div><div class="extra-sub">Longer-Term Pipeline — Revisit Quarterly</div></div>'+
-      '</div>'+
-      '<textarea class="extra-ta" data-save="card9" placeholder="Future roles, opportunities, or paths to explore...">'+escHtml(getFieldVal('card9'))+'</textarea>'+
-    '</div>'+
-    '<div style="margin-top:24px;"><button class="nav-btn-back" onclick="backToSummit()">← Back to Summit</button></div>'+
-  '</div>';
-
-  // Auto-generate if we have data
+  // Navigate to the roadmap hold (card7, index 7) and proceed through normally
+  // This lets card8 (Wins) and card9 (Future) be proper focus cards with Next Hold
+  summitReached = false;
+  currentHold = 7; // card7 = Quarterly Development Plan
+  buildWall();
+  renderCard();
+  document.getElementById('cardStage').scrollIntoView({behavior:'smooth',block:'start'});
+  // Auto-generate roadmap
   if (getFieldVal('card1') || getFieldVal('card4')) {
-    setTimeout(generateAIPlan, 300);
+    setTimeout(generateAIPlan, 400);
   }
 }
 
 function backToSummit() {
   summitReached = true;
+  currentHold = HOLDS.length - 1;
+  buildWall();
   renderSummitReveal();
 }
 
@@ -1455,68 +1578,270 @@ function backToSummit() {
 //  CLASSIC MODE BUILD
 // ══════════════════════════════════════════════════════════
 function buildClassicMode() {
-  var content = document.getElementById('clContent');
-  var tagMap = {
-    card1:'<span class="cl-tag" style="background:var(--cyan-light);color:var(--cyan);">Self-Directed</span>',
-    card2:'<span class="cl-tag" style="background:var(--cyan-light);color:var(--cyan);">Self-Directed</span><span class="cl-tag" style="background:var(--pink-light);color:var(--pink);">External Feedback</span>',
-    card3:'<span class="cl-tag" style="background:var(--cyan-light);color:var(--cyan);">Self-Directed</span><span class="cl-tag" style="background:var(--pink-light);color:var(--pink);">External Feedback</span>',
-    card4:'<span class="cl-tag" style="background:var(--blue-light);color:var(--blue);">Formal Training</span><span class="cl-tag" style="background:var(--purple-light);color:var(--purple);">Experiential</span>',
-    card5:'<span class="cl-tag" style="background:var(--purple-light);color:var(--purple);">Experiential</span><span class="cl-tag" style="background:var(--green-light);color:var(--green);">Social / Observational</span>',
-    card6:'<span class="cl-tag" style="background:var(--orange-light);color:var(--orange);">Mentoring & Coaching</span><span class="cl-tag" style="background:var(--pink-light);color:var(--pink);">External Feedback</span>',
-  };
-  var phases = [
-    {label:'Phase 1 · Discover',  holds:[0,1,2,3]},
-    {label:'Phase 2 · Define',    holds:[4,5,6]},
-    {label:'Phase 3 · Activate',  holds:[7,8,9]},
+  // Replaces #classicMode inner content with the exact original design structure
+  var cm = document.getElementById('classicMode');
+  cm.innerHTML = '';
+
+  var app = document.createElement('div');
+  app.className = 'cl-app';
+
+  // ── Toolbar ──
+  app.innerHTML +=
+    '<div class="cl-toolbar">'+
+      '<div class="cl-toolbar-left">'+
+        '<select class="cl-ver-sel" id="clVerSel" onchange="loadVersion(this.value)">'+
+          '<option value="current">Current Draft</option>'+
+        '</select>'+
+        '<button class="cl-tbtn" onclick="saveVersion()">💾 Save Version</button>'+
+        '<button class="cl-tbtn" onclick="openVersionModal()">History</button>'+
+      '</div>'+
+      '<div class="cl-toolbar-right">'+
+        '<button class="cl-tbtn" onclick="openResetModal()">↺ Reset Fields</button>'+
+        '<button class="cl-tbtn primary" onclick="openShareModal()">✉ Share Plan</button>'+
+      '</div>'+
+    '</div>';
+
+  // ── Header ──
+  app.innerHTML +=
+    '<div class="cl-header">'+
+      '<div class="cl-header-label">GPS 360° Framework</div>'+
+      '<h1>Individual Development <em>Plan</em></h1>'+
+      '<p class="cl-subtitle">A structured approach to owning your professional growth — one conversation at a time.</p>'+
+    '</div>';
+
+  // ── Progress bar ──
+  var progFields = [
+    {key:'empName',label:'Profile'},
+    {key:'card1',label:'Goals'},
+    {key:'card2',label:'Loves'},
+    {key:'card3',label:'Learning'},
+    {key:'card4',label:'Skills'},
+    {key:'card5',label:'Experiences'},
+    {key:'card6',label:'Support'},
+    {key:'card8',label:'Wins'},
   ];
-  var html = '';
-  // Plan details card
-  html += '<div class="cl-phase-lbl">Plan Details</div>';
-  html += '<div class="cl-card"><div class="cl-details-grid">'+
-    '<div class="cl-field"><label>Your Name</label><input class="cl-input" data-save="empName" placeholder="Full name" value="'+escHtml(getFieldVal('empName'))+'"></div>'+
-    '<div class="cl-field"><label>Manager\'s Name</label><input class="cl-input" data-save="mgrName" placeholder="Manager\'s full name" value="'+escHtml(getFieldVal('mgrName'))+'"></div>'+
-    '<div class="cl-field"><label>Plan Date</label><input class="cl-input" data-save="planDate" placeholder="MM/DD/YYYY" value="'+escHtml(getFieldVal('planDate'))+'"></div>'+
-    '<div class="cl-field"><label>Current Role</label><input class="cl-input" data-save="currentRole" placeholder="e.g. Sr. Solutions Engineer" value="'+escHtml(getFieldVal('currentRole'))+'"></div>'+
-    '<div class="cl-field"><label>Time in Role (yrs)</label><input class="cl-input" data-save="timeInRole" placeholder="e.g. 2.5" value="'+escHtml(getFieldVal('timeInRole'))+'"></div>'+
-    '<div class="cl-field"><label>Time at Company (yrs)</label><input class="cl-input" data-save="timeAtCompany" placeholder="e.g. 4" value="'+escHtml(getFieldVal('timeAtCompany'))+'"></div>'+
-  '</div></div>';
+  var donePF = progFields.filter(function(f){return !!getFieldVal(f.key);}).length;
+  var pctPF  = Math.round((donePF/progFields.length)*100);
+  var pfHtml = progFields.map(function(f){
+    var filled = !!getFieldVal(f.key);
+    return '<div class="cl-pf '+(filled?'filled':'empty')+'"><span class="cl-dot"></span>'+f.label+'</div>';
+  }).join('');
+  app.innerHTML +=
+    '<div class="cl-prog-wrap">'+
+      '<div class="cl-prog-head">'+
+        '<span>Development Progress</span>'+
+        '<span class="cl-prog-pct">'+pctPF+'%</span>'+
+      '</div>'+
+      '<div class="cl-prog-track"><div class="cl-prog-fill" id="clProgFill" style="width:'+pctPF+'%"></div></div>'+
+      '<div class="cl-prog-fields">'+pfHtml+'</div>'+
+    '</div>';
 
-  phases.forEach(function(ph){
-    html += '<div class="cl-phase-lbl">'+ph.label+'</div>';
-    ph.holds.forEach(function(i){
-      var s = HOLDS[i];
-      if (!s || s.id==='empInfo') return;
-      if (s.isRoadmap) {
-        html += '<div class="cl-card">'+
-          '<div class="cl-card-head">'+
-            '<div class="cl-num">'+s.num+'</div>'+
-            '<div class="cl-card-info"><h3>'+s.name+'</h3><div class="cl-tf">'+s.timeframe+'</div></div>'+
+  // ── Plan Details (dark info section) ──
+  app.innerHTML +=
+    '<div class="cl-info-section">'+
+      '<h2>Plan Details</h2>'+
+      '<div class="cl-info-grid">'+
+        '<div class="cl-info-field"><label>Employee Name</label>'+
+          '<input class="cl-info-input" data-save="empName" placeholder="Full name" value="'+escHtml(getFieldVal('empName'))+'"></div>'+
+        '<div class="cl-info-field"><label>Manager Name</label>'+
+          '<input class="cl-info-input" data-save="mgrName" placeholder="Manager\'s full name" value="'+escHtml(getFieldVal('mgrName'))+'"></div>'+
+        '<div class="cl-info-field"><label>Plan Date</label>'+
+          '<input class="cl-info-input" data-save="planDate" placeholder="MM/DD/YYYY" value="'+escHtml(getFieldVal('planDate'))+'"></div>'+
+        '<div class="cl-info-field"><label>Current Role</label>'+
+          '<input class="cl-info-input" data-save="currentRole" placeholder="e.g. Sr. Solutions Engineer" value="'+escHtml(getFieldVal('currentRole'))+'"></div>'+
+        '<div class="cl-info-field"><label>Time in Role (yrs)</label>'+
+          '<input class="cl-info-input" data-save="timeInRole" placeholder="e.g. 2.5" value="'+escHtml(getFieldVal('timeInRole'))+'"></div>'+
+        '<div class="cl-info-field"><label>Time at Company (yrs)</label>'+
+          '<input class="cl-info-input" data-save="timeAtCompany" placeholder="e.g. 4" value="'+escHtml(getFieldVal('timeAtCompany'))+'"></div>'+
+      '</div>'+
+    '</div>';
+
+  // ── Phase 1: Discover — 3-column card grid ──
+  var tagMap = {
+    card1:'<span class="cl-ltag cl-ltag-self">Self-Directed</span>',
+    card2:'<span class="cl-ltag cl-ltag-self">Self-Directed</span> <span class="cl-ltag cl-ltag-feedback">External Feedback</span>',
+    card3:'<span class="cl-ltag cl-ltag-self">Self-Directed</span> <span class="cl-ltag cl-ltag-feedback">External Feedback</span>',
+    card4:'<span class="cl-ltag cl-ltag-formal">Formal Training</span> <span class="cl-ltag cl-ltag-exp">Experiential</span>',
+    card5:'<span class="cl-ltag cl-ltag-exp">Experiential</span> <span class="cl-ltag cl-ltag-social">Social / Observational</span>',
+    card6:'<span class="cl-ltag cl-ltag-mentor">Mentoring &amp; Coaching</span> <span class="cl-ltag cl-ltag-feedback">External Feedback</span>',
+  };
+  var iconMap = {
+    card1:['⏱','#E5F7FA','#00BCD4'],
+    card2:['♥','#FCE8F0','#E8588C'],
+    card3:['📖','#EBF1F8','#4A7FBF'],
+    card4:['◆','#F0EDF8','#7B68C8'],
+    card5:['💼','#E6F6F2','#1AAB8A'],
+    card6:['👥','#FDF3E0','#F0A030'],
+  };
+
+  // Phase 1
+  app.innerHTML +=
+    '<div class="cl-phase cl-ph1">'+
+      '<div class="cl-phase-header">'+
+        '<span class="cl-phase-badge">Phase 1</span>'+
+        '<span class="cl-phase-title">Discover</span>'+
+        '<div class="cl-phase-line"></div>'+
+      '</div>'+
+      '<div class="cl-card-row" id="clPh1Cards"></div>'+
+    '</div>';
+
+  // Phase 2
+  app.innerHTML +=
+    '<div class="cl-phase cl-ph2">'+
+      '<div class="cl-phase-header">'+
+        '<span class="cl-phase-badge">Phase 2</span>'+
+        '<span class="cl-phase-title">Define</span>'+
+        '<div class="cl-phase-line"></div>'+
+      '</div>'+
+      '<div class="cl-card-row" id="clPh2Cards"></div>'+
+    '</div>';
+
+  // Phase 3
+  app.innerHTML +=
+    '<div class="cl-phase cl-ph3">'+
+      '<div class="cl-phase-header">'+
+        '<span class="cl-phase-badge">Phase 3</span>'+
+        '<span class="cl-phase-title">Activate</span>'+
+        '<div class="cl-phase-line"></div>'+
+      '</div>'+
+      '<div id="clPh3Cards"></div>'+
+    '</div>';
+
+  cm.appendChild(app);
+  refreshVersionDropdown();
+  // Sync cl version select
+  var clSel = document.getElementById('clVerSel');
+  if (clSel) {
+    var versions = getVersions();
+    clSel.innerHTML = '<option value="current">Current Draft</option>'+
+      versions.map(function(v){return '<option value="'+v.id+'">'+escHtml(v.name)+'</option>';}).join('');
+  }
+
+  // Build Phase 1 cards (holds 1,2,3)
+  var ph1 = document.getElementById('clPh1Cards');
+  if (ph1) {
+    [1,2,3].forEach(function(hi){
+      var s = HOLDS[hi];
+      var ic = iconMap[s.id]||['◆','#F0EDF8','#7B68C8'];
+      ph1.innerHTML +=
+        '<div class="cl-card card-'+hi+'">'+
+          '<div class="cl-card-num">'+s.num+'</div>'+
+          '<div class="cl-card-top">'+
+            '<div class="cl-card-icon" style="background:'+ic[1]+';color:'+ic[2]+';">'+ic[0]+'</div>'+
+            '<div><h3>'+s.name+'</h3><div class="cl-tf-sm">'+s.timeframe+'</div></div>'+
           '</div>'+
-          '<div class="cl-desc">'+s.desc+'</div>'+
-          '<table class="roadmap-table"><tr class="rm-thead"><td colspan="4" style="background:#2D2D2D;padding:10px 14px;">'+
-          '<div class="rm-thead-inner">'+
-          '<span style="font-family:var(--font-display);font-size:12px;letter-spacing:0.08em;color:rgba(255,255,255,0.75);text-transform:uppercase;">✦ 4 Phases of Development</span>'+
-          '<div class="rm-btns">'+
-          '<button class="rm-gen-btn" id="generateBtn" onclick="generateAIPlan()">✦ Generate My Roadmap</button>'+
-          '<button class="rm-redo-btn" onclick="generateAIPlan()" style="width:30px;height:30px;">↻</button>'+
-          '</div></div></td></tr></table>'+
-          '<div id="planOutput"><div style="padding:16px;text-align:center;color:var(--muted);font-size:13px;font-style:italic;">Complete sections 1–6 then click Generate My Roadmap</div></div>'+
+          '<div class="cl-ltags">'+(tagMap[s.id]||'')+'</div>'+
+          '<p class="cl-card-desc">'+s.desc+'</p>'+
+          '<div class="cl-entry-area">'+
+            '<label class="cl-entry-label">Your Response</label>'+
+            '<textarea data-save="'+s.id+'" placeholder="'+s.placeholder+'">'+escHtml(getFieldVal(s.id))+'</textarea>'+
+          '</div>'+
         '</div>';
-        return;
-      }
-      html += '<div class="cl-card">'+
-        '<div class="cl-card-head">'+
-          '<div class="cl-num">'+s.num+'</div>'+
-          '<div class="cl-card-info"><h3>'+s.name+'</h3><div class="cl-tf">'+s.timeframe+'</div></div>'+
-        '</div>'+
-        (tagMap[s.id] ? '<div class="cl-tags">'+tagMap[s.id]+'</div>' : '')+
-        '<div class="cl-desc">'+s.desc+'</div>'+
-        '<textarea class="cl-ta" data-save="'+s.id+'" placeholder="'+s.placeholder+'">'+escHtml(getFieldVal(s.id))+'</textarea>'+
-      '</div>';
     });
-  });
+  }
 
-  content.innerHTML = html;
+  // Build Phase 2 cards (holds 4,5,6)
+  var ph2 = document.getElementById('clPh2Cards');
+  if (ph2) {
+    [4,5,6].forEach(function(hi){
+      var s = HOLDS[hi];
+      var ic = iconMap[s.id]||['◆','#F0EDF8','#7B68C8'];
+      ph2.innerHTML +=
+        '<div class="cl-card card-'+hi+'">'+
+          '<div class="cl-card-num">'+s.num+'</div>'+
+          '<div class="cl-card-top">'+
+            '<div class="cl-card-icon" style="background:'+ic[1]+';color:'+ic[2]+';">'+ic[0]+'</div>'+
+            '<div><h3>'+s.name+'</h3><div class="cl-tf-sm">'+s.timeframe+'</div></div>'+
+          '</div>'+
+          '<div class="cl-ltags">'+(tagMap[s.id]||'')+'</div>'+
+          '<p class="cl-card-desc">'+s.desc+'</p>'+
+          '<div class="cl-entry-area">'+
+            '<label class="cl-entry-label">Your Response</label>'+
+            '<textarea data-save="'+s.id+'" placeholder="'+s.placeholder+'">'+escHtml(getFieldVal(s.id))+'</textarea>'+
+          '</div>'+
+        '</div>';
+    });
+  }
+
+  // Phase 3: Quarterly Plan (full width), Wins, Future
+  var ph3 = document.getElementById('clPh3Cards');
+  if (ph3) {
+    // Card 7 — Quarterly Plan full width
+    var s7 = HOLDS[7];
+    ph3.innerHTML +=
+      '<div class="cl-full-card">'+
+        '<div class="cl-card-num">7</div>'+
+        '<div class="cl-full-card-header">'+
+          '<div class="cl-card-icon" style="background:#F0EDF8;color:#7B68C8;width:40px;height:40px;font-size:18px;border-radius:10px;display:flex;align-items:center;justify-content:center;">✦</div>'+
+          '<div><h3>'+s7.name+'</h3><div class="cl-tf-sm">'+s7.timeframe+'</div></div>'+
+        '</div>'+
+        '<p class="cl-full-card-desc">'+s7.desc+'</p>'+
+        '<div class="cl-ltags">'+
+          '<span class="cl-ltag cl-ltag-exp">Experiential</span>'+
+          '<span class="cl-ltag cl-ltag-formal">Formal Training</span>'+
+          '<span class="cl-ltag cl-ltag-mentor">Mentoring</span>'+
+        '</div>'+
+        // Roadmap table shell with generate button in header
+        '<table class="roadmap-table">'+
+          '<tr class="roadmap-header-row"><td colspan="4">'+
+            '<div class="roadmap-header-inner">'+
+              '<span class="roadmap-phase-text">✦ 4 Phases of Development</span>'+
+              '<div class="roadmap-header-btns">'+
+                '<button class="roadmap-gen-btn" id="generateBtn" onclick="generateAIPlan()">✦ Generate My Roadmap</button>'+
+                '<button class="roadmap-redo-btn" onclick="generateAIPlan()" title="Regenerate">↻</button>'+
+              '</div>'+
+            '</div>'+
+          '</td></tr>'+
+        '</table>'+
+        '<div id="planOutput">'+
+          '<div class="empty-state">'+
+            '<div style="font-size:28px;margin-bottom:8px;opacity:0.4;">📋</div>'+
+            'Complete sections 1–6 above, then click <strong>✦ Generate My Roadmap</strong> to build your personalized 12-month plan.'+
+          '</div>'+
+        '</div>'+
+      '</div>';
+
+    // Card 8 — Wins (full width)
+    var s8 = HOLDS[8];
+    ph3.innerHTML +=
+      '<div class="cl-full-card">'+
+        '<div class="cl-card-num">8</div>'+
+        '<div class="cl-full-card-header">'+
+          '<div class="cl-card-icon" style="background:#E6F6F2;color:#1AAB8A;width:40px;height:40px;font-size:18px;border-radius:10px;display:flex;align-items:center;justify-content:center;">📈</div>'+
+          '<div><h3>'+s8.name+'</h3><div class="cl-tf-sm">'+s8.timeframe+'</div></div>'+
+        '</div>'+
+        '<p class="cl-full-card-desc">'+s8.desc+'</p>'+
+        '<div class="cl-ltags">'+
+          '<span class="cl-ltag cl-ltag-self">Self-Directed</span>'+
+          '<span class="cl-ltag cl-ltag-feedback">External Feedback</span>'+
+        '</div>'+
+        '<div class="cl-entry-area">'+
+          '<label class="cl-entry-label">Recent Progress &amp; Wins</label>'+
+          '<textarea class="cl-full-ta" data-save="card8" placeholder="Log your wins, milestones, and progress here. Date each entry for easy reference during reviews.">'+escHtml(getFieldVal('card8'))+'</textarea>'+
+        '</div>'+
+      '</div>';
+
+    // Card 9 — Future Opportunities (full width)
+    var s9 = HOLDS[9];
+    ph3.innerHTML +=
+      '<div class="cl-full-card">'+
+        '<div class="cl-card-num">9</div>'+
+        '<div class="cl-full-card-header">'+
+          '<div class="cl-card-icon" style="background:#EBF1F8;color:#4A7FBF;width:40px;height:40px;font-size:18px;border-radius:10px;display:flex;align-items:center;justify-content:center;">🔭</div>'+
+          '<div><h3>'+s9.name+'</h3><div class="cl-tf-sm">'+s9.timeframe+'</div></div>'+
+        '</div>'+
+        '<p class="cl-full-card-desc">'+s9.desc+'</p>'+
+        '<div class="cl-ltags">'+
+          '<span class="cl-ltag cl-ltag-social">Social / Observational</span>'+
+          '<span class="cl-ltag cl-ltag-self">Self-Directed</span>'+
+        '</div>'+
+        '<div class="cl-entry-area">'+
+          '<label class="cl-entry-label">Future Pipeline</label>'+
+          '<textarea class="cl-full-ta" data-save="card9" placeholder="Roles, functions, skills, networks, or ideas you want to explore down the road..." style="min-height:100px;">'+escHtml(getFieldVal('card9'))+'</textarea>'+
+        '</div>'+
+      '</div>';
+  }
+
   updateProgress();
 }
 
@@ -1548,8 +1873,14 @@ function buildRoadmapText() {
   var themeCells = table.querySelectorAll('.roadmap-themes-row td');
   var qFocus = [];
   themeCells.forEach(function(td){
-    var items=td.querySelectorAll('li'); var fl=[];
-    items.forEach(function(li){fl.push(li.textContent.trim());}); qFocus.push(fl);
+    var ta = td.querySelector('.focus-textarea');
+    if (ta) {
+      var fl = ta.value.split('\n').map(function(s){return s.trim();}).filter(Boolean);
+      qFocus.push(fl);
+    } else {
+      var items=td.querySelectorAll('li'); var fl2=[];
+      items.forEach(function(li){fl2.push(li.textContent.trim());}); qFocus.push(fl2);
+    }
   });
   var outcomeTAs = table.querySelectorAll('.roadmap-outcomes-row td textarea');
   var qOutcomes = []; outcomeTAs.forEach(function(ta){qOutcomes.push(ta.value.trim());});
@@ -1610,8 +1941,10 @@ function buildRoadmapHTML() {
     var badge=qlabelCells[i]?qlabelCells[i].querySelector('.q-badge'):null;
     var rangeEl=qlabelCells[i]?qlabelCells[i].querySelectorAll('span'):[];
     var range=rangeEl.length>1?rangeEl[rangeEl.length-1].textContent.trim():'';
-    var focusItems=themeCells[i]?themeCells[i].querySelectorAll('li'):[];
-    var focus=[]; focusItems.forEach(function(li){focus.push(li.textContent.trim());});
+    var focusTa=themeCells[i]?themeCells[i].querySelector('.focus-textarea'):null;
+    var focus=[];
+    if(focusTa){ focus=focusTa.value.split('\n').map(function(s){return s.trim();}).filter(Boolean); }
+    else { var focusItems=themeCells[i]?themeCells[i].querySelectorAll('li'):[]; focusItems.forEach(function(li){focus.push(li.textContent.trim());}); }
     var outcome=outcomeTAs[i]?outcomeTAs[i].value.trim():'';
     var statusEl=statusCells[i]?statusCells[i].querySelector('.status-active,.status-planned'):null;
     var status=statusEl?statusEl.textContent.trim():'';
@@ -1734,6 +2067,15 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')['shareModal
 //  UTILITIES
 // ══════════════════════════════════════════════════════════
 function wireOwnerRadios() {
+  // Wire focus textareas to save on change
+  document.querySelectorAll('.focus-textarea[data-save]').forEach(function(ta){
+    ta.addEventListener('input', function(){
+      var stored={};
+      try{stored=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}');}catch(e){}
+      stored[ta.getAttribute('data-save')] = ta.value;
+      try{localStorage.setItem(STORAGE_KEY,JSON.stringify(stored));}catch(e){}
+    });
+  });
   document.querySelectorAll('.owner-radio').forEach(function(radio){
     radio.addEventListener('change',function(){
       if(!this.checked) return;
@@ -2177,19 +2519,18 @@ function generateAIPlan() {
   });
   html += '</tr>';
 
-  // ── ROW 3: Areas of focus (synthesized) ──
+  // ── ROW 3: Areas of focus — editable textarea so users can curate ──
   html += '<tr class="roadmap-themes-row">';
   qSourceTexts.forEach(function(srcs, qi) {
     var focusAreas = synthesizeFocusAreas(srcs, 4);
+    var focusKey = 'roadmap_focus_q' + qi;
+    var savedFocus = '';
+    try { savedFocus = JSON.parse(localStorage.getItem('360idp_data') || '{}')[focusKey] || ''; } catch(e){}
+    var defaultText = focusAreas.length ? focusAreas.join('\n') : '';
+    var displayText = savedFocus || defaultText;
     html += '<td>';
     html += '<span class="themes-label">Areas of Focus</span>';
-    if (focusAreas.length) {
-      html += '<ul>';
-      focusAreas.forEach(function(f){ html += '<li>'+escHtml(f)+'</li>'; });
-      html += '</ul>';
-    } else {
-      html += '<p style="color:var(--muted);font-style:italic;font-size:11px;">Complete sections 1\u20136 to populate focus areas.</p>';
-    }
+    html += '<textarea class="focus-textarea" data-save="'+focusKey+'" placeholder="Add your focus areas...">' + escHtml(displayText) + '</textarea>';
     html += '</td>';
   });
   html += '</tr>';
@@ -2207,7 +2548,7 @@ function generateAIPlan() {
     try { savedVal = JSON.parse(localStorage.getItem('360idp_data') || '{}')[savedKey] || ''; } catch(e){}
     html += '<td>';
     html += '<div class="outcome-box">';
-    html += '<textarea class="outcome-textarea" data-save="'+savedKey+'" placeholder="Outcomes I envision..." rows="3">'+escHtml(savedVal)+'</textarea>';
+    html += '<textarea class="outcome-textarea" data-save="'+savedKey+'" placeholder="What success looks like this quarter..." rows="3">'+escHtml(savedVal)+'</textarea>';
     html += '</div>';
     html += '</td>';
   });
