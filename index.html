@@ -3,1870 +3,757 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>360 IDP — Individual Development Plan</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<title>GPS 360° — Individual Development Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;600;700;800&family=Barlow:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
+/* ═══════════════════════════════════════════════
+   GPS 360° IDP  —  DESIGN TOKENS
+═══════════════════════════════════════════════ */
 :root {
-  --cyan: #00BCD4;
-  --cyan-light: #E5F7FA;
-  --blue: #4A7FBF;
-  --blue-light: #EBF1F8;
-  --purple: #7B68C8;
-  --purple-light: #F0EDF8;
-  --green: #1AAB8A;
-  --green-light: #E6F6F2;
-  --orange: #F0A030;
-  --orange-light: #FDF3E0;
-  --pink: #E8588C;
-  --pink-light: #FCE8F0;
-  --dark: #263238;
-  --dark2: #37474F;
-  --text: #3C4858;
-  --muted: #78909C;
-  --light-gray: #ECEFF1;
-  --bg: #F7F8FA;
-  --white: #FFFFFF;
-  --radius: 12px;
-  --radius-sm: 8px;
-}
-
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
-body {
-  font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-}
-
-.app {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 32px 24px 80px;
-}
-
-/* ── TOP TOOLBAR ── */
-.top-toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  background: var(--white);
-  border: 1px solid var(--light-gray);
-  border-radius: var(--radius);
-  padding: 10px 16px;
-  margin-bottom: 24px;
-  flex-wrap: wrap;
-  animation: fadeUp 0.4s ease both;
-}
-
-.toolbar-left {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.toolbar-right {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.toolbar-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 7px 14px;
-  border-radius: 7px;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  border: 1px solid var(--light-gray);
-  background: var(--bg);
-  color: var(--text);
-  transition: all 0.2s;
-  white-space: nowrap;
-}
-
-.toolbar-btn:hover { background: var(--light-gray); }
-
-.toolbar-btn.danger { color: var(--pink); border-color: var(--pink-light); }
-.toolbar-btn.danger:hover { background: var(--pink-light); }
-
-.toolbar-btn.primary {
-  background: linear-gradient(135deg, var(--cyan), var(--blue));
-  color: #fff;
-  border-color: transparent;
-}
-.toolbar-btn.primary:hover {
-  box-shadow: 0 3px 12px rgba(0,188,212,0.3);
-  transform: translateY(-1px);
-}
-
-.version-selector {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  color: var(--muted);
-}
-
-.version-selector select {
-  padding: 6px 10px;
-  border: 1px solid var(--light-gray);
-  border-radius: 6px;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text);
-  background: var(--bg);
-  cursor: pointer;
-  max-width: 180px;
-}
-
-.version-selector select:focus { outline: none; border-color: var(--cyan); }
-
-/* ── HEADER ── */
-.header {
-  text-align: center;
-  margin-bottom: 32px;
-  animation: fadeUp 0.6s ease;
-}
-
-.header-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 10.5px;
-  font-weight: 700;
-  letter-spacing: 2.5px;
-  text-transform: uppercase;
-  color: var(--cyan);
-  margin-bottom: 8px;
-}
-
-.header-label::before, .header-label::after {
-  content: '';
-  width: 24px;
-  height: 2px;
-  background: linear-gradient(90deg, var(--cyan), var(--purple));
-  border-radius: 1px;
-}
-
-.header h1 {
-  font-family: 'DM Serif Display', serif;
-  font-size: 32px;
-  color: var(--dark);
-  letter-spacing: -0.5px;
-  line-height: 1.2;
-  margin-bottom: 6px;
-}
-
-.header h1 em {
-  font-style: italic;
-  background: linear-gradient(135deg, var(--cyan), var(--purple));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.header .subtitle {
-  font-size: 14px;
-  color: var(--muted);
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-/* ── PROGRESS BAR ── */
-.progress-bar-wrap {
-  background: var(--white);
-  border: 1px solid var(--light-gray);
-  border-radius: var(--radius);
-  padding: 14px 20px;
-  margin-bottom: 24px;
-  animation: fadeUp 0.5s ease 0.05s both;
-}
-
-.progress-bar-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.progress-bar-header span {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
-.progress-bar-header .progress-pct {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--cyan);
-}
-
-.progress-track {
-  height: 6px;
-  background: var(--light-gray);
-  border-radius: 3px;
-  margin-bottom: 12px;
-  overflow: hidden;
-}
-
-.progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--cyan), var(--purple));
-  border-radius: 3px;
-  transition: width 0.5s ease;
-  width: 0%;
-}
-
-.progress-fields {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-}
-
-.prog-field {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 10.5px;
-  font-weight: 600;
-  padding: 3px 10px;
-  border-radius: 10px;
-  transition: all 0.3s;
-}
-
-.prog-field .dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.prog-field.empty { background: var(--bg); color: var(--muted); }
-.prog-field.empty .dot { background: var(--light-gray); }
-.prog-field.filled { background: var(--cyan-light); color: var(--cyan); }
-.prog-field.filled .dot { background: var(--cyan); }
-
-/* ── LEGEND ── */
-.legend {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 6px 18px;
-  padding: 12px 20px;
-  background: var(--white);
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--light-gray);
-  margin-bottom: 28px;
-  animation: fadeUp 0.6s ease 0.1s both;
-}
-
-.legend-item {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--text);
-}
-
-.legend-dot {
-  width: 8px; height: 8px;
-  border-radius: 2px;
-  flex-shrink: 0;
-}
-
-.legend-pct {
-  font-weight: 400;
-  color: var(--muted);
-  font-size: 10px;
-}
-
-/* ── EMPLOYEE INFO SECTION ── */
-.info-section {
-  background: var(--dark);
-  border-radius: var(--radius);
-  padding: 28px 32px;
-  margin-bottom: 28px;
-  position: relative;
-  overflow: hidden;
-  animation: fadeUp 0.6s ease 0.15s both;
-}
-
-.info-section::before {
-  content: '';
-  position: absolute;
-  top: -60px; right: -40px;
-  width: 200px; height: 200px;
-  background: radial-gradient(circle, rgba(0,188,212,0.1), transparent 70%);
-  border-radius: 50%;
-  pointer-events: none;
-}
-
-.info-section::after {
-  content: '';
-  position: absolute;
-  bottom: -40px; left: 30%;
-  width: 160px; height: 160px;
-  background: radial-gradient(circle, rgba(123,104,200,0.08), transparent 70%);
-  border-radius: 50%;
-  pointer-events: none;
-}
-
-.info-section h2 {
-  font-family: 'DM Serif Display', serif;
-  font-size: 18px;
-  color: #fff;
-  margin-bottom: 16px;
-  position: relative;
-}
-
-.info-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  position: relative;
-}
-
-.info-field label {
-  display: block;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.5);
-  margin-bottom: 4px;
-}
-
-.info-field input {
-  width: 100%;
-  padding: 8px 12px;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.12);
-  border-radius: 6px;
-  color: #fff;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 13px;
-  transition: border-color 0.2s, background 0.2s;
-}
-
-.info-field input:focus {
-  outline: none;
-  border-color: var(--cyan);
-  background: rgba(255,255,255,0.12);
-}
-
-.info-field input::placeholder { color: rgba(255,255,255,0.3); }
-
-/* ── PHASE ── */
-.phase { margin-bottom: 28px; }
-
-.phase-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 14px;
-}
-
-.phase-badge {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  padding: 4px 14px;
-  border-radius: 16px;
-  white-space: nowrap;
-}
-
-.phase-title {
-  font-family: 'DM Serif Display', serif;
-  font-size: 16px;
-  color: var(--dark);
-}
-
-.phase-line { flex: 1; height: 1px; opacity: 0.2; }
-
-.phase-1 .phase-badge { background: var(--cyan-light); color: var(--cyan); }
-.phase-1 .phase-line { background: var(--cyan); }
-.phase-2 .phase-badge { background: var(--purple-light); color: var(--purple); }
-.phase-2 .phase-line { background: var(--purple); }
-.phase-3 .phase-badge { background: var(--green-light); color: var(--green); }
-.phase-3 .phase-line { background: var(--green); }
-
-/* ── CARDS ── */
-.card-row {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-}
-
-@media (max-width: 768px) {
-  .card-row { grid-template-columns: 1fr; }
-  .info-grid { grid-template-columns: repeat(2, 1fr); }
-  .top-toolbar { flex-direction: column; align-items: stretch; }
-  .toolbar-left, .toolbar-right { justify-content: center; }
-}
-
-.card {
-  background: var(--white);
-  border-radius: var(--radius);
-  padding: 22px 20px 20px;
-  border: 1px solid rgba(0,0,0,0.06);
-  position: relative;
-  transition: box-shadow 0.3s, transform 0.3s;
-}
-
-.card:hover {
-  box-shadow: 0 8px 28px rgba(0,0,0,0.07);
-  transform: translateY(-2px);
-}
-
-/* card reset button */
-.card-reset {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 3px 10px;
-  border-radius: 5px;
-  border: 1px solid var(--light-gray);
-  background: var(--bg);
-  color: var(--muted);
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.3px;
-  cursor: pointer;
-  transition: all 0.2s;
-  margin-bottom: 10px;
-}
-
-.card-reset:hover {
-  background: var(--pink-light);
-  color: var(--pink);
-  border-color: var(--pink);
-}
-
-.card-num {
-  position: absolute;
-  top: 8px; right: 14px;
-  font-family: 'DM Serif Display', serif;
-  font-size: 40px;
-  opacity: 0.08;
-  color: var(--dark);
-  line-height: 1;
-  pointer-events: none;
-}
-
-.card-top {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  margin-bottom: 8px;
-}
-
-.card-icon {
-  width: 36px; height: 36px;
-  border-radius: 9px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  font-size: 16px;
-}
-
-.card h3 {
-  font-family: 'DM Serif Display', serif;
-  font-size: 15px;
-  color: var(--dark);
-  line-height: 1.3;
-}
-
-.card .timeframe {
-  font-size: 9.5px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-top: 1px;
-}
-
-.learning-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  margin: 10px 0;
-}
-
-.ltag {
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  padding: 2px 8px;
-  border-radius: 3px;
-}
-
-.ltag-self { background: var(--cyan-light); color: var(--cyan); }
-.ltag-formal { background: var(--blue-light); color: var(--blue); }
-.ltag-experiential { background: var(--purple-light); color: var(--purple); }
-.ltag-social { background: var(--green-light); color: var(--green); }
-.ltag-mentoring { background: var(--orange-light); color: var(--orange); }
-.ltag-feedback { background: var(--pink-light); color: var(--pink); }
-
-.card-desc {
-  font-size: 12.5px;
-  color: var(--muted);
-  line-height: 1.6;
-  margin-bottom: 10px;
-}
-
-.card .prompt-label {
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 6px;
-  padding-top: 8px;
-  border-top: 1px solid var(--light-gray);
-}
-
-.card .prompts { list-style: none; margin-bottom: 12px; }
-
-.card .prompts li {
-  font-size: 12px;
-  color: var(--text);
-  padding: 3px 0 3px 16px;
-  position: relative;
-  line-height: 1.5;
-}
-
-.card .prompts li::before {
-  content: '';
-  position: absolute;
-  left: 2px; top: 10px;
-  width: 5px; height: 5px;
-  border-radius: 50%;
-}
-
-.card-1 .prompts li::before { background: var(--cyan); }
-.card-2 .prompts li::before { background: var(--pink); }
-.card-3 .prompts li::before { background: var(--blue); }
-.card-4 .prompts li::before { background: var(--purple); }
-.card-5 .prompts li::before { background: var(--green); }
-.card-6 .prompts li::before { background: var(--orange); }
-
-/* ── TEXT ENTRY ── */
-.entry-area { margin-top: 8px; }
-
-.entry-area textarea {
-  width: 100%;
-  min-height: 80px;
-  padding: 10px 12px;
-  border: 1.5px solid var(--light-gray);
-  border-radius: 8px;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 12.5px;
-  color: var(--text);
-  background: var(--bg);
-  resize: vertical;
-  transition: border-color 0.2s, box-shadow 0.2s;
-  line-height: 1.6;
-}
-
-.entry-area textarea:focus {
-  outline: none;
-  border-color: var(--cyan);
-  box-shadow: 0 0 0 3px rgba(0,188,212,0.1);
-  background: var(--white);
-}
-
-.entry-area textarea::placeholder { color: #B0BEC5; font-size: 12px; }
-
-.entry-label {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 5px;
-  display: block;
-}
-
-/* ── FULL WIDTH CARDS ── */
-.full-card {
-  background: var(--white);
-  border-radius: var(--radius);
-  padding: 24px 28px;
-  border: 1px solid rgba(0,0,0,0.06);
-  margin-bottom: 14px;
-  position: relative;
-  transition: box-shadow 0.3s;
-}
-
-.full-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.06); }
-
-.full-card .card-num { font-size: 52px; top: 10px; right: 20px; }
-
-.full-card-header {
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-  margin-bottom: 12px;
-}
-
-.full-card h3 {
-  font-family: 'DM Serif Display', serif;
-  font-size: 18px;
-  color: var(--dark);
-}
-
-.full-card .timeframe {
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.6px;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
-.full-card .card-desc { font-size: 13px; max-width: 700px; }
-
-/* ── QUARTERLY PLAN TABLE ── */
-/* ── QUARTERLY ROADMAP — 4-COLUMN CARD LAYOUT ── */
-.roadmap-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 0;
-  table-layout: fixed;
-  font-size: 12.5px;
-}
-
-/* Header row — dark grey banner with cyan button */
-.roadmap-header-row td {
-  background: #2D2D2D;
-  color: #fff;
-  padding: 10px 16px;
-  border: none;
-}
-
-.roadmap-header-inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.roadmap-header-btns {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-shrink: 0;
-}
-
-.roadmap-gen-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 7px 18px;
-  background: var(--cyan);
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 12px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background 0.2s, transform 0.15s;
-  white-space: nowrap;
-}
-
-.roadmap-gen-btn:hover { background: #00A5C0; transform: translateY(-1px); }
-.roadmap-gen-btn:active { transform: translateY(0); }
-.roadmap-gen-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-
-.roadmap-redo-btn {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: 2px solid rgba(255,255,255,0.35);
-  background: rgba(255,255,255,0.1);
-  color: #fff;
-  font-size: 17px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.2s, border-color 0.2s, transform 0.2s;
-  line-height: 1;
-  padding: 0;
-  flex-shrink: 0;
-}
-
-.roadmap-redo-btn:hover { background: rgba(255,255,255,0.22); border-color: rgba(255,255,255,0.6); transform: rotate(-30deg); }
-.roadmap-redo-btn:active { transform: rotate(-60deg); }
-.roadmap-redo-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
-
-.roadmap-phase-text {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 12px;
-  font-weight: 600;
-  color: rgba(255,255,255,0.78);
-  letter-spacing: 0.3px;
-}
-
-/* Outcomes prompt — full-width row between areas of focus and textarea row */
-.roadmap-prompt-row td {
-  background: var(--white);
-  border: 1px solid var(--light-gray);
-  border-top: none;
-  padding: 8px 14px;
-}
-
-.roadmap-outcomes-prompt {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 11.5px;
-  color: var(--muted);
-  font-style: italic;
-  margin: 0;
-  padding: 0;
-}
-
-/* Owner radio buttons */
-.owner-radios {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  margin-top: 4px;
-}
-
-.owner-radio-label {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  font-size: 12px;
-  color: var(--text);
-  cursor: pointer;
-  user-select: none;
-}
-
-.owner-radio {
-  width: 14px;
-  height: 14px;
-  accent-color: var(--purple);
-  cursor: pointer;
-  flex-shrink: 0;
-}
-
-/* Quarter label row */
-.roadmap-qlabel-row td {
-  font-family: 'DM Serif Display', serif;
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--dark);
-  padding: 10px 14px 8px;
-  border: 1px solid var(--light-gray);
-  border-top: none;
-  background: var(--white);
-}
-
-.roadmap-qlabel-row td .q-phase {
-  display: block;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  margin-bottom: 2px;
-}
-
-/* Themes row — light blue tint like reference */
-.roadmap-themes-row td {
-  background: #EAF5FB;
-  border: 1px solid var(--light-gray);
-  border-top: none;
-  padding: 10px 14px;
-  vertical-align: top;
-  color: var(--text);
-  font-size: 12px;
-  line-height: 1.6;
-  min-height: 80px;
-}
-
-.roadmap-themes-row td .themes-label {
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: #4A90B8;
-  margin-bottom: 6px;
-  display: block;
-}
-
-.roadmap-themes-row td ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.roadmap-themes-row td ul li {
-  padding: 2px 0 2px 13px;
-  position: relative;
-  color: var(--dark2);
-  font-size: 12px;
-}
-
-.roadmap-themes-row td ul li::before {
-  content: '';
-  position: absolute;
-  left: 0; top: 9px;
-  width: 5px; height: 5px;
-  border-radius: 50%;
-  background: #4A90B8;
-}
-
-/* Outcomes row — white with border box */
-.roadmap-outcomes-row td {
-  background: var(--white);
-  border: 1px solid var(--light-gray);
-  border-top: none;
-  padding: 10px 14px;
-  vertical-align: top;
-}
-
-.roadmap-outcomes-row td .outcome-box {
-  background: var(--bg);
-  border: 1px solid var(--light-gray);
-  border-radius: 6px;
-  padding: 10px 12px;
-  font-size: 12px;
-  color: var(--text);
-  line-height: 1.6;
-  min-height: 56px;
-}
-
-.roadmap-outcomes-row td .outcome-box .outcome-label {
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 5px;
-  display: block;
-}
-
-.outcome-textarea {
-  width: 100%;
-  box-sizing: border-box;
-  border: none;
-  background: transparent;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 12px;
-  line-height: 1.6;
-  color: var(--text);
-  resize: vertical;
-  outline: none;
-  padding: 0;
-  min-height: 56px;
-}
-
-/* Status row */
-.roadmap-status-row td {
-  background: var(--white);
-  border: 1px solid var(--light-gray);
-  border-top: none;
-  padding: 8px 14px;
-  font-size: 11.5px;
-  color: var(--text);
-}
-
-.roadmap-status-row td .status-label {
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 3px;
-  display: block;
-}
-
-/* Owner row */
-.roadmap-owner-row td {
-  background: var(--bg);
-  border: 1px solid var(--light-gray);
-  border-top: none;
-  padding: 8px 14px;
-  font-size: 11.5px;
-  color: var(--text);
-  border-radius: 0 0 0 0;
-}
-
-.roadmap-owner-row td:first-child { border-radius: 0 0 0 8px; }
-.roadmap-owner-row td:last-child  { border-radius: 0 0 8px 0; }
-
-.roadmap-owner-row td .owner-label {
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 3px;
-  display: block;
-}
-
-/* Status badges */
-.status-active {
-  display: inline-flex; align-items: center; gap: 5px;
-  font-weight: 700; color: var(--cyan); font-size: 12px;
-}
-.status-planned {
-  display: inline-flex; align-items: center; gap: 5px;
-  font-weight: 600; color: var(--muted); font-size: 12px;
-}
-.status-dot-active  { width:7px; height:7px; border-radius:50%; background:var(--cyan); display:inline-block; }
-.status-dot-planned { width:7px; height:7px; border-radius:50%; background:var(--light-gray); display:inline-block; }
-
-/* Checkin row */
-.roadmap-checkin-row td {
-  background: var(--bg);
-  border: 1px solid var(--light-gray);
-  border-top: none;
-  padding: 7px 14px;
-  font-size: 11.5px;
-  color: var(--muted);
-  font-style: italic;
-}
-
-.q-badge {
-  display: inline-block;
-  font-size: 10px;
-  font-weight: 700;
-  padding: 2px 10px;
-  border-radius: 10px;
-  letter-spacing: 0.5px;
-}
-
-.q-badge.q1 { background: var(--cyan-light); color: var(--cyan); }
-.q-badge.q2 { background: var(--purple-light); color: var(--purple); }
-.q-badge.q3 { background: var(--green-light); color: var(--green); }
-.q-badge.q4 { background: var(--orange-light); color: var(--orange); }
-
-.status-indicator {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 11px;
-  font-weight: 600;
-}
-
-.status-dot { width: 7px; height: 7px; border-radius: 50%; }
-
-@media (max-width: 700px) {
-  .roadmap-table, .roadmap-table tbody, .roadmap-table tr, .roadmap-table td {
-    display: block; width: 100%;
-  }
-  .roadmap-header-row td:not(:first-child) { display: none; }
-  .roadmap-qlabel-row td,
-  .roadmap-themes-row td,
-  .roadmap-outcomes-row td,
-  .roadmap-status-row td,
-  .roadmap-owner-row td,
-  .roadmap-checkin-row td {
-    border-left: 3px solid var(--purple);
-    margin-bottom: 2px;
-  }
-}
-
-.empty-state {
-  text-align: center;
-  padding: 28px 20px;
-  color: var(--muted);
-  font-size: 13px;
-  background: var(--bg);
-  border-radius: 8px;
-  margin-top: 12px;
-}
-
-.empty-state .empty-icon {
-  font-size: 28px;
-  margin-bottom: 8px;
-  opacity: 0.5;
-}
-
-/* ── AI GENERATE BUTTON ── */
-.generate-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 24px;
-  background: linear-gradient(135deg, var(--purple), var(--blue));
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-  margin-top: 12px;
-}
-
-.generate-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 16px rgba(123,104,200,0.35);
-}
-
-.generate-btn:active { transform: translateY(0); }
-.generate-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-
-.ai-badge {
-  font-size: 9px;
-  font-weight: 800;
-  background: rgba(255,255,255,0.2);
-  padding: 1px 6px;
-  border-radius: 4px;
-  letter-spacing: 0.5px;
-}
-
-/* ── AI LOADING ── */
-.ai-loading {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 20px;
-  background: var(--bg);
-  border-radius: 8px;
-  margin-top: 12px;
-  font-size: 13px;
-  color: var(--muted);
-}
-
-.ai-spinner {
-  width: 20px; height: 20px;
-  border: 2px solid var(--light-gray);
-  border-top-color: var(--purple);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin { to { transform: rotate(360deg); } }
-
-/* ── AI PLAN OUTPUT ── */
-.ai-plan-output {
-  margin-top: 14px;
-  border: 1px solid rgba(123,104,200,0.2);
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.ai-plan-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 16px;
-  background: linear-gradient(135deg, rgba(123,104,200,0.08), rgba(74,127,191,0.06));
-  border-bottom: 1px solid rgba(123,104,200,0.15);
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--purple);
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-}
-
-/* ── DIAGNOSTIC CALLOUT ── */
-.callout {
-  background: var(--dark);
-  border-radius: var(--radius);
-  padding: 20px 24px;
-  margin-top: 28px;
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-}
-
-.callout-accent {
-  width: 4px;
-  min-height: 40px;
-  background: var(--pink);
-  border-radius: 2px;
-  flex-shrink: 0;
-}
-
-.callout h4 { font-size: 13px; font-weight: 700; color: var(--pink); margin-bottom: 3px; }
-
-.callout p { font-size: 12px; color: rgba(255,255,255,0.7); line-height: 1.65; }
-
-/* ── FOOTER ── */
-.footer {
-  text-align: center;
-  margin-top: 36px;
-  padding-top: 20px;
-  border-top: 1px solid var(--light-gray);
-}
-
-.footer .color-dots {
-  display: flex;
-  justify-content: center;
-  gap: 5px;
-  margin-bottom: 8px;
-}
-
-.footer .color-dots span { width: 7px; height: 7px; border-radius: 50%; }
-.footer p { font-size: 11px; color: var(--muted); }
-
-/* ── ANIMATIONS ── */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(16px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.phase { animation: fadeUp 0.5s ease both; }
-.phase:nth-child(2) { animation-delay: 0.2s; }
-.phase:nth-child(3) { animation-delay: 0.3s; }
-.phase:nth-child(4) { animation-delay: 0.4s; }
-
-/* ── SAVE STATUS ── */
-.save-indicator {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: var(--dark);
-  color: #fff;
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 600;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.3s, transform 0.3s;
-  pointer-events: none;
-  z-index: 100;
-}
-
-.save-indicator.show { opacity: 1; transform: translateY(0); }
-
-/* ── PUBLISH SECTION ── */
-.publish-section {
-  margin-top: 28px;
-  background: linear-gradient(135deg, #f0fafb 0%, #f0edf8 50%, #fdf3e0 100%);
-  border-radius: var(--radius);
-  border: 1px solid rgba(0,0,0,0.06);
-  padding: 3px;
-}
-
-.publish-inner {
-  background: var(--white);
-  border-radius: 10px;
-  padding: 28px 32px;
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-
-.publish-icon {
-  font-size: 32px;
-  width: 56px; height: 56px;
-  background: var(--cyan-light);
-  border-radius: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.publish-content { flex: 1; min-width: 200px; }
-
-.publish-content h3 {
-  font-family: 'DM Serif Display', serif;
-  font-size: 17px;
-  color: var(--dark);
-  margin-bottom: 4px;
-}
-
-.publish-content p { font-size: 13px; color: var(--muted); line-height: 1.55; }
-
-.publish-actions { display: flex; gap: 10px; flex-shrink: 0; }
-
-.publish-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 8px;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-  white-space: nowrap;
-}
-
-.publish-btn:hover { transform: translateY(-1px); }
-.publish-btn:active { transform: translateY(0); }
-
-.publish-btn.primary { background: linear-gradient(135deg, var(--cyan), var(--blue)); color: #fff; }
-.publish-btn.primary:hover { box-shadow: 0 4px 16px rgba(0,188,212,0.3); }
-
-.publish-btn.secondary { background: var(--bg); color: var(--text); border: 1px solid var(--light-gray); }
-.publish-btn.secondary:hover { background: var(--light-gray); }
-
-.btn-icon { font-size: 15px; }
-
-/* ── MODAL (shared base) ── */
-.modal-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(38,50,56,0.5);
-  backdrop-filter: blur(4px);
-  z-index: 1000;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-}
-
-.modal-overlay.open { display: flex; }
-
-.modal {
-  background: var(--white);
-  border-radius: 16px;
-  width: 100%;
-  max-width: 580px;
-  max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: 0 24px 80px rgba(0,0,0,0.18);
-  position: relative;
-  animation: modalIn 0.3s ease;
-}
-
-@keyframes modalIn {
-  from { opacity: 0; transform: translateY(20px) scale(0.97); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-.modal-close {
-  position: absolute;
-  top: 16px; right: 16px;
-  background: var(--bg);
-  border: none;
-  width: 32px; height: 32px;
-  border-radius: 50%;
-  font-size: 18px;
-  color: var(--muted);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.2s;
-}
-
-.modal-close:hover { background: var(--light-gray); }
-
-.modal-header {
-  padding: 28px 28px 16px;
-  text-align: center;
-  border-bottom: 1px solid var(--light-gray);
-}
-
-.modal-header .modal-icon {
-  font-size: 28px;
-  width: 52px; height: 52px;
-  background: linear-gradient(135deg, var(--cyan-light), var(--blue-light));
-  border-radius: 14px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 12px;
-}
-
-.modal-header h2 {
-  font-family: 'DM Serif Display', serif;
-  font-size: 22px;
-  color: var(--dark);
-  margin-bottom: 6px;
-}
-
-.modal-header p { font-size: 13px; color: var(--muted); line-height: 1.55; }
-
-.modal-body { padding: 20px 28px; }
-
-.modal-field { margin-bottom: 14px; }
-
-.modal-field label {
-  display: block;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 5px;
-}
-
-.modal-field input,
-.modal-field textarea {
-  width: 100%;
-  padding: 10px 14px;
-  border: 1.5px solid var(--light-gray);
-  border-radius: 8px;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 13px;
-  color: var(--text);
-  background: var(--bg);
-  transition: border-color 0.2s;
-}
-
-.modal-field input:focus,
-.modal-field textarea:focus {
-  outline: none;
-  border-color: var(--cyan);
-  background: var(--white);
-}
-
-.modal-preview-toggle { margin-bottom: 10px; }
-
-.preview-toggle-btn {
-  background: none;
-  border: none;
-  color: var(--cyan);
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  padding: 4px 0;
-}
-
-.preview-toggle-btn:hover { text-decoration: underline; }
-
-.modal-preview {
-  background: var(--bg);
-  border: 1px solid var(--light-gray);
-  border-radius: 8px;
-  padding: 16px;
-  font-size: 12px;
-  color: var(--text);
-  line-height: 1.7;
-  max-height: 250px;
-  overflow-y: auto;
-  white-space: pre-wrap;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-}
-
-.modal-footer {
-  padding: 16px 28px 24px;
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  border-top: 1px solid var(--light-gray);
-}
-
-/* ── CONFIRM MODAL ── */
-.confirm-modal { max-width: 420px; }
-
-.confirm-modal .modal-header { padding-bottom: 16px; }
-
-.confirm-options {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 16px 28px;
-}
-
-.confirm-option {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 14px;
-  border: 1.5px solid var(--light-gray);
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s;
-  background: var(--white);
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 13px;
-  color: var(--text);
-  text-align: left;
-}
-
-.confirm-option:hover { border-color: var(--pink); background: var(--pink-light); }
-.confirm-option.selected { border-color: var(--pink); background: var(--pink-light); }
-
-.confirm-option-icon { font-size: 16px; flex-shrink: 0; }
-
-.confirm-option-text strong { display: block; font-size: 13px; margin-bottom: 1px; }
-.confirm-option-text span { font-size: 11px; color: var(--muted); }
-
-/* ── VERSION MODAL ── */
-.version-list {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 0 28px 8px;
-}
-
-.version-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 14px;
-  border: 1px solid var(--light-gray);
-  border-radius: 8px;
-  background: var(--bg);
-  font-size: 13px;
-  gap: 8px;
-}
-
-.version-item-info { flex: 1; }
-.version-item-info strong { display: block; font-size: 12px; color: var(--dark); }
-.version-item-info span { font-size: 11px; color: var(--muted); }
-
-.version-item-actions { display: flex; gap: 6px; }
-
-.ver-btn {
-  padding: 4px 10px;
-  border-radius: 5px;
-  font-size: 11px;
-  font-weight: 600;
-  cursor: pointer;
-  border: 1px solid var(--light-gray);
-  background: var(--white);
-  color: var(--text);
-  transition: all 0.2s;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-}
-
-.ver-btn:hover { background: var(--light-gray); }
-.ver-btn.restore { color: var(--cyan); border-color: var(--cyan-light); }
-.ver-btn.restore:hover { background: var(--cyan-light); }
-.ver-btn.del { color: var(--pink); border-color: var(--pink-light); }
-.ver-btn.del:hover { background: var(--pink-light); }
-
-.version-save-form {
-  padding: 12px 28px 0;
-  border-top: 1px solid var(--light-gray);
-  margin-top: 8px;
-}
-
-.version-save-form .modal-field { margin-bottom: 8px; }
-
-/* ── EMAIL INFO BOX ── */
-.email-info-box {
-  background: var(--blue-light);
-  border: 1px solid rgba(74,127,191,0.2);
-  border-radius: 8px;
-  padding: 10px 14px;
-  margin-bottom: 14px;
-  font-size: 12px;
-  color: var(--blue);
-  line-height: 1.6;
-}
-
-.email-info-box strong { font-weight: 700; }
-
-/* Print styles */
-@media print {
-  body { background: #fff; }
-  .app { max-width: 100%; padding: 12px; }
-  .card:hover, .full-card:hover { transform: none; box-shadow: none; }
-  textarea { border: 1px solid #ccc !important; }
-  .generate-btn, .top-toolbar, .save-indicator, .publish-section { display: none; }
-}
+  --orange:#E8541A; --orange-light:#FEF0EA;
+  --teal:#2E9FAB;   --teal-light:#E4F6F8;
+  --yellow:#F0B429; --yellow-light:#FEF9EC;
+  --purple:#7C6FF7; --purple-light:#F0EFFE;
+  --green:#3DAB6E;  --green-light:#E8F8EE;
+  --pink:#E8455A;   --pink-light:#FDEEF0;
+  --blue:#4A7FC1;   --blue-light:#EBF3FD;
+  --cyan:#00BCD4;   --cyan-light:#E0F7FA;
+  --chalk:#F5F2EB;  --concrete:#D8D4CC;
+  --dark:#18191C;   --mid:#2E3138;   --card-bg:#22252B;
+  --text:#1C1F23;   --muted:#78808C;
+  --white:#FFFFFF;  --light-gray:#EEF0F2;
+  --border:rgba(255,255,255,0.08);
+  --font-display:'Barlow Condensed',sans-serif;
+  --font-body:'Barlow',sans-serif;
+  --font-classic:'Plus Jakarta Sans',sans-serif;
+  --font-serif:'DM Serif Display',serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font-body);background:var(--dark);color:var(--chalk);min-height:100vh;overflow-x:hidden;}
+
+/* ═══════════════════════════════════════════════
+   TOP BAR
+═══════════════════════════════════════════════ */
+.top-bar {
+  position:fixed;top:0;left:0;right:0;z-index:300;
+  background:rgba(18,19,22,0.96);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:9px 20px;height:52px;
+}
+.brand {
+  font-family:var(--font-display);font-size:16px;font-weight:700;
+  letter-spacing:0.08em;text-transform:uppercase;color:var(--chalk);
+  display:flex;align-items:center;gap:8px;
+}
+.brand em{color:var(--orange);font-style:normal;}
+.top-bar-actions{display:flex;align-items:center;gap:8px;}
+.tb-btn {
+  font-family:var(--font-display);font-size:11px;font-weight:600;
+  letter-spacing:0.08em;text-transform:uppercase;
+  padding:6px 12px;border-radius:6px;cursor:pointer;
+  border:1px solid var(--border);background:rgba(255,255,255,0.05);
+  color:rgba(255,255,255,0.6);transition:all 0.2s;white-space:nowrap;
+}
+.tb-btn:hover{background:rgba(255,255,255,0.1);color:var(--chalk);}
+.tb-btn.primary{background:var(--orange);border-color:var(--orange);color:#fff;}
+.tb-btn.primary:hover{background:#cc3e0d;}
+.mode-pill {
+  display:flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--border);
+  border-radius:40px;padding:4px 10px 4px 12px;
+}
+.pill-lbl{font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.35);}
+.mode-sw {
+  width:40px;height:22px;border-radius:11px;
+  background:var(--orange);border:none;cursor:pointer;
+  position:relative;transition:background 0.3s;flex-shrink:0;
+}
+.mode-sw.off{background:var(--mid);}
+.sw-knob{
+  position:absolute;top:2px;left:2px;width:18px;height:18px;
+  border-radius:50%;background:#fff;transition:transform 0.3s;
+}
+.mode-sw:not(.off) .sw-knob{transform:translateX(18px);}
+.ml{font-size:10px;letter-spacing:0.05em;text-transform:uppercase;}
+.ml-off{color:rgba(255,255,255,0.3);}
+.ml-on{color:var(--orange);}
+#versionSelect {
+  background:rgba(255,255,255,0.05);border:1px solid var(--border);
+  color:rgba(255,255,255,0.6);border-radius:6px;padding:5px 8px;
+  font-family:var(--font-display);font-size:11px;letter-spacing:0.05em;
+  cursor:pointer;max-width:140px;
+}
+
+/* ═══════════════════════════════════════════════
+   ASCENT MODE — WALL STRIP
+═══════════════════════════════════════════════ */
+#ascentMode{padding-top:52px;min-height:100vh;}
+
+.wall-strip {
+  position:relative;width:100%;height:220px;overflow:hidden;
+  flex-shrink:0;
+}
+.wall-img {
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;object-position:center 30%;
+}
+.wall-dim{
+  position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(18,19,22,0.3) 0%,rgba(18,19,22,0.75) 100%);
+}
+.wall-dim-top{
+  position:absolute;top:0;left:0;right:0;height:52px;
+  background:rgba(18,19,22,0.6);
+}
+
+/* Route SVG */
+.route-svg{
+  position:absolute;inset:0;width:100%;height:100%;z-index:3;pointer-events:none;
+}
+.rope-done{
+  fill:none;stroke:rgba(255,255,255,0.55);stroke-width:2;
+  stroke-linecap:round;stroke-linejoin:round;
+}
+.rope-ahead{
+  fill:none;stroke:rgba(255,255,255,0.18);stroke-width:1.5;
+  stroke-dasharray:5 5;stroke-linecap:round;
+}
+
+/* Holds */
+.holds-layer{position:absolute;inset:0;z-index:4;}
+.hold {
+  position:absolute;
+  width:30px;height:20px;
+  border-radius:42% 58% 55% 45% / 52% 48% 62% 38%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-display);font-size:11px;font-weight:700;
+  color:#fff;text-shadow:0 1px 3px rgba(0,0,0,0.7);
+  cursor:pointer;user-select:none;
+  border:1.5px solid rgba(255,255,255,0.28);
+  filter:drop-shadow(0 2px 5px rgba(0,0,0,0.55));
+  transition:transform 0.18s,filter 0.18s;
+  transform-origin:bottom center;
+}
+.hold:hover:not(.h-locked){transform:scale(1.3);filter:drop-shadow(0 3px 10px rgba(255,255,255,0.35));}
+.hold.h-active{animation:hGlow 1.7s infinite ease-in-out;}
+.hold.h-done{border-color:rgba(255,255,255,0.8);filter:drop-shadow(0 0 7px rgba(255,255,255,0.5));}
+.hold.h-locked{opacity:0.32;cursor:not-allowed;}
+@keyframes hGlow{
+  0%,100%{filter:drop-shadow(0 0 3px rgba(255,255,255,0.25)) drop-shadow(0 2px 5px rgba(0,0,0,0.5));}
+  50%{filter:drop-shadow(0 0 12px rgba(255,255,255,0.7)) drop-shadow(0 2px 8px rgba(0,0,0,0.4));}
+}
+
+/* Climber */
+.climber{
+  position:absolute;z-index:5;pointer-events:none;
+  width:24px;height:24px;border-radius:50%;
+  background:var(--chalk);border:2px solid rgba(0,0,0,0.35);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;
+  filter:drop-shadow(0 2px 6px rgba(0,0,0,0.7));
+  transition:left 0.85s cubic-bezier(.4,0,.2,1),bottom 0.85s cubic-bezier(.4,0,.2,1);
+}
+
+/* Wall mini caption */
+.wall-caption{
+  position:absolute;right:16px;bottom:12px;z-index:6;pointer-events:none;
+  text-align:right;
+}
+.wall-caption h3{
+  font-family:var(--font-display);font-size:15px;font-weight:700;
+  text-transform:uppercase;letter-spacing:0.06em;
+  color:#fff;text-shadow:0 1px 8px rgba(0,0,0,0.8);line-height:1.1;
+}
+.wall-caption p{
+  font-size:10px;color:rgba(255,255,255,0.55);
+  letter-spacing:0.07em;text-transform:uppercase;margin-top:3px;
+  text-shadow:0 1px 5px rgba(0,0,0,0.8);
+}
+
+/* Phase track dots */
+.phase-track{
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  position:absolute;bottom:8px;left:16px;z-index:6;
+}
+.pt-dot{
+  width:7px;height:7px;border-radius:50%;
+  border:1.5px solid rgba(255,255,255,0.35);
+  background:transparent;
+  transition:all 0.3s;
+}
+.pt-dot.pt-done{background:var(--teal);border-color:var(--teal);}
+.pt-dot.pt-active{background:var(--orange);border-color:var(--orange);transform:scale(1.3);}
+
+/* ═══════════════════════════════════════════════
+   CARD FOCUS AREA  (one at a time)
+═══════════════════════════════════════════════ */
+.card-stage{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:flex-start;
+  padding:28px 20px 32px;
+  min-height:calc(100vh - 272px);
+}
+.focus-card{
+  width:100%;max-width:640px;
+  animation:cardIn 0.45s cubic-bezier(.4,0,.2,1) forwards;
+}
+@keyframes cardIn{
+  from{opacity:0;transform:translateY(18px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+.hold-badge{
+  display:inline-flex;align-items:center;gap:7px;
+  border-radius:20px;padding:4px 12px;
+  font-family:var(--font-display);font-size:10px;font-weight:600;
+  letter-spacing:0.12em;text-transform:uppercase;margin-bottom:14px;
+}
+.card-title-lg{
+  font-family:var(--font-display);font-size:clamp(22px,5vw,34px);
+  font-weight:700;text-transform:uppercase;letter-spacing:0.03em;
+  color:var(--chalk);line-height:1.05;margin-bottom:6px;
+}
+.card-timeframe{
+  font-size:11px;letter-spacing:0.1em;text-transform:uppercase;
+  color:rgba(255,255,255,0.35);margin-bottom:16px;
+}
+.card-desc-txt{
+  font-size:13px;color:rgba(255,255,255,0.55);
+  line-height:1.65;margin-bottom:6px;
+}
+
+/* Reflection prompt box */
+.reflection-box{
+  border-left:3px solid var(--orange);
+  border-radius:0 10px 10px 0;
+  padding:14px 18px;margin:16px 0;
+  background:rgba(232,84,26,0.07);
+}
+.ref-lbl{
+  font-size:9px;letter-spacing:0.16em;text-transform:uppercase;
+  color:var(--orange);margin-bottom:6px;
+}
+.ref-prompt{
+  font-family:var(--font-serif);font-size:16px;font-weight:400;font-style:italic;
+  color:rgba(255,255,255,0.82);line-height:1.55;
+}
+
+/* Beta tip */
+.beta-tip{
+  display:none;margin-top:10px;
+  background:rgba(46,159,171,0.07);
+  border-left:3px solid var(--teal);
+  border-radius:0 8px 8px 0;
+  padding:10px 14px;
+}
+.beta-tip.show{display:block;}
+.bt-lbl{font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--teal);margin-bottom:4px;}
+.bt-txt{font-size:12px;color:rgba(255,255,255,0.5);line-height:1.55;font-style:italic;}
+
+/* Difficulty badge */
+.diff-badge{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:10px;color:rgba(255,255,255,0.3);margin-bottom:14px;
+  font-family:var(--font-display);letter-spacing:0.06em;
+}
+.diff-diamond{color:var(--yellow);}
+
+/* Textarea */
+.stage-ta{
+  width:100%;background:rgba(0,0,0,0.32);
+  border:1px solid rgba(255,255,255,0.1);border-radius:10px;
+  padding:14px 16px;color:var(--chalk);
+  font-family:var(--font-body);font-size:14px;
+  resize:none;min-height:130px;outline:none;
+  transition:border-color 0.25s,background 0.25s;line-height:1.65;
+}
+.stage-ta:focus{border-color:var(--orange);background:rgba(0,0,0,0.4);}
+.stage-ta::placeholder{color:rgba(255,255,255,0.2);}
+
+/* Card footer */
+.card-foot{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-top:18px;flex-wrap:wrap;gap:10px;
+}
+.progress-wrap{display:flex;align-items:center;gap:10px;}
+.prog-lbl{font-size:11px;color:rgba(255,255,255,0.3);}
+.prog-bar{width:100px;height:4px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--orange),var(--yellow));width:0%;transition:width 0.75s ease;}
+.nav-btns{display:flex;gap:8px;}
+.nav-btn-back{
+  background:transparent;border:1px solid var(--border);border-radius:8px;
+  padding:10px 16px;color:rgba(255,255,255,0.4);
+  font-family:var(--font-display);font-size:12px;font-weight:600;
+  letter-spacing:0.07em;text-transform:uppercase;cursor:pointer;
+  transition:all 0.2s;
+}
+.nav-btn-back:hover{border-color:rgba(255,255,255,0.3);color:rgba(255,255,255,0.7);}
+.nav-btn-next{
+  background:var(--orange);border:none;border-radius:8px;
+  padding:10px 22px;color:#fff;
+  font-family:var(--font-display);font-size:13px;font-weight:700;
+  letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;
+  transition:background 0.2s,transform 0.1s;
+}
+.nav-btn-next:hover{background:#cc3e0d;}
+.nav-btn-next:active{transform:scale(0.97);}
+.nav-btn-next.summit{background:var(--yellow);color:var(--dark);}
+.nav-btn-next.summit:hover{background:#d49a1a;}
+
+/* ═══════════════════════════════════════════════
+   PLAN DETAILS CARD (card 0)
+═══════════════════════════════════════════════ */
+.details-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:8px;
+}
+.detail-field label{
+  display:block;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;
+  color:rgba(255,255,255,0.35);margin-bottom:5px;
+}
+.detail-input{
+  width:100%;background:rgba(0,0,0,0.3);
+  border:1px solid rgba(255,255,255,0.1);border-radius:8px;
+  padding:10px 13px;color:var(--chalk);
+  font-family:var(--font-body);font-size:13px;outline:none;
+  transition:border-color 0.2s;
+}
+.detail-input:focus{border-color:var(--orange);}
+.detail-input::placeholder{color:rgba(255,255,255,0.2);}
+
+/* ═══════════════════════════════════════════════
+   SUMMIT REVEAL
+═══════════════════════════════════════════════ */
+.summit-reveal{
+  text-align:center;padding:32px 20px;max-width:640px;width:100%;
+  animation:cardIn 0.5s ease forwards;
+}
+.summit-icon{font-size:48px;margin-bottom:16px;}
+.summit-title{
+  font-family:var(--font-display);font-size:36px;font-weight:800;
+  text-transform:uppercase;letter-spacing:0.05em;color:var(--yellow);
+  margin-bottom:8px;
+}
+.summit-sub{font-size:14px;color:rgba(255,255,255,0.55);line-height:1.6;margin-bottom:24px;}
+.summit-stats{
+  display:flex;justify-content:center;gap:28px;margin-bottom:28px;
+}
+.stat-item{text-align:center;}
+.stat-num{
+  font-family:var(--font-display);font-size:28px;font-weight:700;color:var(--orange);
+}
+.stat-lbl{font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-top:2px;}
+.unlock-btn{
+  background:var(--yellow);border:none;border-radius:10px;
+  padding:14px 32px;color:var(--dark);
+  font-family:var(--font-display);font-size:15px;font-weight:800;
+  letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;
+  transition:background 0.2s,transform 0.1s;
+}
+.unlock-btn:hover{background:#d49a1a;}
+.unlock-btn:active{transform:scale(0.98);}
+
+/* ═══════════════════════════════════════════════
+   ROADMAP SECTION
+═══════════════════════════════════════════════ */
+.roadmap-section{
+  width:100%;max-width:900px;padding:0 20px 40px;
+  animation:cardIn 0.5s ease forwards;
+}
+.rm-header-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;margin-bottom:20px;
+}
+.rm-title-group{}
+.rm-eyebrow{
+  font-size:10px;letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--yellow);margin-bottom:4px;
+}
+.rm-title{
+  font-family:var(--font-display);font-size:24px;font-weight:700;
+  text-transform:uppercase;letter-spacing:0.04em;color:var(--chalk);
+}
+.rm-btns{display:flex;gap:8px;}
+.rm-gen-btn{
+  background:var(--teal);border:none;border-radius:7px;
+  padding:8px 16px;color:#fff;
+  font-family:var(--font-display);font-size:12px;font-weight:600;
+  letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;
+  transition:background 0.2s;
+}
+.rm-gen-btn:hover{background:#228a96;}
+.rm-gen-btn:disabled{opacity:0.5;cursor:not-allowed;}
+.rm-redo-btn{
+  width:34px;height:34px;border-radius:50%;
+  border:1px solid var(--border);background:rgba(255,255,255,0.05);
+  color:rgba(255,255,255,0.5);font-size:14px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all 0.2s;
+}
+.rm-redo-btn:hover{background:rgba(255,255,255,0.1);color:var(--chalk);}
+
+/* Roadmap table */
+.roadmap-table{width:100%;border-collapse:collapse;table-layout:fixed;}
+.roadmap-table .rm-thead td{
+  background:#2D2D2D;padding:12px 14px;
+}
+.rm-thead-inner{display:flex;align-items:center;justify-content:space-between;}
+.rm-phase-txt{
+  font-family:var(--font-display);font-size:13px;font-weight:600;
+  letter-spacing:0.08em;color:rgba(255,255,255,0.75);text-transform:uppercase;
+}
+.rm-head-btns{display:flex;gap:6px;align-items:center;}
+.roadmap-table .ql-row td{
+  padding:10px 14px;border:1px solid rgba(255,255,255,0.07);
+  background:rgba(255,255,255,0.03);
+}
+.q-badge{
+  display:inline-block;border-radius:12px;padding:2px 10px;
+  font-family:var(--font-display);font-size:10px;font-weight:700;
+  letter-spacing:0.1em;text-transform:uppercase;color:#fff;margin-bottom:4px;
+}
+.q-phase-lbl{font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:3px;}
+.q-date{font-size:10px;color:rgba(255,255,255,0.28);}
+.roadmap-table .themes-row td{
+  padding:10px 14px;border:1px solid rgba(255,255,255,0.07);
+  background:#EAF5FB;vertical-align:top;
+}
+.themes-row .focus-label{
+  font-size:9px;letter-spacing:0.12em;text-transform:uppercase;
+  color:#2E7D9A;margin-bottom:6px;
+}
+.themes-row ul{list-style:none;padding:0;}
+.themes-row li{
+  font-size:11px;color:#1a4a5c;padding:2px 0;line-height:1.5;
+}
+.themes-row li::before{content:'· ';color:var(--teal);}
+.roadmap-table .prompt-row td{
+  background:#F8FAFB;padding:8px 14px;
+  font-size:11px;font-style:italic;color:#5a7280;
+  border:1px solid rgba(255,255,255,0.07);
+}
+.roadmap-table .outcomes-row td{
+  padding:8px 10px;border:1px solid rgba(255,255,255,0.07);
+  background:#fff;vertical-align:top;
+}
+.outcome-ta{
+  width:100%;border:none;background:transparent;outline:none;
+  font-family:var(--font-body);font-size:12px;color:#333;
+  min-height:70px;resize:none;line-height:1.6;
+}
+.outcome-ta::placeholder{color:#aaa;font-style:italic;}
+.roadmap-table .status-row td{
+  padding:8px 14px;border:1px solid rgba(255,255,255,0.07);
+  background:rgba(255,255,255,0.03);
+}
+.status-active{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:11px;color:var(--teal);
+}
+.status-active::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--teal);}
+.status-planned{font-size:11px;color:rgba(255,255,255,0.3);}
+.roadmap-table .owner-row td{
+  padding:8px 14px;border:1px solid rgba(255,255,255,0.07);
+  background:rgba(255,255,255,0.02);
+}
+.owner-label{
+  font-size:9px;letter-spacing:0.12em;text-transform:uppercase;
+  color:rgba(255,255,255,0.35);margin-bottom:5px;display:block;
+}
+.owner-radios{display:flex;flex-direction:column;gap:4px;}
+.owner-radio-label{
+  display:flex;align-items:center;gap:5px;
+  font-size:11px;color:rgba(255,255,255,0.5);cursor:pointer;
+}
+.owner-radio{width:12px;height:12px;accent-color:var(--purple);cursor:pointer;}
+
+/* Wins & Future cards in roadmap view */
+.extra-card{
+  background:rgba(255,255,255,0.04);border:1px solid var(--border);
+  border-radius:12px;padding:20px;margin-top:16px;
+}
+.extra-card-head{
+  display:flex;align-items:center;gap:10px;margin-bottom:10px;
+}
+.extra-icon{
+  width:36px;height:36px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;font-size:16px;
+}
+.extra-title{
+  font-family:var(--font-display);font-size:16px;font-weight:600;
+  text-transform:uppercase;letter-spacing:0.04em;color:var(--chalk);
+}
+.extra-sub{font-size:11px;color:rgba(255,255,255,0.35);}
+.extra-ta{
+  width:100%;background:rgba(0,0,0,0.28);border:1px solid var(--border);
+  border-radius:8px;padding:12px 14px;color:var(--chalk);
+  font-family:var(--font-body);font-size:13px;
+  resize:none;min-height:90px;outline:none;
+  transition:border-color 0.2s;line-height:1.6;
+}
+.extra-ta:focus{border-color:var(--teal);}
+.extra-ta::placeholder{color:rgba(255,255,255,0.2);}
+
+/* ═══════════════════════════════════════════════
+   CHALK TOAST
+═══════════════════════════════════════════════ */
+.chalk-toast{
+  position:fixed;bottom:24px;right:24px;z-index:500;
+  background:rgba(18,19,22,0.95);border:1px solid var(--border);
+  border-radius:10px;padding:10px 16px;
+  font-family:var(--font-display);font-size:12px;letter-spacing:0.06em;
+  color:var(--chalk);
+  display:flex;align-items:center;gap:8px;
+  opacity:0;transform:translateY(10px);
+  transition:opacity 0.3s,transform 0.3s;
+  pointer-events:none;
+}
+.chalk-toast.show{opacity:1;transform:translateY(0);}
+.chalk-puff{font-size:14px;}
+
+/* ═══════════════════════════════════════════════
+   CLASSIC MODE
+═══════════════════════════════════════════════ */
+#classicMode{
+  padding-top:52px;display:none;
+  background:#F0EEE9;color:var(--text);min-height:100vh;
+}
+.cl-topbar{
+  background:linear-gradient(135deg,#1C1F23 0%,#2E3138 100%);
+  padding:24px 28px 20px;
+  border-bottom:3px solid var(--orange);
+}
+.cl-topbar h1{
+  font-family:var(--font-display);font-size:28px;font-weight:700;
+  text-transform:uppercase;letter-spacing:0.06em;color:var(--chalk);
+}
+.cl-topbar p{font-size:13px;color:rgba(255,255,255,0.55);margin-top:4px;}
+.cl-progress-wrap{margin-top:14px;}
+.cl-prog-bar-outer{
+  height:5px;background:rgba(255,255,255,0.12);border-radius:3px;overflow:hidden;
+}
+.cl-prog-bar-fill{
+  height:100%;background:linear-gradient(90deg,var(--orange),var(--yellow));
+  border-radius:3px;width:0%;transition:width 0.6s ease;
+}
+.cl-prog-lbl{font-size:10px;color:rgba(255,255,255,0.4);margin-top:5px;letter-spacing:0.08em;}
+.cl-content{max-width:860px;margin:0 auto;padding:24px 20px 60px;}
+.cl-phase-lbl{
+  font-family:var(--font-display);font-size:10px;font-weight:600;
+  letter-spacing:0.16em;text-transform:uppercase;color:var(--orange);
+  margin:28px 0 10px;
+}
+.cl-card{
+  background:var(--white);border:1px solid #E0DDD8;
+  border-radius:14px;padding:22px 24px;margin-bottom:12px;
+  box-shadow:0 1px 4px rgba(0,0,0,0.05);
+}
+.cl-card-head{display:flex;align-items:flex-start;gap:14px;margin-bottom:12px;}
+.cl-num{
+  font-family:var(--font-display);font-size:32px;font-weight:700;
+  color:#D8D4CC;line-height:1;flex-shrink:0;
+}
+.cl-card-info h3{
+  font-family:var(--font-classic);font-size:16px;font-weight:600;color:var(--text);margin-bottom:2px;
+}
+.cl-card-info .cl-tf{font-size:11px;color:var(--muted);letter-spacing:0.05em;}
+.cl-desc{
+  font-size:12px;color:var(--muted);line-height:1.65;margin-bottom:14px;font-style:italic;
+}
+.cl-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
+.cl-tag{
+  font-family:var(--font-classic);font-size:10px;font-weight:500;
+  padding:3px 9px;border-radius:20px;letter-spacing:0.04em;
+}
+.cl-ta{
+  width:100%;background:#F7F5F1;border:1px solid #E0DDD8;border-radius:8px;
+  padding:12px 14px;color:var(--text);
+  font-family:var(--font-classic);font-size:13px;
+  resize:vertical;min-height:90px;outline:none;transition:border-color 0.2s;
+}
+.cl-ta:focus{border-color:var(--orange);}
+.cl-ta::placeholder{color:#B0A9A0;font-size:12px;}
+/* plan details */
+.cl-details-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+.cl-field label{font-size:11px;color:var(--muted);margin-bottom:4px;display:block;letter-spacing:0.05em;}
+.cl-input{
+  width:100%;background:#F7F5F1;border:1px solid #E0DDD8;border-radius:8px;
+  padding:9px 12px;color:var(--text);font-family:var(--font-classic);font-size:13px;
+  outline:none;transition:border-color 0.2s;
+}
+.cl-input:focus{border-color:var(--orange);}
+.cl-input::placeholder{color:#B0A9A0;}
+
+/* ═══════════════════════════════════════════════
+   MODALS  (shared across both modes)
+═══════════════════════════════════════════════ */
+.modal-overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);
+  z-index:1000;align-items:center;justify-content:center;padding:24px;
+}
+.modal-overlay.open{display:flex;}
+.modal{
+  background:var(--white);border-radius:16px;width:100%;
+  max-width:560px;max-height:90vh;overflow-y:auto;
+  color:var(--text);position:relative;
+}
+.modal-close{
+  position:absolute;top:14px;right:14px;
+  background:none;border:none;font-size:20px;cursor:pointer;
+  color:var(--muted);line-height:1;
+}
+.modal-header{padding:28px 28px 20px;border-bottom:1px solid var(--light-gray);}
+.modal-icon{
+  width:44px;height:44px;border-radius:12px;
+  background:linear-gradient(135deg,var(--orange-light),var(--yellow-light));
+  display:flex;align-items:center;justify-content:center;font-size:20px;
+  margin-bottom:12px;
+}
+.modal-header h2{font-family:var(--font-classic);font-size:18px;font-weight:600;margin-bottom:4px;}
+.modal-header p{font-size:13px;color:var(--muted);}
+.modal-body{padding:20px 28px;}
+.modal-field{margin-bottom:14px;}
+.modal-field label{font-size:12px;color:var(--muted);display:block;margin-bottom:5px;}
+.modal-field input,.modal-field textarea{
+  width:100%;border:1px solid #D8D4CC;border-radius:8px;
+  padding:10px 13px;font-family:var(--font-classic);font-size:13px;
+  color:var(--text);outline:none;transition:border-color 0.2s;
+}
+.modal-field input:focus,.modal-field textarea:focus{border-color:var(--orange);}
+.modal-footer{
+  display:flex;justify-content:flex-end;gap:8px;
+  padding:16px 28px 24px;border-top:1px solid var(--light-gray);
+}
+.publish-btn{
+  font-family:var(--font-classic);font-size:13px;font-weight:500;
+  padding:9px 18px;border-radius:8px;cursor:pointer;
+  border:1px solid #D8D4CC;background:var(--white);color:var(--text);
+  transition:all 0.2s;
+}
+.publish-btn.primary{background:var(--orange);border-color:var(--orange);color:#fff;}
+.publish-btn.primary:hover{background:#cc3e0d;}
+.email-info-box{
+  background:#F7F5F1;border-radius:8px;padding:12px 14px;
+  font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:16px;
+}
+.modal-preview-toggle{margin-top:8px;}
+.preview-toggle-btn{
+  background:none;border:none;color:var(--blue);font-size:12px;cursor:pointer;
+  padding:0;font-family:var(--font-classic);
+}
+.modal-preview{
+  background:#F7F5F1;border-radius:8px;margin-top:8px;
+  padding:12px;max-height:160px;overflow-y:auto;
+}
+#emailPreviewContent{font-size:11px;color:var(--muted);white-space:pre-wrap;line-height:1.6;}
+.confirm-modal{max-width:500px;}
+.confirm-options{padding:16px 28px;}
+.confirm-option{
+  width:100%;display:flex;align-items:flex-start;gap:12px;
+  background:var(--white);border:1px solid #E0DDD8;border-radius:10px;
+  padding:14px 16px;margin-bottom:8px;cursor:pointer;text-align:left;
+  transition:border-color 0.2s;font-family:var(--font-classic);
+}
+.confirm-option:hover{border-color:var(--orange);}
+.confirm-option-icon{font-size:18px;flex-shrink:0;}
+.confirm-option-text strong{display:block;font-size:13px;font-weight:600;color:var(--text);}
+.confirm-option-text span{font-size:12px;color:var(--muted);}
+.version-list{padding:0 28px;}
+.version-item{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 0;border-bottom:1px solid var(--light-gray);
+}
+.version-item-name{font-size:13px;font-weight:500;}
+.version-item-date{font-size:11px;color:var(--muted);margin-top:2px;}
+.version-item-actions{display:flex;gap:6px;}
+.version-item-actions button{
+  font-size:11px;padding:4px 10px;border-radius:6px;cursor:pointer;
+  border:1px solid #D8D4CC;background:transparent;color:var(--muted);
+}
+.version-item-actions button:hover{border-color:var(--orange);color:var(--orange);}
+.version-save-form{padding:16px 28px 0;}
+
+/* ai-plan-output wrapper for roadmap */
+.ai-plan-output{border-radius:10px;overflow:hidden;}
 </style>
 </head>
 <body>
 
-<div class="app" id="app">
-
-  <!-- TOP TOOLBAR -->
-  <div class="top-toolbar">
-    <div class="toolbar-left">
-      <div class="version-selector">
-        <span>📁</span>
-        <select id="versionSelect" onchange="loadVersion(this.value)" title="Switch between saved versions">
-          <option value="current">Current Draft</option>
-        </select>
-      </div>
-      <button class="toolbar-btn" onclick="openVersionModal()" title="Save a named snapshot of this plan">
-        💾 Save Version
-      </button>
-    </div>
-    <div class="toolbar-right">
-      <button class="toolbar-btn" onclick="openResetModal()" title="Clear fields">
-        ↺ Reset Fields
-      </button>
-      <button class="toolbar-btn primary" onclick="openShareModal()" title="Share your plan via email">
-        ✉ Share Plan
-      </button>
+<!-- ══════════════════════════════════ -->
+<!-- TOP BAR -->
+<!-- ══════════════════════════════════ -->
+<div class="top-bar">
+  <div class="brand">GPS <em>360°</em> IDP</div>
+  <div class="top-bar-actions">
+    <select id="versionSelect" onchange="loadVersion(this.value)" title="Version history">
+      <option value="current">Current Draft</option>
+    </select>
+    <button class="tb-btn" onclick="saveVersion()" title="Save a named version">💾 Save</button>
+    <button class="tb-btn" onclick="openVersionModal()">History</button>
+    <button class="tb-btn" onclick="openResetModal()">↺ Reset</button>
+    <button class="tb-btn primary" onclick="openShareModal()">✉ Share</button>
+    <div class="mode-pill">
+      <span class="pill-lbl">Mode</span>
+      <span class="ml ml-off" id="lblClassic">Classic</span>
+      <button class="mode-sw" id="modeSw" onclick="toggleMode()"><div class="sw-knob"></div></button>
+      <span class="ml ml-on" id="lblAscent">Ascent</span>
     </div>
   </div>
+</div>
 
-  <!-- HEADER -->
-  <div class="header">
-    <div class="header-label">GPS Training 360° Framework</div>
-    <h1>360 IDP — The Comprehensive <em>Individual Development Plan</em></h1>
-    <p class="subtitle">9 components, 3 phases — each tagged with the learning types it activates. Complete sections 1–6, then generate your personalized quarterly roadmap.</p>
+<!-- ══════════════════════════════════ -->
+<!-- ASCENT MODE -->
+<!-- ══════════════════════════════════ -->
+<div id="ascentMode">
+
+  <!-- WALL STRIP -->
+  <div class="wall-strip" id="wallStrip">
+    <img class="wall-img" id="wallImg"
+      src="GPS_Ascent_Journeys.jpeg"
+      alt="Climbing wall — GPS Ascent">
+    <div class="wall-dim"></div>
+    <div class="wall-dim-top"></div>
+
+    <svg class="route-svg" id="routeSvg" viewBox="0 0 800 220" preserveAspectRatio="none">
+      <path class="rope-done" id="ropeDone" d=""/>
+      <path class="rope-ahead" id="ropeAhead" d=""/>
+    </svg>
+
+    <div class="holds-layer" id="holdsLayer"></div>
+    <div class="climber" id="climber">▲</div>
+
+    <div class="wall-caption">
+      <h3>Career development<br>isn't a ladder</h3>
+      <p>It's a climbing wall</p>
+    </div>
+    <div class="phase-track" id="phaseTrack"></div>
   </div>
 
-  <!-- PROGRESS BAR -->
-  <div class="progress-bar-wrap">
-    <div class="progress-bar-header">
-      <span>Plan Completion</span>
-      <span class="progress-pct" id="progressPct">0%</span>
-    </div>
-    <div class="progress-track">
-      <div class="progress-fill" id="progressFill"></div>
-    </div>
-    <div class="progress-fields" id="progressFields">
-      <div class="prog-field empty" data-field="empName"><span class="dot"></span>Name</div>
-      <div class="prog-field empty" data-field="card1"><span class="dot"></span>Career Goals</div>
-      <div class="prog-field empty" data-field="card2"><span class="dot"></span>What I Love</div>
-      <div class="prog-field empty" data-field="card3"><span class="dot"></span>Learning Goals</div>
-      <div class="prog-field empty" data-field="card4"><span class="dot"></span>Skills</div>
-      <div class="prog-field empty" data-field="card5"><span class="dot"></span>Experiences</div>
-      <div class="prog-field empty" data-field="card6"><span class="dot"></span>Manager Support</div>
-      <div class="prog-field empty" data-field="card8"><span class="dot"></span>Wins Log</div>
-    </div>
-  </div>
-
-  <!-- LEGEND -->
-  <div class="legend">
-    <div class="legend-item"><span class="legend-dot" style="background:var(--cyan)"></span>Self-Directed <span class="legend-pct">15%</span></div>
-    <div class="legend-item"><span class="legend-dot" style="background:var(--blue)"></span>Formal Training <span class="legend-pct">10%</span></div>
-    <div class="legend-item"><span class="legend-dot" style="background:var(--purple)"></span>Experiential <span class="legend-pct">30%</span></div>
-    <div class="legend-item"><span class="legend-dot" style="background:var(--green)"></span>Social / Observational <span class="legend-pct">20%</span></div>
-    <div class="legend-item"><span class="legend-dot" style="background:var(--orange)"></span>Mentoring &amp; Coaching <span class="legend-pct">15%</span></div>
-    <div class="legend-item"><span class="legend-dot" style="background:var(--pink)"></span>External Feedback <span class="legend-pct">10%</span></div>
-  </div>
-
-  <!-- EMPLOYEE INFO -->
-  <div class="info-section">
-    <h2>Plan Details</h2>
-    <div class="info-grid">
-      <div class="info-field">
-        <label>Employee Name</label>
-        <input type="text" id="empName" placeholder="Full name" data-save="empName">
-      </div>
-      <div class="info-field">
-        <label>Manager Name</label>
-        <input type="text" id="mgrName" placeholder="Manager's full name" data-save="mgrName">
-      </div>
-      <div class="info-field">
-        <label>Date (MM/DD/YYYY)</label>
-        <input type="text" id="planDate" placeholder="03/06/2026" data-save="planDate">
-      </div>
-      <div class="info-field">
-        <label>Current Role</label>
-        <input type="text" id="currentRole" placeholder="e.g. Sr. Solutions Engineer" data-save="currentRole">
-      </div>
-      <div class="info-field">
-        <label>Time in Role (Years)</label>
-        <input type="text" id="timeInRole" placeholder="e.g. 2.5" data-save="timeInRole">
-      </div>
-      <div class="info-field">
-        <label>Time at Company (Years)</label>
-        <input type="text" id="timeAtCompany" placeholder="e.g. 4" data-save="timeAtCompany">
-      </div>
-    </div>
-  </div>
-
-  <!-- PHASE 1 -->
-  <div class="phase phase-1">
-    <div class="phase-header">
-      <span class="phase-badge">Phase 1</span>
-      <span class="phase-title">Discover — Know Yourself</span>
-      <div class="phase-line"></div>
-    </div>
-    <div class="card-row">
-
-      <div class="card card-1">
-        <div class="card-num">1</div>
-        <div class="card-top">
-          <div class="card-icon" style="background:var(--cyan-light); color:var(--cyan);">⏱</div>
-          <div><h3>Career Goals</h3><div class="timeframe">3–5 Year Horizon</div></div>
-        </div>
-        <button class="card-reset" onclick="resetCard('card1')" title="Clear this section">↺ Clear section</button>
-        <div class="learning-tags"><span class="ltag ltag-self">Self-Directed</span></div>
-        <p class="card-desc">Define the future role, scope, and impact you want. Be specific — include functions, industries, leadership scope, and technical depth.</p>
-        <div class="prompt-label">Guiding Questions</div>
-        <ul class="prompts">
-          <li>Where do I see myself in 1, 3, or 5 years?</li>
-          <li>What level or type of role am I targeting?</li>
-          <li>What kind of problems do I want to be solving?</li>
-          <li>What responsibilities do I want more — or less — of?</li>
-        </ul>
-        <div class="entry-area">
-          <label class="entry-label">My Ambitions</label>
-          <textarea data-save="card1" placeholder="Describe your career goals..."></textarea>
-        </div>
-      </div>
-
-      <div class="card card-2">
-        <div class="card-num">2</div>
-        <div class="card-top">
-          <div class="card-icon" style="background:var(--pink-light); color:var(--pink);">♥</div>
-          <div><h3>What I Love About My Role</h3><div class="timeframe">Self-Awareness</div></div>
-        </div>
-        <button class="card-reset" onclick="resetCard('card2')" title="Clear this section">↺ Clear section</button>
-        <div class="learning-tags"><span class="ltag ltag-self">Self-Directed</span><span class="ltag ltag-feedback">External Feedback</span></div>
-        <p class="card-desc">Identify the activities, responsibilities, and work that energize you. This anchors future planning in genuine motivation.</p>
-        <div class="prompt-label">Guiding Questions</div>
-        <ul class="prompts">
-          <li>Where am I most "in flow"?</li>
-          <li>What tasks do I naturally volunteer for?</li>
-          <li>When do I feel most recognized or proud?</li>
-        </ul>
-        <div class="entry-area">
-          <label class="entry-label">What I Enjoy Doing Most</label>
-          <textarea data-save="card2" placeholder="What energizes you at work..."></textarea>
-        </div>
-      </div>
-
-      <div class="card card-3">
-        <div class="card-num">3</div>
-        <div class="card-top">
-          <div class="card-icon" style="background:var(--blue-light); color:var(--blue);">📖</div>
-          <div><h3>Current Learning Goals</h3><div class="timeframe">6–12 Month Focus</div></div>
-        </div>
-        <button class="card-reset" onclick="resetCard('card3')" title="Clear this section">↺ Clear section</button>
-        <div class="learning-tags"><span class="ltag ltag-self">Self-Directed</span><span class="ltag ltag-feedback">External Feedback</span></div>
-        <p class="card-desc">Clarify the concrete areas for growth right now. Align these to feedback themes, next-level performance, and future roles.</p>
-        <div class="prompt-label">Guiding Questions</div>
-        <ul class="prompts">
-          <li>What skills does my next level require?</li>
-          <li>What recurring feedback themes should I address?</li>
-          <li>Which capabilities align to future roles?</li>
-        </ul>
-        <div class="entry-area">
-          <label class="entry-label">Learning Goals</label>
-          <textarea data-save="card3" placeholder="What you want to grow in right now..."></textarea>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- PHASE 2 -->
-  <div class="phase phase-2">
-    <div class="phase-header">
-      <span class="phase-badge">Phase 2</span>
-      <span class="phase-title">Define — Build the Plan</span>
-      <div class="phase-line"></div>
-    </div>
-    <div class="card-row">
-
-      <div class="card card-4">
-        <div class="card-num">4</div>
-        <div class="card-top">
-          <div class="card-icon" style="background:var(--purple-light); color:var(--purple);">◆</div>
-          <div><h3>Skills I Want to Develop</h3><div class="timeframe">Competency Mapping</div></div>
-        </div>
-        <button class="card-reset" onclick="resetCard('card4')" title="Clear this section">↺ Clear section</button>
-        <div class="learning-tags"><span class="ltag ltag-formal">Formal Training</span><span class="ltag ltag-experiential">Experiential</span></div>
-        <p class="card-desc">Break development into three dimensions for a holistic view of growth.</p>
-        <div class="prompt-label">Three Dimensions</div>
-        <ul class="prompts">
-          <li><strong>Technical</strong> — tools, systems, domain expertise</li>
-          <li><strong>Professional</strong> — communication, PM, analytics</li>
-          <li><strong>Leadership</strong> — influence, coaching, strategic thinking</li>
-        </ul>
-        <div class="entry-area">
-          <label class="entry-label">Skills to Build</label>
-          <textarea data-save="card4" placeholder="List skills across all three dimensions..."></textarea>
-        </div>
-      </div>
-
-      <div class="card card-5">
-        <div class="card-num">5</div>
-        <div class="card-top">
-          <div class="card-icon" style="background:var(--green-light); color:var(--green);">💼</div>
-          <div><h3>Experiences I Want to Gain</h3><div class="timeframe">Stretch &amp; Exposure</div></div>
-        </div>
-        <button class="card-reset" onclick="resetCard('card5')" title="Clear this section">↺ Clear section</button>
-        <div class="learning-tags"><span class="ltag ltag-experiential">Experiential</span><span class="ltag ltag-social">Social / Observational</span></div>
-        <p class="card-desc">Think beyond courses — exposure and stretch assignments drive the deepest growth.</p>
-        <div class="prompt-label">Example Experiences</div>
-        <ul class="prompts">
-          <li>Leading a cross-functional initiative</li>
-          <li>Owning an analytics workstream end-to-end</li>
-          <li>Presenting to senior leadership</li>
-          <li>Shadowing a partner function</li>
-        </ul>
-        <div class="entry-area">
-          <label class="entry-label">Desired Experiences</label>
-          <textarea data-save="card5" placeholder="What experiences would accelerate your growth..."></textarea>
-        </div>
-      </div>
-
-      <div class="card card-6">
-        <div class="card-num">6</div>
-        <div class="card-top">
-          <div class="card-icon" style="background:var(--orange-light); color:var(--orange);">👥</div>
-          <div><h3>Support From My Manager</h3><div class="timeframe">Partnership</div></div>
-        </div>
-        <button class="card-reset" onclick="resetCard('card6')" title="Clear this section">↺ Clear section</button>
-        <div class="learning-tags"><span class="ltag ltag-mentoring">Mentoring &amp; Coaching</span><span class="ltag ltag-feedback">External Feedback</span></div>
-        <p class="card-desc">Spell out the enablement, sponsorship, and feedback cadence required to make this plan real.</p>
-        <div class="prompt-label">Types of Support</div>
-        <ul class="prompts">
-          <li>Introductions, visibility, and sponsorship</li>
-          <li>Delegated ownership and stretch assignments</li>
-          <li>Access to tools, training, or coaching</li>
-          <li>Regular feedback loops and check-ins</li>
-        </ul>
-        <div class="entry-area">
-          <label class="entry-label">What I Need</label>
-          <textarea data-save="card6" placeholder="What support do you need from your manager..."></textarea>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- PHASE 3 -->
-  <div class="phase phase-3">
-    <div class="phase-header">
-      <span class="phase-badge">Phase 3</span>
-      <span class="phase-title">Activate — Execute &amp; Evolve</span>
-      <div class="phase-line"></div>
-    </div>
-
-    <!-- Card 7 — Quarterly Plan -->
-    <div class="full-card" id="card7">
-      <div class="card-num">7</div>
-      <div class="full-card-header">
-        <div class="card-icon" style="background:var(--purple-light); color:var(--purple); width:40px; height:40px; font-size:18px;">✦</div>
-        <div>
-          <h3>Quarterly Development Plan</h3>
-          <div class="timeframe">Next 12 Months — Generated from Your Entries</div>
-        </div>
-      </div>
-      <div class="learning-tags">
-        <span class="ltag ltag-experiential">Experiential</span>
-        <span class="ltag ltag-formal">Formal Training</span>
-        <span class="ltag ltag-mentoring">Mentoring</span>
-      </div>
-      <p class="card-desc">Your entries across sections 1–6 are analyzed and sequenced into a personalized quarterly roadmap — with specific actions, ownership, and built-in check-in milestones tied to your actual goals, skills, and experiences.</p>
-
-      <div id="planOutput">
-        <!-- Static header shell always visible — button lives here on first load -->
-        <div class="ai-plan-output" style="margin-top:16px;border:none;border-radius:10px;overflow:hidden;">
-          <table class="roadmap-table">
-            <tr class="roadmap-header-row">
-              <td colspan="4">
-                <div class="roadmap-header-inner">
-                  <span class="roadmap-phase-text">&#10022; 4 Phases of Development</span>
-                  <div class="roadmap-header-btns">
-                    <button class="roadmap-gen-btn" id="generateBtn" onclick="generateAIPlan()">&#10022; Generate My Roadmap</button>
-                    <button class="roadmap-redo-btn" onclick="generateAIPlan()" title="Regenerate roadmap" aria-label="Regenerate roadmap">&#8635;</button>
-                  </div>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td colspan="4" style="padding:28px 20px;text-align:center;color:var(--muted);font-size:13px;background:var(--white);border:1px solid var(--light-gray);border-top:none;border-radius:0 0 10px 10px;">
-                <div style="font-size:28px;margin-bottom:8px;opacity:0.4;">📋</div>
-                Complete sections 1–6 above, then click <strong>&#10022; Generate My Roadmap</strong> to build your personalized 12-month plan.
-              </td>
-            </tr>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- Card 8 -->
-    <div class="full-card">
-      <div class="card-num">8</div>
-      <div class="full-card-header">
-        <div class="card-icon" style="background:var(--green-light); color:var(--green); width:40px; height:40px; font-size:18px;">📈</div>
-        <div><h3>Wins &amp; Progress Log</h3><div class="timeframe">Running Record — Add Entries Over Time</div></div>
-      </div>
-      <div class="learning-tags"><span class="ltag ltag-self">Self-Directed</span><span class="ltag ltag-feedback">External Feedback</span></div>
-      <p class="card-desc">A running log that makes progress visible and easy to reference during reviews, calibrations, and promotion conversations.</p>
-      <div class="entry-area">
-        <label class="entry-label">Recent Progress &amp; Wins</label>
-        <textarea data-save="card8" placeholder="Log your wins, milestones, and progress here. Date each entry for easy reference during reviews.
-
-Example:
-• [Mar 2026] Completed advanced analytics certification
-• [Apr 2026] Led Q2 cross-functional project — delivered on time, positive stakeholder feedback
-• [May 2026] Presented quarterly results to VP-level audience" style="min-height: 140px;"></textarea>
-      </div>
-    </div>
-
-    <!-- Card 9 -->
-    <div class="full-card">
-      <div class="card-num">9</div>
-      <div class="full-card-header">
-        <div class="card-icon" style="background:var(--blue-light); color:var(--blue); width:40px; height:40px; font-size:18px;">🔭</div>
-        <div><h3>Future Opportunities to Explore</h3><div class="timeframe">Longer-Term Pipeline — Revisit Quarterly</div></div>
-      </div>
-      <div class="learning-tags"><span class="ltag ltag-social">Social / Observational</span><span class="ltag ltag-self">Self-Directed</span></div>
-      <p class="card-desc">A parking lot for ideas to revisit — keeping the roadmap dynamic and forward-looking.</p>
-      <div class="entry-area">
-        <label class="entry-label">Opportunities to Explore Later</label>
-        <textarea data-save="card9" placeholder="Roles, functions, skills, networks, or ideas you want to explore down the road..." style="min-height: 100px;"></textarea>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- DIAGNOSTIC CALLOUT -->
-  <div class="callout">
-    <div class="callout-accent"></div>
-    <div>
-      <h4>The Leader's Diagnostic Question</h4>
-      <p>Look at this development plan. How many of the six learning types are represented? If only Formal Training shows up, you're engaging just 10% of how people grow. This framework ensures you're activating the other 90% — through self-reflection, real experiences, relationships, coaching, and ongoing feedback.</p>
-    </div>
-  </div>
-
-  <!-- PUBLISH SECTION -->
-  <div class="publish-section">
-    <div class="publish-inner">
-      <div class="publish-icon">✉</div>
-      <div class="publish-content">
-        <h3>Ready to Share Your Plan?</h3>
-        <p>Share your completed IDP with your manager, HR partner, or coach via email, or download a print-ready version.</p>
-      </div>
-      <div class="publish-actions">
-        <button class="publish-btn primary" onclick="openShareModal()">
-          <span class="btn-icon">✉</span> Share via Email
-        </button>
-        <button class="publish-btn secondary" onclick="downloadPrintVersion()">
-          <span class="btn-icon">↓</span> Download for Print
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- FOOTER -->
-  <div class="footer">
-    <div class="color-dots">
-      <span style="background:var(--cyan)"></span>
-      <span style="background:var(--blue)"></span>
-      <span style="background:var(--purple)"></span>
-      <span style="background:var(--green)"></span>
-      <span style="background:var(--orange)"></span>
-      <span style="background:var(--pink)"></span>
-    </div>
-    <p>GPS Training 360°</p>
-  </div>
+  <!-- CARD STAGE (one at a time) -->
+  <div class="card-stage" id="cardStage"></div>
 
 </div>
 
-<!-- SAVE INDICATOR -->
-<div class="save-indicator" id="saveIndicator">✓ Saved locally</div>
+<!-- ══════════════════════════════════ -->
+<!-- CLASSIC MODE -->
+<!-- ══════════════════════════════════ -->
+<div id="classicMode">
+  <div class="cl-topbar">
+    <h1>GPS 360° Individual Development Plan</h1>
+    <p>Complete all sections to build your personalized quarterly roadmap.</p>
+    <div class="cl-progress-wrap">
+      <div class="cl-prog-bar-outer"><div class="cl-prog-bar-fill" id="clProgFill"></div></div>
+      <div class="cl-prog-lbl" id="clProgLbl">0 of 8 sections complete</div>
+    </div>
+  </div>
+  <div class="cl-content" id="clContent"></div>
+</div>
 
-<!-- ══════════════════════════════════ -->
-<!-- SHARE MODAL -->
-<!-- ══════════════════════════════════ -->
+<!-- MODALS -->
 <div class="modal-overlay" id="shareModal">
   <div class="modal">
     <button class="modal-close" onclick="closeModal('shareModal')">&times;</button>
@@ -1876,120 +763,55 @@ Example:
       <p>Compose your email below. Your plan will open in your default mail client.</p>
     </div>
     <div class="modal-body">
-      <div class="email-info-box">
-        <strong>Note:</strong> This will open your computer's default email app (Outlook, Apple Mail, etc.) with the plan pre-filled. If your company uses SSO, ensure your mail client is signed in — or copy the plan text to paste directly into your browser-based mail (Gmail, Outlook Web).
-      </div>
-      <div class="modal-field">
-        <label>To (required)</label>
-        <input type="email" id="shareTo" placeholder="manager@yourcompany.com">
-      </div>
-      <div class="modal-field">
-        <label>CC (optional)</label>
-        <input type="email" id="shareCc" placeholder="hr-partner@yourcompany.com">
-      </div>
-      <div class="modal-field">
-        <label>Subject</label>
-        <input type="text" id="shareSubject" placeholder="My 360 Individual Development Plan">
-      </div>
-      <div class="modal-field">
-        <label>Personal Message (optional)</label>
-        <textarea id="shareMessage" rows="3" placeholder="Hi — here is my completed 360 IDP for your review. I'd love to discuss during our next 1:1."></textarea>
-      </div>
+      <div class="email-info-box"><strong>Note:</strong> This will open your computer's default email app (Outlook, Apple Mail, etc.) with the plan pre-filled. If your company uses SSO, ensure your mail client is signed in — or copy the plan text to paste directly into your browser-based mail.</div>
+      <div class="modal-field"><label>To (required)</label><input type="email" id="shareTo" placeholder="manager@yourcompany.com"></div>
+      <div class="modal-field"><label>CC (optional)</label><input type="email" id="shareCc" placeholder="hr-partner@yourcompany.com"></div>
+      <div class="modal-field"><label>Subject</label><input type="text" id="shareSubject" placeholder="My 360 Individual Development Plan"></div>
+      <div class="modal-field"><label>Personal Message (optional)</label><textarea id="shareMessage" rows="3" placeholder="Hi — here is my completed 360 IDP for your review. I'd love to discuss during our next 1:1."></textarea></div>
       <div class="modal-preview-toggle">
-        <button class="preview-toggle-btn" onclick="togglePreview()">
-          <span id="previewToggleIcon">▶</span> Preview plan content
-        </button>
+        <button class="preview-toggle-btn" onclick="togglePreview()"><span id="previewToggleIcon">▶</span> Preview plan content</button>
       </div>
-      <div class="modal-preview" id="emailPreview" style="display:none;">
-        <div id="emailPreviewContent"></div>
-      </div>
+      <div class="modal-preview" id="emailPreview" style="display:none;"><div id="emailPreviewContent"></div></div>
     </div>
     <div class="modal-footer">
       <button class="publish-btn secondary" onclick="closeModal('shareModal')">Cancel</button>
-      <button class="publish-btn secondary" onclick="copyPlanToClipboard()" id="copyBtn">
-        📋 Copy Plan Text
-      </button>
-      <button class="publish-btn primary" onclick="sendEmail()">
-        ✉ Open in Email App
-      </button>
+      <button class="publish-btn secondary" onclick="copyPlanToClipboard()" id="copyBtn">📋 Copy Plan Text</button>
+      <button class="publish-btn primary" onclick="sendEmail()">✉ Open in Email App</button>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════ -->
-<!-- RESET MODAL -->
-<!-- ══════════════════════════════════ -->
 <div class="modal-overlay" id="resetModal">
   <div class="modal confirm-modal">
     <button class="modal-close" onclick="closeModal('resetModal')">&times;</button>
     <div class="modal-header">
-      <div class="modal-icon" style="background: linear-gradient(135deg, var(--pink-light), var(--orange-light));">↺</div>
+      <div class="modal-icon" style="background:linear-gradient(135deg,#FDEEF0,#FEF0EA);">↺</div>
       <h2>Reset Fields</h2>
       <p>Choose what you'd like to clear. This cannot be undone — consider saving a version first.</p>
     </div>
     <div class="confirm-options">
-      <button class="confirm-option" onclick="resetSection('phase1')">
-        <span class="confirm-option-icon">1️⃣</span>
-        <div class="confirm-option-text">
-          <strong>Phase 1 only — Discover</strong>
-          <span>Clears Career Goals, What I Love, Learning Goals</span>
-        </div>
-      </button>
-      <button class="confirm-option" onclick="resetSection('phase2')">
-        <span class="confirm-option-icon">2️⃣</span>
-        <div class="confirm-option-text">
-          <strong>Phase 2 only — Define</strong>
-          <span>Clears Skills, Experiences, Manager Support</span>
-        </div>
-      </button>
-      <button class="confirm-option" onclick="resetSection('phase3')">
-        <span class="confirm-option-icon">3️⃣</span>
-        <div class="confirm-option-text">
-          <strong>Phase 3 only — Activate</strong>
-          <span>Clears Wins Log, Future Opportunities, and the generated roadmap</span>
-        </div>
-      </button>
-      <button class="confirm-option" onclick="resetSection('plan_details')">
-        <span class="confirm-option-icon">👤</span>
-        <div class="confirm-option-text">
-          <strong>Plan Details only</strong>
-          <span>Clears name, manager, role, and date fields</span>
-        </div>
-      </button>
-      <button class="confirm-option" style="border-color: var(--pink);" onclick="resetSection('all')">
-        <span class="confirm-option-icon">🗑</span>
-        <div class="confirm-option-text">
-          <strong>Reset everything</strong>
-          <span>Wipes all fields and the generated roadmap</span>
-        </div>
-      </button>
+      <button class="confirm-option" onclick="resetSection('phase1')"><span class="confirm-option-icon">1️⃣</span><div class="confirm-option-text"><strong>Phase 1 only — Discover</strong><span>Clears Career Goals, What I Love, Learning Goals</span></div></button>
+      <button class="confirm-option" onclick="resetSection('phase2')"><span class="confirm-option-icon">2️⃣</span><div class="confirm-option-text"><strong>Phase 2 only — Define</strong><span>Clears Skills, Experiences, Manager Support</span></div></button>
+      <button class="confirm-option" onclick="resetSection('phase3')"><span class="confirm-option-icon">3️⃣</span><div class="confirm-option-text"><strong>Phase 3 only — Activate</strong><span>Clears Wins Log, Future Opportunities, and the generated roadmap</span></div></button>
+      <button class="confirm-option" onclick="resetSection('plan_details')"><span class="confirm-option-icon">👤</span><div class="confirm-option-text"><strong>Plan Details only</strong><span>Clears name, manager, role, and date fields</span></div></button>
+      <button class="confirm-option" style="border-color:var(--pink);" onclick="resetSection('all')"><span class="confirm-option-icon">🗑</span><div class="confirm-option-text"><strong>Reset everything</strong><span>Wipes all fields and the generated roadmap</span></div></button>
     </div>
-    <div class="modal-footer">
-      <button class="publish-btn secondary" onclick="closeModal('resetModal')">Cancel</button>
-    </div>
+    <div class="modal-footer"><button class="publish-btn secondary" onclick="closeModal('resetModal')">Cancel</button></div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════ -->
-<!-- VERSION MODAL -->
-<!-- ══════════════════════════════════ -->
 <div class="modal-overlay" id="versionModal">
   <div class="modal">
     <button class="modal-close" onclick="closeModal('versionModal')">&times;</button>
     <div class="modal-header">
-      <div class="modal-icon" style="background: linear-gradient(135deg, var(--green-light), var(--cyan-light));">💾</div>
+      <div class="modal-icon" style="background:linear-gradient(135deg,var(--green-light),var(--teal-light));">💾</div>
       <h2>Version History</h2>
       <p>Save named snapshots of your plan and restore them any time.</p>
     </div>
-    <div id="versionListContainer" class="version-list" style="padding-top: 16px;">
-      <!-- populated by JS -->
-    </div>
+    <div id="versionListContainer" class="version-list" style="padding-top:16px;"></div>
     <div class="version-save-form">
-      <div class="modal-field">
-        <label>Save current plan as a new version</label>
-        <input type="text" id="versionNameInput" placeholder="e.g. Q1 2026 draft, After manager review...">
-      </div>
-      <div class="modal-footer" style="padding: 0 0 20px; border: none;">
+      <div class="modal-field"><label>Save current plan as a new version</label><input type="text" id="versionNameInput" placeholder="e.g. Q1 2026 draft, After manager review..."></div>
+      <div class="modal-footer" style="padding:0 0 20px;border:none;">
         <button class="publish-btn secondary" onclick="closeModal('versionModal')">Close</button>
         <button class="publish-btn primary" onclick="saveVersion()">💾 Save Version</button>
       </div>
@@ -1997,251 +819,714 @@ Example:
   </div>
 </div>
 
+<!-- Toast -->
+<div class="chalk-toast" id="chalkToast"><span class="chalk-puff">🤍</span><span id="toastMsg">Saved</span></div>
+
 
 <script>
-// ══════════════════════════════════
-// STORAGE & SAVE
-// ══════════════════════════════════
-var STORAGE_KEY = '360idp_data';
+// ══════════════════════════════════════════════════════════
+//  GPS 360° IDP  —  CORE DATA & STORAGE
+// ══════════════════════════════════════════════════════════
+var STORAGE_KEY  = '360idp_data';
 var VERSIONS_KEY = '360idp_versions';
-var saveTimeout = null;
-var currentVersionName = 'Current Draft';
+var saveTimeout  = null;
 
+// ── HOLDS / CARDS ──
+// Mountain-ridge path: starts bottom-left, rises to peak at hold 6, 
+// then the final holds reach top-center (summit).
+// wallX = % from left,  wallY = % from bottom of wall (higher = higher)
+var HOLDS = [
+  { id:'empInfo', num:0,  phase:'Base Camp', name:'Plan Details',
+    timeframe:'Your Profile', icon:'⛺',
+    color:'#78808C',
+    desc:'Set up your base camp — who you are, your current role, and who you climb with.',
+    betaTip:'A complete profile helps your manager understand your starting point.',
+    difficulty:1, isDetails:true,
+    wallX:12, wallY:8 },
+  { id:'card1',   num:1,  phase:'Discover', name:'Career Goals',
+    timeframe:'3–5 Year Horizon', icon:'★',
+    color:'#E8541A',
+    desc:'Define the future role, scope, and impact you want. Be specific — include functions, industries, leadership scope, and technical depth.',
+    prompt:'"If your career had no ceiling — what does success look and feel like in 3–5 years?"',
+    betaTip:'The most powerful goals name a specific role or responsibility, not just a feeling.',
+    placeholder:'Describe your career goals...',
+    difficulty:2,
+    wallX:22, wallY:18 },
+  { id:'card2',   num:2,  phase:'Discover', name:'What I Love About My Role',
+    timeframe:'Self-Awareness', icon:'♥',
+    color:'#E8455A',
+    desc:'Identify the activities, responsibilities, and work that energize you. This anchors future planning in genuine motivation.',
+    prompt:'"When do you feel most alive at work? What makes time completely disappear?"',
+    betaTip:'Be honest here — not what looks good, but what actually lights you up.',
+    placeholder:'What energizes you at work...',
+    difficulty:2,
+    wallX:34, wallY:30 },
+  { id:'card3',   num:3,  phase:'Discover', name:'Current Learning Goals',
+    timeframe:'6–12 Month Focus', icon:'📖',
+    color:'#4A7FC1',
+    desc:'Clarify the concrete areas for growth right now. Align these to feedback themes, next-level performance, and future roles.',
+    prompt:'"What are you most hungry to learn right now — and why does it matter to your trajectory?"',
+    betaTip:'Frame learning goals around outcomes, not courses: "lead cross-functional projects" not "take PM course".',
+    placeholder:'What you want to grow in right now...',
+    difficulty:3,
+    wallX:46, wallY:43 },
+  { id:'card4',   num:4,  phase:'Define', name:'Skills I Want to Develop',
+    timeframe:'Competency Mapping', icon:'◆',
+    color:'#7C6FF7',
+    desc:'Break development into three dimensions for a holistic view of growth.',
+    prompt:'"What one capability, if mastered in the next year, would genuinely change your trajectory?"',
+    betaTip:'Think across three dimensions: technical skills, leadership behaviors, and relationships.',
+    placeholder:'List skills across all three dimensions...',
+    difficulty:3,
+    wallX:56, wallY:56 },
+  { id:'card5',   num:5,  phase:'Define', name:'Experiences I Want to Gain',
+    timeframe:'Stretch & Exposure', icon:'💼',
+    color:'#2E9FAB',
+    desc:'Think beyond courses — exposure and stretch assignments drive the deepest growth.',
+    prompt:'"What stretch experience do you need — one that challenges you and proves you are ready for the next level?"',
+    betaTip:'The best stretch experiences are visible, cross-functional, and slightly uncomfortable.',
+    placeholder:'What experiences would accelerate your growth...',
+    difficulty:3,
+    wallX:64, wallY:68 },
+  { id:'card6',   num:6,  phase:'Define', name:'Support From My Manager',
+    timeframe:'Partnership', icon:'👥',
+    color:'#3DAB6E',
+    desc:'Spell out the enablement, sponsorship, and feedback cadence required to make this plan real.',
+    prompt:'"What specific support from your manager would make the biggest difference right now?"',
+    betaTip:'Name specific asks: introductions, project opportunities, feedback frequency, or sponsorship.',
+    placeholder:'What support do you need from your manager...',
+    difficulty:2,
+    wallX:70, wallY:78 },
+  { id:'card7',   num:7,  phase:'Activate', name:'Quarterly Development Plan',
+    timeframe:'Next 12 Months', icon:'✦',
+    color:'#F0B429',
+    desc:'Your entries are analyzed and sequenced into a personalized quarterly roadmap.',
+    prompt:'"Your ascent plan is ready to generate. Review and edit each quarter\'s focus and outcomes."',
+    betaTip:'Review each quarter — the roadmap is a starting point, not a prescription.',
+    placeholder:'',
+    difficulty:1, isRoadmap:true,
+    wallX:76, wallY:86 },
+  { id:'card8',   num:8,  phase:'Activate', name:'Wins & Progress Log',
+    timeframe:'Running Record', icon:'📈',
+    color:'#E8541A',
+    desc:'A running log that makes progress visible and easy to reference during reviews, calibrations, and promotion conversations.',
+    prompt:'"What wins, milestones, and moments of growth do you want to capture? Date each entry."',
+    betaTip:'Add entries regularly — even small wins matter. This becomes your promotion evidence.',
+    placeholder:'Log your wins, milestones, and progress here. Date each entry for easy reference during reviews.\n\nExample:\n03/15 — Led first cross-functional alignment session for Q2 planning',
+    difficulty:1,
+    wallX:83, wallY:91 },
+  { id:'card9',   num:9,  phase:'Activate', name:'Future Opportunities to Explore',
+    timeframe:'Longer-Term Pipeline', icon:'🔭',
+    color:'#7C6FF7',
+    desc:'A parking lot for ideas to revisit — keeping the roadmap dynamic and forward-looking.',
+    prompt:'"What future roles, opportunities, or paths do you want to keep on your radar?"',
+    betaTip:'Think 2–3 years out. Lateral moves, different functions, or entrepreneurial paths all count.',
+    placeholder:'Future roles, opportunities, or paths to explore...',
+    difficulty:1,
+    wallX:50, wallY:96 },  // summit — center-top
+];
+
+var ascentMode = true;
+var currentHold = 0;
+var summitReached = false;
+
+// ── FIELD SYNC: all data-save elements are in Classic mode DOM
+// Ascent mode reads/writes them directly via getFieldVal / setFieldVal
+
+function getFieldVal(key) {
+  var el = document.querySelector('[data-save="'+key+'"]');
+  return el ? el.value.trim() : '';
+}
+function setFieldVal(key, val) {
+  var el = document.querySelector('[data-save="'+key+'"]');
+  if (el) el.value = val;
+}
 function getAllFields() {
   var fields = document.querySelectorAll('[data-save]');
   var data = {};
-  for (var i = 0; i < fields.length; i++) {
+  for (var i=0;i<fields.length;i++) {
     data[fields[i].getAttribute('data-save')] = fields[i].value;
   }
   return data;
 }
-
 function applyFields(data) {
-  var fields = document.querySelectorAll('[data-save]');
-  for (var i = 0; i < fields.length; i++) {
-    var key = fields[i].getAttribute('data-save');
-    fields[i].value = data[key] || '';
+  for (var k in data) {
+    if (k==='_generatedPlan'||k==='_ascentHold'||k==='_ascentMode') continue;
+    var el = document.querySelector('[data-save="'+k+'"]');
+    if (el) el.value = data[k]||'';
   }
 }
 
+// ══════════════════════════════════════════════════════════
+//  SAVE / LOAD / VERSIONS
+// ══════════════════════════════════════════════════════════
+function saveAll() {
+  try {
+    var data = getAllFields();
+    var planHTML = document.getElementById('planOutput') ?
+      document.getElementById('planOutput').innerHTML : '';
+    if (planHTML && planHTML.indexOf('empty-state')===-1 &&
+        planHTML.indexOf('type="checkbox"')===-1) {
+      data._generatedPlan = planHTML;
+    }
+    data._ascentHold = currentHold;
+    data._ascentMode = ascentMode ? '1' : '0';
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    updateProgress();
+  } catch(e){}
+}
+function showToast(msg, duration) {
+  var toast = document.getElementById('chalkToast');
+  var msgEl  = document.getElementById('toastMsg');
+  if (msgEl) msgEl.textContent = msg || 'Saved';
+  toast.classList.add('show');
+  clearTimeout(toast._timer);
+  toast._timer = setTimeout(function(){ toast.classList.remove('show'); }, duration||2200);
+}
 function loadSaved() {
   try {
     var raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return;
     var data = JSON.parse(raw);
     applyFields(data);
+    if (data._ascentHold) currentHold = parseInt(data._ascentHold)||0;
+    if (data._ascentMode === '0') {
+      ascentMode = false;
+      document.getElementById('modeSw').classList.add('off');
+    }
     if (data._generatedPlan) {
-      // If the saved plan HTML contains old checkbox markup, discard it and re-generate
-      if (data._generatedPlan.indexOf('type="checkbox"') !== -1 ||
-          data._generatedPlan.indexOf("type='checkbox'") !== -1 ||
-          data._generatedPlan.indexOf('owner-chk') !== -1) {
-        // Wipe stale HTML from storage and re-render fresh
-        delete data._generatedPlan;
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-        setTimeout(generateAIPlan, 100);
-      } else {
-        document.getElementById('planOutput').innerHTML = data._generatedPlan;
-        // Re-wire radio buttons after restoring HTML
-        wireOwnerRadios();
+      var po = document.getElementById('planOutput');
+      if (po) {
+        if (data._generatedPlan.indexOf('type="checkbox"')!==-1 ||
+            data._generatedPlan.indexOf('owner-chk')!==-1) {
+          delete data._generatedPlan;
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+          setTimeout(generateAIPlan, 200);
+        } else {
+          po.innerHTML = data._generatedPlan;
+          wireOwnerRadios();
+        }
       }
     }
-  } catch(e) {}
+  } catch(e){}
   updateProgress();
   refreshVersionDropdown();
 }
-
-function saveAll() {
-  try {
-    var data = getAllFields();
-    var planHTML = document.getElementById('planOutput').innerHTML;
-    if (planHTML.indexOf('empty-state') === -1) {
-      data._generatedPlan = planHTML;
-    }
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-    showToast('✓ Saved locally');
-    updateProgress();
-  } catch(e) {}
-}
-
-function showToast(msg, duration) {
-  var el = document.getElementById('saveIndicator');
-  el.textContent = msg || '✓ Saved locally';
-  el.classList.add('show');
-  setTimeout(function() { el.classList.remove('show'); }, duration || 1800);
-}
-
-document.addEventListener('input', function() {
-  clearTimeout(saveTimeout);
-  saveTimeout = setTimeout(saveAll, 700);
+var _autoSaveTimer = null;
+document.addEventListener('input', function(){
+  clearTimeout(_autoSaveTimer);
+  _autoSaveTimer = setTimeout(function(){
+    saveAll();
+    showToast('🤍 Chalk puff — saved');
+  }, 700);
 });
 
-// ══════════════════════════════════
-// PROGRESS BAR
-// ══════════════════════════════════
 function updateProgress() {
-  var trackFields = ['empName','card1','card2','card3','card4','card5','card6','card8'];
-  var filled = 0;
-  trackFields.forEach(function(key) {
-    var el = document.querySelector('[data-save="' + key + '"]');
-    var val = el ? el.value.trim() : '';
-    var indicator = document.querySelector('.prog-field[data-field="' + key + '"]');
-    if (indicator) {
-      indicator.className = 'prog-field ' + (val.length > 3 ? 'filled' : 'empty');
-    }
-    if (val.length > 3) filled++;
-  });
-  var pct = Math.round((filled / trackFields.length) * 100);
-  document.getElementById('progressFill').style.width = pct + '%';
-  document.getElementById('progressPct').textContent = pct + '%';
+  var keys = ['empName','card1','card2','card3','card4','card5','card6','card8'];
+  var done = keys.filter(function(k){ return !!getFieldVal(k); }).length;
+  var pct  = Math.round((done/keys.length)*100);
+  var fill = document.getElementById('clProgFill');
+  var lbl  = document.getElementById('clProgLbl');
+  if (fill) fill.style.width = pct+'%';
+  if (lbl)  lbl.textContent  = done+' of '+keys.length+' sections complete';
 }
 
-// ══════════════════════════════════
-// RESET / CLEAR
-// ══════════════════════════════════
-var SECTION_FIELDS = {
-  plan_details: ['empName','mgrName','planDate','currentRole','timeInRole','timeAtCompany'],
-  phase1: ['card1','card2','card3'],
-  phase2: ['card4','card5','card6'],
-  phase3: ['card8','card9'],
-  all: ['empName','mgrName','planDate','currentRole','timeInRole','timeAtCompany',
-        'card1','card2','card3','card4','card5','card6','card8','card9']
-};
-
-function resetSection(section) {
-  var keys = SECTION_FIELDS[section] || [];
-  keys.forEach(function(key) {
-    var el = document.querySelector('[data-save="' + key + '"]');
-    if (el) el.value = '';
-  });
-  if (section === 'phase3' || section === 'all') {
-    document.getElementById('planOutput').innerHTML =
-      '<div class="empty-state"><div class="empty-icon">📋</div>Complete sections 1–6 above, then click "Generate My Roadmap" to build your personalized 12-month plan.</div>';
-  }
-  saveAll();
-  closeModal('resetModal');
-  showToast('↺ Fields cleared');
-}
-
-function resetCard(key) {
-  var el = document.querySelector('[data-save="' + key + '"]');
-  if (el) { el.value = ''; saveAll(); showToast('↺ Section cleared'); }
-}
-
-// ══════════════════════════════════
-// VERSION SYSTEM
-// ══════════════════════════════════
+// ── VERSIONS ──
 function getVersions() {
-  try {
-    return JSON.parse(localStorage.getItem(VERSIONS_KEY) || '[]');
-  } catch(e) { return []; }
+  try { return JSON.parse(localStorage.getItem(VERSIONS_KEY)||'[]'); } catch(e){ return []; }
 }
-
-function saveVersions(versions) {
-  localStorage.setItem(VERSIONS_KEY, JSON.stringify(versions));
-}
-
+function saveVersions(v) { try { localStorage.setItem(VERSIONS_KEY,JSON.stringify(v)); } catch(e){} }
 function saveVersion() {
-  var name = document.getElementById('versionNameInput').value.trim();
-  if (!name) { document.getElementById('versionNameInput').focus(); return; }
+  var nameEl = document.getElementById('versionNameInput');
+  var name   = (nameEl && nameEl.value.trim()) ||
+    ('Snapshot '+new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}));
   var versions = getVersions();
-  var data = getAllFields();
-  var planHTML = document.getElementById('planOutput').innerHTML;
-  if (planHTML.indexOf('empty-state') === -1) data._generatedPlan = planHTML;
-  versions.unshift({
-    id: Date.now(),
-    name: name,
-    date: new Date().toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'}),
-    time: new Date().toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit'}),
-    data: data
-  });
-  // Keep max 20 versions
-  if (versions.length > 20) versions = versions.slice(0, 20);
+  versions.unshift({ id:Date.now(), name:name, date:new Date().toISOString(), data:getAllFields() });
+  if (versions.length>20) versions=versions.slice(0,20);
   saveVersions(versions);
-  document.getElementById('versionNameInput').value = '';
-  renderVersionList();
-  refreshVersionDropdown();
-  showToast('💾 Version saved: ' + name);
+  if (nameEl) nameEl.value='';
+  renderVersionList(); refreshVersionDropdown();
+  showToast('💾 Version saved: '+name);
 }
-
 function loadVersion(id) {
-  if (!id || id === 'current') return;
-  var versions = getVersions();
-  var ver = versions.find(function(v) { return String(v.id) === String(id); });
+  if (!id||id==='current') return;
+  var ver = getVersions().find(function(v){ return String(v.id)===String(id); });
   if (!ver) return;
   applyFields(ver.data);
   if (ver.data._generatedPlan) {
-    // Discard stale checkbox HTML — re-generate instead
-    if (ver.data._generatedPlan.indexOf('type="checkbox"') !== -1 ||
-        ver.data._generatedPlan.indexOf('owner-chk') !== -1) {
-      setTimeout(generateAIPlan, 100);
-    } else {
-      document.getElementById('planOutput').innerHTML = ver.data._generatedPlan;
-      wireOwnerRadios();
+    var po = document.getElementById('planOutput');
+    if (po) {
+      if (ver.data._generatedPlan.indexOf('type="checkbox"')!==-1||
+          ver.data._generatedPlan.indexOf('owner-chk')!==-1) {
+        setTimeout(generateAIPlan,100);
+      } else {
+        po.innerHTML = ver.data._generatedPlan;
+        wireOwnerRadios();
+      }
     }
-  } else {
-    document.getElementById('planOutput').innerHTML =
-      '<div class="empty-state"><div class="empty-icon">📋</div>No generated plan in this version.</div>';
   }
-  saveAll();
-  showToast('✓ Loaded: ' + ver.name);
-  document.getElementById('versionSelect').value = 'current';
+  saveAll(); showToast('✓ Loaded: '+ver.name);
+  document.getElementById('versionSelect').value='current';
 }
-
 function deleteVersion(id) {
-  var versions = getVersions().filter(function(v) { return String(v.id) !== String(id); });
-  saveVersions(versions);
-  renderVersionList();
-  refreshVersionDropdown();
+  saveVersions(getVersions().filter(function(v){ return String(v.id)!==String(id); }));
+  renderVersionList(); refreshVersionDropdown();
   showToast('🗑 Version deleted');
 }
-
 function renderVersionList() {
   var versions = getVersions();
-  var container = document.getElementById('versionListContainer');
-  if (!versions.length) {
-    container.innerHTML = '<div style="text-align:center; padding: 20px; color: var(--muted); font-size:13px;">No saved versions yet.<br><span style="font-size:11px;">Save your first version below.</span></div>';
-    return;
-  }
-  container.innerHTML = versions.map(function(v) {
-    return '<div class="version-item">' +
-      '<div class="version-item-info">' +
-        '<strong>' + escHtml(v.name) + '</strong>' +
-        '<span>' + v.date + ' at ' + v.time + '</span>' +
-      '</div>' +
-      '<div class="version-item-actions">' +
-        '<button class="ver-btn restore" onclick="loadVersionFromModal(' + v.id + ')">Restore</button>' +
-        '<button class="ver-btn del" onclick="deleteVersion(' + v.id + ')">Delete</button>' +
-      '</div>' +
-    '</div>';
+  var c = document.getElementById('versionListContainer');
+  if (!versions.length) { c.innerHTML='<p style="font-size:13px;color:var(--muted);padding:8px 0;">No saved versions yet.</p>'; return; }
+  c.innerHTML = versions.map(function(v){
+    var d = new Date(v.date);
+    return '<div class="version-item">'+
+      '<div><div class="version-item-name">'+escHtml(v.name)+'</div>'+
+      '<div class="version-item-date">'+d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'2-digit',minute:'2-digit'})+'</div></div>'+
+      '<div class="version-item-actions">'+
+        '<button onclick="loadVersion(\''+v.id+'\');closeModal(\'versionModal\')">Load</button>'+
+        '<button onclick="deleteVersion(\''+v.id+'\')">Delete</button>'+
+      '</div></div>';
   }).join('');
 }
-
-function loadVersionFromModal(id) {
-  loadVersion(id);
-  closeModal('versionModal');
-}
-
+function loadVersionFromModal(id) { loadVersion(id); closeModal('versionModal'); }
 function refreshVersionDropdown() {
   var sel = document.getElementById('versionSelect');
   var versions = getVersions();
-  // Keep first option
-  while (sel.options.length > 1) sel.remove(1);
-  versions.forEach(function(v) {
-    var opt = document.createElement('option');
-    opt.value = v.id;
-    opt.textContent = v.name + ' (' + v.date + ')';
-    sel.appendChild(opt);
+  sel.innerHTML = '<option value="current">Current Draft</option>'+
+    versions.map(function(v){
+      return '<option value="'+v.id+'">'+escHtml(v.name)+'</option>';
+    }).join('');
+}
+function openVersionModal() { renderVersionList(); openModal('versionModal'); }
+
+// ── RESET ──
+function resetSection(section) {
+  var maps = {
+    phase1:['card1','card2','card3'],
+    phase2:['card4','card5','card6'],
+    phase3:['card7','card8','card9'],
+    plan_details:['empName','mgrName','planDate','currentRole','timeInRole','timeAtCompany'],
+    all:['empName','mgrName','planDate','currentRole','timeInRole','timeAtCompany',
+         'card1','card2','card3','card4','card5','card6','card7','card8','card9']
+  };
+  var keys = maps[section]||[];
+  keys.forEach(function(k){ setFieldVal(k,''); });
+  if (section==='phase3'||section==='all') {
+    var po=document.getElementById('planOutput');
+    if (po) po.innerHTML='<div style="padding:28px 20px;text-align:center;color:rgba(255,255,255,0.3);font-size:13px;font-style:italic;">Complete sections 1–6 above, then generate your roadmap.</div>';
+  }
+  if (section==='all') { currentHold=0; summitReached=false; }
+  saveAll(); closeModal('resetModal');
+  if (ascentMode) { buildWall(); renderSidebar(); renderCard(); }
+  showToast('↺ Fields cleared');
+}
+
+// ══════════════════════════════════════════════════════════
+//  MODE TOGGLE
+// ══════════════════════════════════════════════════════════
+function toggleMode() {
+  ascentMode = !ascentMode;
+  var sw = document.getElementById('modeSw');
+  sw.classList.toggle('off', !ascentMode);
+  document.getElementById('ascentMode').style.display  = ascentMode ? 'block' : 'none';
+  document.getElementById('classicMode').style.display = ascentMode ? 'none'  : 'block';
+  if (!ascentMode) buildClassicMode();
+  saveAll();
+}
+
+// ══════════════════════════════════════════════════════════
+//  ASCENT MODE — WALL
+// ══════════════════════════════════════════════════════════
+function buildWall() {
+  var layer = document.getElementById('holdsLayer');
+  layer.innerHTML = '';
+
+  // Decorative non-interactive holds
+  var deco = [
+    {x:8,y:35,c:'#E8455A'},{x:18,y:55,c:'#4A7FC1'},{x:28,y:72,c:'#3DAB6E'},
+    {x:38,y:60,c:'#E8541A'},{x:55,y:38,c:'#F0B429'},{x:68,y:55,c:'#E8455A'},
+    {x:78,y:42,c:'#4A7FC1'},{x:88,y:72,c:'#7C6FF7'},{x:93,y:50,c:'#3DAB6E'},
+    {x:6,y:80,c:'#F0B429'},{x:42,y:82,c:'#E8541A'},{x:60,y:82,c:'#7C6FF7'},
+  ];
+  deco.forEach(function(d){
+    var h=document.createElement('div');
+    h.className='hold';
+    h.style.cssText='left:calc('+d.x+'% - 15px);bottom:calc('+d.y+'% - 10px);background:'+d.c+';opacity:0.28;cursor:default;pointer-events:none;';
+    layer.appendChild(h);
+  });
+
+  // Route holds — mountain ridge: low-left → peak (hold 6) → summit (hold 9 at top-center)
+  HOLDS.forEach(function(s,i){
+    var isDone  = i < currentHold;
+    var isActive= i === currentHold;
+    var isLocked= i > currentHold;
+    var h = document.createElement('div');
+    h.className = 'hold'+(isDone?' h-done':isActive?' h-active':isLocked?' h-locked':'');
+    h.id = 'hold_'+s.id;
+    h.title = s.name;
+    h.style.cssText = 'left:calc('+s.wallX+'% - 15px);bottom:calc('+s.wallY+'% - 10px);background:'+s.color+';z-index:5;';
+    h.textContent = isDone ? '✓' : s.icon;
+    (function(idx){ h.addEventListener('click', function(){
+      if (idx > currentHold) return;
+      currentHold = idx;
+      buildWall(); renderCard(); drawRope(); moveClimber(HOLDS[idx]);
+      // scroll stage into view on mobile
+      document.getElementById('cardStage').scrollIntoView({behavior:'smooth',block:'nearest'});
+    }); })(i);
+    layer.appendChild(h);
+  });
+
+  buildPhaseTrack();
+  drawRope();
+  moveClimber(HOLDS[currentHold]);
+}
+
+function drawRope() {
+  var strip = document.getElementById('wallStrip');
+  var W = strip.offsetWidth || 800, H = 220;
+  // Done segment
+  var donePts = HOLDS.slice(0, currentHold+1).map(function(s){
+    return (s.wallX/100*W)+','+(H-(s.wallY/100*H));
+  });
+  // Ahead segment
+  var aheadPts = HOLDS.slice(currentHold).map(function(s){
+    return (s.wallX/100*W)+','+(H-(s.wallY/100*H));
+  });
+  document.getElementById('ropeDone').setAttribute('d', donePts.length>1 ? 'M '+donePts.join(' L ') : '');
+  document.getElementById('ropeAhead').setAttribute('d', aheadPts.length>1 ? 'M '+aheadPts.join(' L ') : '');
+}
+
+function moveClimber(s) {
+  var cl = document.getElementById('climber');
+  cl.style.left  = 'calc('+s.wallX+'% - 12px)';
+  cl.style.bottom= 'calc('+s.wallY+'% + 12px)';
+}
+
+function buildPhaseTrack() {
+  var pt = document.getElementById('phaseTrack');
+  pt.innerHTML = HOLDS.map(function(s,i){
+    var cls = i < currentHold ? 'pt-done' : i===currentHold ? 'pt-active' : '';
+    return '<div class="pt-dot '+cls+'" title="'+s.name+'"></div>';
+  }).join('');
+}
+
+// ══════════════════════════════════════════════════════════
+//  ASCENT MODE — CARD RENDERING (one at a time)
+// ══════════════════════════════════════════════════════════
+function renderCard() {
+  var stage = document.getElementById('cardStage');
+  var s = HOLDS[currentHold];
+  var pct = Math.round((currentHold / (HOLDS.length-1)) * 100);
+
+  if (summitReached && currentHold >= HOLDS.length-1) {
+    renderSummitReveal(); return;
+  }
+
+  var isLast = currentHold === HOLDS.length - 1;
+  var isFirst = currentHold === 0;
+
+  var html = '<div class="focus-card">';
+
+  // Badge
+  html += '<div class="hold-badge" style="background:'+hexToRgba(s.color,0.12)+';color:'+s.color+';border:1px solid '+hexToRgba(s.color,0.25)+';">';
+  html += s.icon+' Hold '+currentHold+' · '+s.phase;
+  html += '</div>';
+
+  // Difficulty
+  var diamonds = '';
+  for (var d=0;d<s.difficulty;d++) diamonds += '<span class="diff-diamond">◆</span>';
+  html += '<div class="diff-badge">'+diamonds+' '+(s.difficulty===1?'Moderate':s.difficulty===2?'Challenging':'Expert')+' reflection</div>';
+
+  // Title
+  html += '<div class="card-title-lg">'+s.name+'</div>';
+  html += '<div class="card-timeframe">'+s.timeframe+'</div>';
+  html += '<div class="card-desc-txt">'+s.desc+'</div>';
+
+  // Reflection prompt
+  if (s.prompt) {
+    html += '<div class="reflection-box"><div class="ref-lbl">Reflection prompt</div>';
+    html += '<div class="ref-prompt">'+s.prompt+'</div></div>';
+  }
+
+  // Input area
+  if (s.isDetails) {
+    html += renderDetailsFields();
+  } else if (s.isRoadmap) {
+    html += renderRoadmapArea();
+  } else {
+    html += '<textarea class="stage-ta" id="stageTA" data-hold="'+s.id+'" placeholder="'+s.placeholder+'">'+(getFieldVal(s.id)||'')+'</textarea>';
+  }
+
+  // Beta tip
+  html += '<div class="beta-tip" id="betaTip">';
+  html += '<div class="bt-lbl">🧗 Climber\'s Beta</div>';
+  html += '<div class="bt-txt">'+s.betaTip+'</div></div>';
+
+  // Footer
+  html += '<div class="card-foot">';
+  html += '<div class="progress-wrap"><span class="prog-lbl">Elevation '+pct+'%</span>';
+  html += '<div class="prog-bar"><div class="prog-fill" id="progFill"></div></div></div>';
+  html += '<div class="nav-btns">';
+  if (!isFirst) html += '<button class="nav-btn-back" onclick="prevHold()">← Back</button>';
+  if (isLast) {
+    html += '<button class="nav-btn-next summit" onclick="advanceHold()">▲ Summit</button>';
+  } else {
+    html += '<button class="nav-btn-next" onclick="advanceHold()">Next Hold →</button>';
+  }
+  html += '</div></div>';
+  html += '</div>'; // focus-card
+
+  stage.innerHTML = html;
+  setTimeout(function(){ var f=document.getElementById('progFill'); if(f) f.style.width=pct+'%'; },80);
+
+  // Wire textarea → sync to data-save field
+  var ta = document.getElementById('stageTA');
+  if (ta) {
+    ta.addEventListener('input', function(){
+      setFieldVal(s.id, this.value);
+      // Show beta tip after 30 chars
+      if (this.value.length > 30) document.getElementById('betaTip').classList.add('show');
+    });
+    // Show beta tip if already has content
+    if (getFieldVal(s.id).length > 30) document.getElementById('betaTip').classList.add('show');
+  }
+
+  // Wire detail inputs
+  wireDetailInputs();
+
+  // Wire roadmap if visible
+  if (s.isRoadmap && document.getElementById('planOutput')) {
+    wireOwnerRadios();
+  }
+}
+
+function renderDetailsFields() {
+  return '<div class="details-grid">'+
+    '<div class="detail-field"><label>Your Name</label><input class="detail-input" data-save="empName" placeholder="Full name" value="'+escHtml(getFieldVal('empName'))+'"></div>'+
+    '<div class="detail-field"><label>Manager\'s Name</label><input class="detail-input" data-save="mgrName" placeholder="Manager\'s full name" value="'+escHtml(getFieldVal('mgrName'))+'"></div>'+
+    '<div class="detail-field"><label>Plan Date</label><input class="detail-input" data-save="planDate" placeholder="MM/DD/YYYY" value="'+escHtml(getFieldVal('planDate'))+'"></div>'+
+    '<div class="detail-field"><label>Current Role</label><input class="detail-input" data-save="currentRole" placeholder="e.g. Sr. Solutions Engineer" value="'+escHtml(getFieldVal('currentRole'))+'"></div>'+
+    '<div class="detail-field"><label>Time in Role (yrs)</label><input class="detail-input" data-save="timeInRole" placeholder="e.g. 2.5" value="'+escHtml(getFieldVal('timeInRole'))+'"></div>'+
+    '<div class="detail-field"><label>Time at Company (yrs)</label><input class="detail-input" data-save="timeAtCompany" placeholder="e.g. 4" value="'+escHtml(getFieldVal('timeAtCompany'))+'"></div>'+
+  '</div>';
+}
+
+function wireDetailInputs() {
+  var inputs = document.querySelectorAll('.detail-input[data-save],.stage-ta[data-hold]');
+  inputs.forEach(function(el){
+    el.addEventListener('input', function(){
+      var key = el.getAttribute('data-save') || el.getAttribute('data-hold');
+      if (key) setFieldVal(key, el.value);
+    });
   });
 }
 
-function openVersionModal() {
-  renderVersionList();
-  openModalEl('versionModal');
+function renderRoadmapArea() {
+  var po = document.getElementById('planOutput');
+  var hasGenerated = po && po.innerHTML && po.innerHTML.indexOf('roadmap-table')!==-1;
+  return '<div id="planOutput">'+
+    (hasGenerated ? po.innerHTML :
+    '<table class="roadmap-table"><tr class="rm-thead"><td colspan="4">'+
+    '<div class="rm-thead-inner">'+
+    '<span class="rm-phase-txt">✦ 4 Phases of Development</span>'+
+    '<div class="rm-head-btns">'+
+    '<button class="rm-gen-btn" id="generateBtn" onclick="generateAIPlan()">✦ Generate My Roadmap</button>'+
+    '<button class="rm-redo-btn" onclick="generateAIPlan()" title="Regenerate" aria-label="Regenerate">↻</button>'+
+    '</div></div></td></tr>'+
+    '<tr><td colspan="4" style="padding:28px 20px;text-align:center;color:rgba(255,255,255,0.3);font-size:13px;font-style:italic;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);">'+
+    'Complete sections 1–6 then click ✦ Generate My Roadmap</td></tr></table>')+
+  '</div>';
 }
 
-// ══════════════════════════════════
-// SHARE & EMAIL
-// ══════════════════════════════════
+function advanceHold() {
+  var s = HOLDS[currentHold];
+  // Validate non-detail, non-roadmap cards
+  if (!s.isDetails && !s.isRoadmap) {
+    var val = getFieldVal(s.id);
+    if (!val || val.length < 5) {
+      var ta = document.getElementById('stageTA');
+      if (ta) {
+        ta.style.borderColor = 'var(--orange)';
+        ta.placeholder = 'Grip this hold — add your reflection to continue climbing...';
+        setTimeout(function(){ ta.style.borderColor='rgba(255,255,255,0.1)'; },2000);
+      }
+      showToast('Add your reflection to advance');
+      return;
+    }
+  }
+  if (currentHold < HOLDS.length - 1) {
+    currentHold++;
+    buildWall(); renderCard();
+    document.getElementById('cardStage').scrollIntoView({behavior:'smooth',block:'start'});
+  } else {
+    summitReached = true;
+    renderSummitReveal();
+    buildWall();
+  }
+  saveAll();
+}
+
+function prevHold() {
+  if (currentHold > 0) {
+    currentHold--;
+    buildWall(); renderCard();
+    document.getElementById('cardStage').scrollIntoView({behavior:'smooth',block:'start'});
+  }
+}
+
+function goToHold(idx) {
+  if (idx <= currentHold || idx < currentHold + 1) {
+    currentHold = idx;
+    summitReached = false;
+    buildWall(); renderCard();
+    document.getElementById('cardStage').scrollIntoView({behavior:'smooth',block:'start'});
+  }
+}
+
+function renderSummitReveal() {
+  var stage = document.getElementById('cardStage');
+  var filledCount = HOLDS.filter(function(h,i){
+    if (h.isDetails || h.isRoadmap) return true;
+    return !!getFieldVal(h.id);
+  }).length;
+
+  stage.innerHTML = '<div class="summit-reveal">'+
+    '<div class="summit-icon">🏔</div>'+
+    '<div class="summit-title">Summit Reached</div>'+
+    '<div class="summit-sub">You\'ve completed all 9 holds of your development ascent.<br>Your quarterly roadmap is ready to generate.</div>'+
+    '<div class="summit-stats">'+
+      '<div class="stat-item"><div class="stat-num">'+HOLDS.length+'</div><div class="stat-lbl">Holds Completed</div></div>'+
+      '<div class="stat-item"><div class="stat-num">'+filledCount+'</div><div class="stat-lbl">Reflections Captured</div></div>'+
+      '<div class="stat-item"><div class="stat-num">4</div><div class="stat-lbl">Quarters Mapped</div></div>'+
+    '</div>'+
+    '<button class="unlock-btn" onclick="unlockRoadmap()">✦ Unlock My Roadmap</button>'+
+    '<div style="margin-top:16px;"><button class="nav-btn-back" style="font-size:11px;" onclick="goToHold(0)">← Return to Base Camp</button></div>'+
+  '</div>';
+}
+
+function unlockRoadmap() {
+  var stage = document.getElementById('cardStage');
+  // Check if roadmap already generated
+  var poHTML = getFieldVal('_generatedPlan') || '';
+  stage.innerHTML = '<div class="roadmap-section">'+
+    '<div class="rm-header-bar">'+
+      '<div class="rm-title-group">'+
+        '<div class="rm-eyebrow">▲ Summit Unlocked</div>'+
+        '<div class="rm-title">Your Ascent Plan · Next 12 Months</div>'+
+      '</div>'+
+      '<div class="rm-btns">'+
+        '<button class="rm-gen-btn" id="generateBtn" onclick="generateAIPlan()">✦ Generate Roadmap</button>'+
+        '<button class="rm-redo-btn" onclick="generateAIPlan()" title="Regenerate">↻</button>'+
+      '</div>'+
+    '</div>'+
+    '<div id="planOutput">'+
+      '<div style="text-align:center;padding:24px;color:rgba(255,255,255,0.35);font-size:13px;font-style:italic;">'+
+      'Click ✦ Generate Roadmap to build your personalized plan</div>'+
+    '</div>'+
+    '<div class="extra-card">'+
+      '<div class="extra-card-head">'+
+        '<div class="extra-icon" style="background:var(--green-light);">📈</div>'+
+        '<div><div class="extra-title">Wins & Progress Log</div><div class="extra-sub">Running Record — Add Entries Over Time</div></div>'+
+      '</div>'+
+      '<textarea class="extra-ta" data-save="card8" placeholder="Log your wins, milestones, and progress here. Date each entry.\n\nExample:\n03/15 — Led first cross-functional alignment session">'+escHtml(getFieldVal('card8'))+'</textarea>'+
+    '</div>'+
+    '<div class="extra-card">'+
+      '<div class="extra-card-head">'+
+        '<div class="extra-icon" style="background:var(--blue-light);">🔭</div>'+
+        '<div><div class="extra-title">Future Opportunities to Explore</div><div class="extra-sub">Longer-Term Pipeline — Revisit Quarterly</div></div>'+
+      '</div>'+
+      '<textarea class="extra-ta" data-save="card9" placeholder="Future roles, opportunities, or paths to explore...">'+escHtml(getFieldVal('card9'))+'</textarea>'+
+    '</div>'+
+    '<div style="margin-top:24px;"><button class="nav-btn-back" onclick="backToSummit()">← Back to Summit</button></div>'+
+  '</div>';
+
+  // Auto-generate if we have data
+  if (getFieldVal('card1') || getFieldVal('card4')) {
+    setTimeout(generateAIPlan, 300);
+  }
+}
+
+function backToSummit() {
+  summitReached = true;
+  renderSummitReveal();
+}
+
+// ══════════════════════════════════════════════════════════
+//  CLASSIC MODE BUILD
+// ══════════════════════════════════════════════════════════
+function buildClassicMode() {
+  var content = document.getElementById('clContent');
+  var tagMap = {
+    card1:'<span class="cl-tag" style="background:var(--cyan-light);color:var(--cyan);">Self-Directed</span>',
+    card2:'<span class="cl-tag" style="background:var(--cyan-light);color:var(--cyan);">Self-Directed</span><span class="cl-tag" style="background:var(--pink-light);color:var(--pink);">External Feedback</span>',
+    card3:'<span class="cl-tag" style="background:var(--cyan-light);color:var(--cyan);">Self-Directed</span><span class="cl-tag" style="background:var(--pink-light);color:var(--pink);">External Feedback</span>',
+    card4:'<span class="cl-tag" style="background:var(--blue-light);color:var(--blue);">Formal Training</span><span class="cl-tag" style="background:var(--purple-light);color:var(--purple);">Experiential</span>',
+    card5:'<span class="cl-tag" style="background:var(--purple-light);color:var(--purple);">Experiential</span><span class="cl-tag" style="background:var(--green-light);color:var(--green);">Social / Observational</span>',
+    card6:'<span class="cl-tag" style="background:var(--orange-light);color:var(--orange);">Mentoring & Coaching</span><span class="cl-tag" style="background:var(--pink-light);color:var(--pink);">External Feedback</span>',
+  };
+  var phases = [
+    {label:'Phase 1 · Discover',  holds:[0,1,2,3]},
+    {label:'Phase 2 · Define',    holds:[4,5,6]},
+    {label:'Phase 3 · Activate',  holds:[7,8,9]},
+  ];
+  var html = '';
+  // Plan details card
+  html += '<div class="cl-phase-lbl">Plan Details</div>';
+  html += '<div class="cl-card"><div class="cl-details-grid">'+
+    '<div class="cl-field"><label>Your Name</label><input class="cl-input" data-save="empName" placeholder="Full name" value="'+escHtml(getFieldVal('empName'))+'"></div>'+
+    '<div class="cl-field"><label>Manager\'s Name</label><input class="cl-input" data-save="mgrName" placeholder="Manager\'s full name" value="'+escHtml(getFieldVal('mgrName'))+'"></div>'+
+    '<div class="cl-field"><label>Plan Date</label><input class="cl-input" data-save="planDate" placeholder="MM/DD/YYYY" value="'+escHtml(getFieldVal('planDate'))+'"></div>'+
+    '<div class="cl-field"><label>Current Role</label><input class="cl-input" data-save="currentRole" placeholder="e.g. Sr. Solutions Engineer" value="'+escHtml(getFieldVal('currentRole'))+'"></div>'+
+    '<div class="cl-field"><label>Time in Role (yrs)</label><input class="cl-input" data-save="timeInRole" placeholder="e.g. 2.5" value="'+escHtml(getFieldVal('timeInRole'))+'"></div>'+
+    '<div class="cl-field"><label>Time at Company (yrs)</label><input class="cl-input" data-save="timeAtCompany" placeholder="e.g. 4" value="'+escHtml(getFieldVal('timeAtCompany'))+'"></div>'+
+  '</div></div>';
+
+  phases.forEach(function(ph){
+    html += '<div class="cl-phase-lbl">'+ph.label+'</div>';
+    ph.holds.forEach(function(i){
+      var s = HOLDS[i];
+      if (!s || s.id==='empInfo') return;
+      if (s.isRoadmap) {
+        html += '<div class="cl-card">'+
+          '<div class="cl-card-head">'+
+            '<div class="cl-num">'+s.num+'</div>'+
+            '<div class="cl-card-info"><h3>'+s.name+'</h3><div class="cl-tf">'+s.timeframe+'</div></div>'+
+          '</div>'+
+          '<div class="cl-desc">'+s.desc+'</div>'+
+          '<table class="roadmap-table"><tr class="rm-thead"><td colspan="4" style="background:#2D2D2D;padding:10px 14px;">'+
+          '<div class="rm-thead-inner">'+
+          '<span style="font-family:var(--font-display);font-size:12px;letter-spacing:0.08em;color:rgba(255,255,255,0.75);text-transform:uppercase;">✦ 4 Phases of Development</span>'+
+          '<div class="rm-btns">'+
+          '<button class="rm-gen-btn" id="generateBtn" onclick="generateAIPlan()">✦ Generate My Roadmap</button>'+
+          '<button class="rm-redo-btn" onclick="generateAIPlan()" style="width:30px;height:30px;">↻</button>'+
+          '</div></div></td></tr></table>'+
+          '<div id="planOutput"><div style="padding:16px;text-align:center;color:var(--muted);font-size:13px;font-style:italic;">Complete sections 1–6 then click Generate My Roadmap</div></div>'+
+        '</div>';
+        return;
+      }
+      html += '<div class="cl-card">'+
+        '<div class="cl-card-head">'+
+          '<div class="cl-num">'+s.num+'</div>'+
+          '<div class="cl-card-info"><h3>'+s.name+'</h3><div class="cl-tf">'+s.timeframe+'</div></div>'+
+        '</div>'+
+        (tagMap[s.id] ? '<div class="cl-tags">'+tagMap[s.id]+'</div>' : '')+
+        '<div class="cl-desc">'+s.desc+'</div>'+
+        '<textarea class="cl-ta" data-save="'+s.id+'" placeholder="'+s.placeholder+'">'+escHtml(getFieldVal(s.id))+'</textarea>'+
+      '</div>';
+    });
+  });
+
+  content.innerHTML = html;
+  updateProgress();
+}
+
+// ══════════════════════════════════════════════════════════
+//  ROADMAP GENERATOR  (preserved in full)
+// ══════════════════════════════════════════════════════════
+
+// ══════════════════════════════════════════════════════════
+//  SHARE / EMAIL / PRINT  (preserved)
+// ══════════════════════════════════════════════════════════
 function openShareModal() {
   var name = getFieldVal('empName') || 'My';
   var sub  = document.getElementById('shareSubject');
@@ -2250,414 +1535,289 @@ function openShareModal() {
 }
 
 function buildRoadmapText() {
-  // Reads the rendered roadmap from the DOM and formats it as plain text
   var lines = [];
   var table = document.querySelector('#planOutput .roadmap-table');
   if (!table) return '';
-
-  var qPhases = ['Q1 — Foundation', 'Q2 — Build', 'Q3 — Apply', 'Q4 — Sustain'];
-
-  // Read quarter labels from the qlabel row
+  var qPhases = ['Q1 — Foundation','Q2 — Build','Q3 — Apply','Q4 — Sustain'];
   var qlabelCells = table.querySelectorAll('.roadmap-qlabel-row td');
   var qLabels = [];
-  qlabelCells.forEach(function(td) {
-    var badge = td.querySelector('.q-badge');
-    var range = td.querySelector('span:last-child');
-    qLabels.push((badge ? badge.textContent.trim() : '') + (range ? ' (' + range.textContent.trim() + ')' : ''));
+  qlabelCells.forEach(function(td){
+    var badge=td.querySelector('.q-badge'); var range=td.querySelector('span:last-child');
+    qLabels.push((badge?badge.textContent.trim():'')+(range?' ('+range.textContent.trim()+')':''));
   });
-
-  // Read focus areas per quarter
   var themeCells = table.querySelectorAll('.roadmap-themes-row td');
   var qFocus = [];
-  themeCells.forEach(function(td) {
-    var items = td.querySelectorAll('li');
-    var focusList = [];
-    items.forEach(function(li) { focusList.push(li.textContent.trim()); });
-    qFocus.push(focusList);
+  themeCells.forEach(function(td){
+    var items=td.querySelectorAll('li'); var fl=[];
+    items.forEach(function(li){fl.push(li.textContent.trim());}); qFocus.push(fl);
   });
-
-  // Read outcome textareas per quarter
-  var outcomeCells = table.querySelectorAll('.roadmap-outcomes-row td textarea');
-  var qOutcomes = [];
-  outcomeCells.forEach(function(ta) { qOutcomes.push(ta.value.trim()); });
-
-  // Read owner checkboxes per quarter
+  var outcomeTAs = table.querySelectorAll('.roadmap-outcomes-row td textarea');
+  var qOutcomes = []; outcomeTAs.forEach(function(ta){qOutcomes.push(ta.value.trim());});
   var qOwners = [];
-  for (var qi = 0; qi < 4; qi++) {
-    var checked = table.querySelector('.owner-radio[data-quarter="'+qi+'"]:checked');
-    qOwners.push(checked ? checked.getAttribute('data-option') : '—');
+  for (var qi=0;qi<4;qi++){
+    var checked=table.querySelector('.owner-radio[data-quarter="'+qi+'"]:checked');
+    qOwners.push(checked?checked.getAttribute('data-option'):'—');
   }
-
-  // Read status per quarter
-  var statusCells = table.querySelectorAll('.roadmap-status-row td');
-  var qStatus = [];
-  statusCells.forEach(function(td) {
-    var s = td.querySelector('.status-active, .status-planned');
-    qStatus.push(s ? s.textContent.trim() : '');
-  });
-
-  lines.push('7. QUARTERLY DEVELOPMENT PLAN');
-  lines.push(new Array(32).join('-'));
-  lines.push('');
-
-  for (var i = 0; i < 4; i++) {
-    var label = qLabels[i] || qPhases[i];
+  var statusCells=table.querySelectorAll('.roadmap-status-row td');
+  var qStatus=[]; statusCells.forEach(function(td){var s=td.querySelector('.status-active,.status-planned');qStatus.push(s?s.textContent.trim():'');});
+  lines.push('7. QUARTERLY DEVELOPMENT PLAN'); lines.push(new Array(32).join('-')); lines.push('');
+  for (var i=0;i<4;i++){
+    var label=qLabels[i]||qPhases[i];
     lines.push(label.toUpperCase());
-    if (qFocus[i] && qFocus[i].length) {
-      lines.push('  Areas of Focus:');
-      qFocus[i].forEach(function(f) { lines.push('    \u2022 ' + f); });
-    }
-    if (qOutcomes[i]) {
-      lines.push('  Outcomes I Envision:');
-      lines.push('    ' + qOutcomes[i]);
-    }
-    if (qStatus[i])  lines.push('  Status: ' + qStatus[i]);
-    if (qOwners[i])  lines.push('  Owner: '  + qOwners[i]);
+    if(qFocus[i]&&qFocus[i].length){lines.push('  Areas of Focus:');qFocus[i].forEach(function(f){lines.push('    \u2022 '+f);});}
+    if(qOutcomes[i]){lines.push('  Outcomes I Envision:');lines.push('    '+qOutcomes[i]);}
+    if(qStatus[i]) lines.push('  Status: '+qStatus[i]);
+    if(qOwners[i]) lines.push('  Owner: '+qOwners[i]);
     lines.push('');
   }
-
   return lines.join('\n');
 }
 
 function buildPlanText() {
-  var lines = [];
-  var name = getFieldVal('empName');
-  var mgr  = getFieldVal('mgrName');
-  var date = getFieldVal('planDate');
-  var role = getFieldVal('currentRole');
-  var timeInRole    = getFieldVal('timeInRole');
-  var timeAtCompany = getFieldVal('timeAtCompany');
-
+  var lines=[];
+  var name=getFieldVal('empName'),mgr=getFieldVal('mgrName'),date=getFieldVal('planDate'),
+      role=getFieldVal('currentRole'),tir=getFieldVal('timeInRole'),tac=getFieldVal('timeAtCompany');
   lines.push('360 INDIVIDUAL DEVELOPMENT PLAN');
   lines.push('================================');
-  if (name)          lines.push('Employee: '        + name);
-  if (mgr)           lines.push('Manager: '         + mgr);
-  if (role)          lines.push('Role: '            + role);
-  if (timeInRole)    lines.push('Time in Role: '    + timeInRole + ' yrs');
-  if (timeAtCompany) lines.push('Time at Company: ' + timeAtCompany + ' yrs');
-  if (date)          lines.push('Date: '            + date);
+  if(name) lines.push('Employee: '+name);
+  if(mgr)  lines.push('Manager: '+mgr);
+  if(role) lines.push('Role: '+role);
+  if(tir)  lines.push('Time in Role: '+tir+' yrs');
+  if(tac)  lines.push('Time at Company: '+tac+' yrs');
+  if(date) lines.push('Date: '+date);
   lines.push('');
-
-  var sections = [
-    ['1. Career Goals',              'card1'],
-    ['2. What I Love',               'card2'],
-    ['3. Current Learning Goals',    'card3'],
-    ['4. Skills to Develop',         'card4'],
-    ['5. Experiences to Gain',       'card5'],
-    ['6. Support From My Manager',   'card6'],
-  ];
-
-  sections.forEach(function(s) {
-    var val = getFieldVal(s[1]);
-    if (val) {
-      lines.push(s[0]);
-      lines.push(new Array(s[0].length + 1).join('-'));
-      lines.push(val);
-      lines.push('');
-    }
-  });
-
-  // Include the quarterly roadmap if it has been generated
-  var roadmapText = buildRoadmapText();
-  if (roadmapText) {
-    lines.push(roadmapText);
-  }
-
-  var winsVal = getFieldVal('card8');
-  if (winsVal) {
-    lines.push('8. Wins & Progress Log');
-    lines.push(new Array(23).join('-'));
-    lines.push(winsVal);
-    lines.push('');
-  }
-
-  var futureVal = getFieldVal('card9');
-  if (futureVal) {
-    lines.push('9. Future Opportunities');
-    lines.push(new Array(24).join('-'));
-    lines.push(futureVal);
-    lines.push('');
-  }
-
+  var sections=[['1. Career Goals','card1'],['2. What I Love','card2'],['3. Current Learning Goals','card3'],
+    ['4. Skills to Develop','card4'],['5. Experiences to Gain','card5'],['6. Support From My Manager','card6']];
+  sections.forEach(function(s){var val=getFieldVal(s[1]);if(val){lines.push(s[0]);lines.push(new Array(s[0].length+1).join('-'));lines.push(val);lines.push('');}});
+  var rt=buildRoadmapText(); if(rt) lines.push(rt);
+  var wv=getFieldVal('card8'); if(wv){lines.push('8. Wins & Progress Log');lines.push(new Array(23).join('-'));lines.push(wv);lines.push('');}
+  var fv=getFieldVal('card9'); if(fv){lines.push('9. Future Opportunities');lines.push(new Array(24).join('-'));lines.push(fv);lines.push('');}
   return lines.join('\n');
 }
 
 function buildRoadmapHTML() {
-  // Returns a styled HTML string of the roadmap for the print view
-  var table = document.querySelector('#planOutput .roadmap-table');
-  if (!table) return '';
-
-  var qPhases = ['Foundation', 'Build', 'Apply', 'Sustain'];
-  var qColors = ['#00BCD4','#7B68C8','#1AAB8A','#F0A030'];
-  var qBg     = ['#E0F7FA','#EDE7F6','#E8F5E9','#FFF3E0'];
-
-  // Read all data from DOM
-  var qlabelCells = table.querySelectorAll('.roadmap-qlabel-row td');
-  var themeCells  = table.querySelectorAll('.roadmap-themes-row td');
-  var outcomeTAs  = table.querySelectorAll('.roadmap-outcomes-row td textarea');
-  var statusCells = table.querySelectorAll('.roadmap-status-row td');
-
-  var quarters = [];
-  for (var i = 0; i < 4; i++) {
-    var badge = qlabelCells[i] ? qlabelCells[i].querySelector('.q-badge') : null;
-    var rangeEl = qlabelCells[i] ? qlabelCells[i].querySelectorAll('span') : [];
-    var range = rangeEl.length > 1 ? rangeEl[rangeEl.length-1].textContent.trim() : '';
-
-    var focusItems = themeCells[i] ? themeCells[i].querySelectorAll('li') : [];
-    var focus = [];
-    focusItems.forEach(function(li){ focus.push(li.textContent.trim()); });
-
-    var outcome = outcomeTAs[i] ? outcomeTAs[i].value.trim() : '';
-
-    var statusEl = statusCells[i] ? statusCells[i].querySelector('.status-active,.status-planned') : null;
-    var status = statusEl ? statusEl.textContent.trim() : '';
-
-    var ownerChk = table.querySelector('.owner-radio[data-quarter="'+i+'"]:checked');
-    var owner = ownerChk ? ownerChk.getAttribute('data-option') : '—';
-
-    quarters.push({ label: badge ? badge.textContent.trim() : ('Q'+(i+1)), range: range, phase: qPhases[i], color: qColors[i], bg: qBg[i], focus: focus, outcome: outcome, status: status, owner: owner });
+  var table=document.querySelector('#planOutput .roadmap-table');
+  if(!table) return '';
+  var qPhases=['Foundation','Build','Apply','Sustain'];
+  var qColors=['#00BCD4','#7C6FF7','#1AAB8A','#F0A030'];
+  var qBg=['#E0F7FA','#EDE7F6','#E8F5E9','#FFF3E0'];
+  var qlabelCells=table.querySelectorAll('.roadmap-qlabel-row td');
+  var themeCells=table.querySelectorAll('.roadmap-themes-row td');
+  var outcomeTAs=table.querySelectorAll('.roadmap-outcomes-row td textarea');
+  var statusCells=table.querySelectorAll('.roadmap-status-row td');
+  var quarters=[];
+  for(var i=0;i<4;i++){
+    var badge=qlabelCells[i]?qlabelCells[i].querySelector('.q-badge'):null;
+    var rangeEl=qlabelCells[i]?qlabelCells[i].querySelectorAll('span'):[];
+    var range=rangeEl.length>1?rangeEl[rangeEl.length-1].textContent.trim():'';
+    var focusItems=themeCells[i]?themeCells[i].querySelectorAll('li'):[];
+    var focus=[]; focusItems.forEach(function(li){focus.push(li.textContent.trim());});
+    var outcome=outcomeTAs[i]?outcomeTAs[i].value.trim():'';
+    var statusEl=statusCells[i]?statusCells[i].querySelector('.status-active,.status-planned'):null;
+    var status=statusEl?statusEl.textContent.trim():'';
+    var ownerChk=table.querySelector('.owner-radio[data-quarter="'+i+'"]:checked');
+    var owner=ownerChk?ownerChk.getAttribute('data-option'):'—';
+    quarters.push({label:badge?badge.textContent.trim():('Q'+(i+1)),range:range,phase:qPhases[i],color:qColors[i],bg:qBg[i],focus:focus,outcome:outcome,status:status,owner:owner});
   }
-
-  var h = '<h2 style="font-family:Arial,sans-serif;font-size:16px;margin:32px 0 8px;color:#222;">7. Quarterly Development Plan</h2>';
-  h += '<table style="width:100%;border-collapse:collapse;font-family:Arial,sans-serif;font-size:12px;">';
-
-  // Header row
-  h += '<tr style="background:#2D2D2D;">';
-  quarters.forEach(function(q) {
-    h += '<th style="padding:10px 12px;text-align:left;color:#fff;font-size:11px;font-weight:700;width:25%;">';
-    h += '<span style="background:'+q.color+';color:#fff;padding:2px 8px;border-radius:8px;font-size:10px;">'+q.label+'</span>';
-    h += ' <span style="color:rgba(255,255,255,0.7);font-weight:400;">'+q.phase+'</span>';
-    if (q.range) h += '<br><span style="color:rgba(255,255,255,0.5);font-size:10px;font-weight:400;">'+q.range+'</span>';
-    h += '</th>';
-  });
-  h += '</tr>';
-
-  // Focus areas row
-  h += '<tr>';
-  quarters.forEach(function(q) {
-    h += '<td style="background:'+q.bg+';padding:10px 12px;vertical-align:top;border:1px solid #e0e0e0;">';
-    h += '<div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#666;margin-bottom:5px;">Areas of Focus</div>';
-    if (q.focus.length) {
-      h += '<ul style="margin:0;padding-left:14px;">';
-      q.focus.forEach(function(f){ h += '<li style="margin-bottom:3px;">'+escHtml(f)+'</li>'; });
-      h += '</ul>';
-    } else {
-      h += '<em style="color:#aaa;font-size:11px;">—</em>';
-    }
-    h += '</td>';
-  });
-  h += '</tr>';
-
-  // Outcomes row
-  h += '<tr>';
-  quarters.forEach(function(q) {
-    h += '<td style="background:#fff;padding:10px 12px;vertical-align:top;border:1px solid #e0e0e0;">';
-    h += '<div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#666;margin-bottom:5px;">Outcomes I Envision</div>';
-    h += '<div style="font-size:12px;color:#333;min-height:40px;">'+(q.outcome ? escHtml(q.outcome) : '<em style="color:#aaa;">—</em>')+'</div>';
-    h += '</td>';
-  });
-  h += '</tr>';
-
-  // Status + Owner row
-  h += '<tr>';
-  quarters.forEach(function(q) {
-    h += '<td style="background:#f9f9f9;padding:8px 12px;border:1px solid #e0e0e0;">';
-    h += '<div style="font-size:10px;color:#666;margin-bottom:2px;"><strong>Status:</strong> '+escHtml(q.status || '—')+'</div>';
-    h += '<div style="font-size:10px;color:#666;"><strong>Owner:</strong> '+escHtml(q.owner)+'</div>';
-    h += '</td>';
-  });
-  h += '</tr>';
-
-  h += '</table>';
-  return h;
+  var h='<h2 style="font-family:Arial,sans-serif;font-size:16px;margin:32px 0 8px;color:#222;">7. Quarterly Development Plan</h2>';
+  h+='<table style="width:100%;border-collapse:collapse;font-family:Arial,sans-serif;font-size:12px;">';
+  h+='<tr style="background:#2D2D2D;">';
+  quarters.forEach(function(q){h+='<th style="padding:10px 12px;text-align:left;color:#fff;font-size:11px;font-weight:700;width:25%;"><span style="background:'+q.color+';color:#fff;padding:2px 8px;border-radius:8px;font-size:10px;">'+q.label+'</span> <span style="color:rgba(255,255,255,0.7);font-weight:400;">'+q.phase+'</span>'+(q.range?'<br><span style="color:rgba(255,255,255,0.5);font-size:10px;font-weight:400;">'+q.range+'</span>':'')+'</th>';});
+  h+='</tr><tr>';
+  quarters.forEach(function(q){h+='<td style="background:'+q.bg+';padding:10px 12px;vertical-align:top;border:1px solid #e0e0e0;"><div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#666;margin-bottom:5px;">Areas of Focus</div>'+(q.focus.length?'<ul style="margin:0;padding-left:14px;">'+q.focus.map(function(f){return '<li style="margin-bottom:3px;">'+escHtml(f)+'</li>';}).join('')+'</ul>':'<em style="color:#aaa;font-size:11px;">—</em>')+'</td>';});
+  h+='</tr><tr>';
+  quarters.forEach(function(q){h+='<td style="background:#fff;padding:10px 12px;vertical-align:top;border:1px solid #e0e0e0;"><div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#666;margin-bottom:5px;">Outcomes I Envision</div><div style="font-size:12px;color:#333;min-height:40px;">'+(q.outcome?escHtml(q.outcome):'<em style="color:#aaa;">—</em>')+'</div></td>';});
+  h+='</tr><tr>';
+  quarters.forEach(function(q){h+='<td style="background:#f9f9f9;padding:8px 12px;border:1px solid #e0e0e0;"><div style="font-size:10px;color:#666;margin-bottom:2px;"><strong>Status:</strong> '+escHtml(q.status||'—')+'</div><div style="font-size:10px;color:#666;"><strong>Owner:</strong> '+escHtml(q.owner)+'</div></td>';});
+  h+='</tr></table>'; return h;
 }
 
 function downloadPrintVersion() {
-  var name          = getFieldVal('empName') || 'IDP';
-  var mgr           = getFieldVal('mgrName');
-  var role          = getFieldVal('currentRole');
-  var date          = getFieldVal('planDate');
-  var timeInRole    = getFieldVal('timeInRole');
-  var timeAtCompany = getFieldVal('timeAtCompany');
-
-  var win = window.open('', '_blank');
-  if (!win) { alert('Please allow pop-ups to download the print version.'); return; }
-
-  function section(title, content) {
-    if (!content) return '';
-    return '<h2>'+escHtml(title)+'</h2><p>'+escHtml(content).replace(/\n/g,'<br>')+'</p>';
-  }
-
-  var meta = '';
-  if (name)          meta += '<strong>Employee:</strong> '+escHtml(name)+'<br>';
-  if (mgr)           meta += '<strong>Manager:</strong> '  +escHtml(mgr)+'<br>';
-  if (role)          meta += '<strong>Role:</strong> '     +escHtml(role)+'<br>';
-  if (timeInRole)    meta += '<strong>Time in Role:</strong> '+escHtml(timeInRole)+' yrs<br>';
-  if (timeAtCompany) meta += '<strong>Time at Company:</strong> '+escHtml(timeAtCompany)+' yrs<br>';
-  if (date)          meta += '<strong>Date:</strong> '     +escHtml(date)+'<br>';
-
-  var body = '';
-  body += section('1. Career Goals',           getFieldVal('card1'));
-  body += section('2. What I Love',             getFieldVal('card2'));
-  body += section('3. Current Learning Goals',  getFieldVal('card3'));
-  body += section('4. Skills to Develop',       getFieldVal('card4'));
-  body += section('5. Experiences to Gain',     getFieldVal('card5'));
-  body += section('6. Support From My Manager', getFieldVal('card6'));
-  body += buildRoadmapHTML();
-  body += section('8. Wins & Progress Log',     getFieldVal('card8'));
-  body += section('9. Future Opportunities',    getFieldVal('card9'));
-
-  win.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'+escHtml(name)+' — 360 IDP</title>' +
-    '<style>' +
-    'body{font-family:Arial,sans-serif;max-width:900px;margin:40px auto;padding:0 24px;color:#222;line-height:1.6;}' +
-    'h1{font-size:22px;color:#333;margin-bottom:4px;}' +
-    '.meta{font-size:13px;color:#555;margin-bottom:24px;padding:12px 16px;background:#f5f5f5;border-radius:6px;border-left:4px solid #7B68C8;}' +
-    'h2{font-size:14px;font-weight:700;color:#7B68C8;border-bottom:1px solid #e0e0e0;padding-bottom:4px;margin-top:28px;text-transform:uppercase;letter-spacing:0.5px;}' +
-    'p{font-size:13px;margin:8px 0 0;white-space:pre-wrap;}' +
-    '@media print{body{margin:20px;} h2{color:#333;}}' +
-    '</style></head><body>' +
-    '<h1>360 Individual Development Plan</h1>' +
-    (meta ? '<div class="meta">'+meta+'</div>' : '') +
-    body +
-    '</body></html>');
+  var name=getFieldVal('empName')||'IDP',mgr=getFieldVal('mgrName'),role=getFieldVal('currentRole'),
+      date=getFieldVal('planDate'),tir=getFieldVal('timeInRole'),tac=getFieldVal('timeAtCompany');
+  var win=window.open('','_blank');
+  if(!win){alert('Please allow pop-ups to download the print version.');return;}
+  function section(title,content){if(!content)return '';return '<h2>'+escHtml(title)+'</h2><p>'+escHtml(content).replace(/\n/g,'<br>')+'</p>';}
+  var meta='';
+  if(name) meta+='<strong>Employee:</strong> '+escHtml(name)+'<br>';
+  if(mgr)  meta+='<strong>Manager:</strong> '+escHtml(mgr)+'<br>';
+  if(role) meta+='<strong>Role:</strong> '+escHtml(role)+'<br>';
+  if(tir)  meta+='<strong>Time in Role:</strong> '+escHtml(tir)+' yrs<br>';
+  if(tac)  meta+='<strong>Time at Company:</strong> '+escHtml(tac)+' yrs<br>';
+  if(date) meta+='<strong>Date:</strong> '+escHtml(date)+'<br>';
+  var body=section('1. Career Goals',getFieldVal('card1'))+section('2. What I Love',getFieldVal('card2'))+
+    section('3. Current Learning Goals',getFieldVal('card3'))+section('4. Skills to Develop',getFieldVal('card4'))+
+    section('5. Experiences to Gain',getFieldVal('card5'))+section('6. Support From My Manager',getFieldVal('card6'))+
+    buildRoadmapHTML()+section('8. Wins & Progress Log',getFieldVal('card8'))+section('9. Future Opportunities',getFieldVal('card9'));
+  win.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'+escHtml(name)+' — 360 IDP</title>'+
+    '<style>body{font-family:Arial,sans-serif;max-width:900px;margin:40px auto;padding:0 24px;color:#222;line-height:1.6;}'+
+    'h1{font-size:22px;color:#333;margin-bottom:4px;}.meta{font-size:13px;color:#555;margin-bottom:24px;padding:12px 16px;background:#f5f5f5;border-radius:6px;border-left:4px solid #7B68C8;}'+
+    'h2{font-size:14px;font-weight:700;color:#7B68C8;border-bottom:1px solid #e0e0e0;padding-bottom:4px;margin-top:28px;text-transform:uppercase;letter-spacing:0.5px;}'+
+    'p{font-size:13px;margin:8px 0 0;white-space:pre-wrap;}@media print{body{margin:20px;}h2{color:#333;}}</style></head><body>'+
+    '<h1>360 Individual Development Plan</h1>'+(meta?'<div class="meta">'+meta+'</div>':'')+body+'</body></html>');
   win.document.close();
-  setTimeout(function() { win.print(); }, 500);
+  setTimeout(function(){win.print();},500);
 }
 
-
 function togglePreview() {
-  var pane    = document.getElementById('emailPreview');
-  var icon    = document.getElementById('previewToggleIcon');
-  var content = document.getElementById('emailPreviewContent');
-  if (pane.style.display === 'none') {
-    pane.style.display = 'block';
-    icon.textContent = '▼';
-    content.innerText = buildPlanText();
-  } else {
-    pane.style.display = 'none';
-    icon.textContent = '▶';
-  }
+  var pane=document.getElementById('emailPreview'),icon=document.getElementById('previewToggleIcon'),
+      content=document.getElementById('emailPreviewContent');
+  if(pane.style.display==='none'){pane.style.display='block';icon.textContent='▼';content.innerText=buildPlanText();}
+  else{pane.style.display='none';icon.textContent='▶';}
 }
 
 function sendEmail() {
-  var to      = (document.getElementById('shareTo')      || {}).value || '';
-  var cc      = (document.getElementById('shareCc')      || {}).value || '';
-  var subject = (document.getElementById('shareSubject') || {}).value || '360 IDP';
-  var message = (document.getElementById('shareMessage') || {}).value || '';
-
-  // Build a body that stays safely under mailto URL limits (~2000 chars encoded)
-  var name     = getFieldVal('empName');
-  var role     = getFieldVal('currentRole');
-  var date     = getFieldVal('planDate');
-  var goals    = getFieldVal('card1');
-  var learning = getFieldVal('card3');
-  var skills   = getFieldVal('card4');
-
-  function cap(s, n) { s = s || ''; return s.length > n ? s.substring(0, n) + '...' : s; }
-
-  var body = '';
-  if (message) body += message + '\n\n';
-  body += '360 INDIVIDUAL DEVELOPMENT PLAN\n================================\n';
-  if (name)  body += 'Employee: ' + name + '\n';
-  if (role)  body += 'Role: '     + role + '\n';
-  if (date)  body += 'Date: '     + date + '\n';
-  body += '\n';
-  if (goals)    body += '1. Career Goals\n'        + cap(goals, 250)    + '\n\n';
-  if (learning) body += '3. Learning Goals\n'      + cap(learning, 250) + '\n\n';
-  if (skills)   body += '4. Skills to Develop\n'   + cap(skills, 250)   + '\n\n';
-
-  // Quarterly outcomes
-  var table = document.querySelector('#planOutput .roadmap-table');
-  if (table) {
-    var qTAs    = table.querySelectorAll('.roadmap-outcomes-row td textarea');
-    var qBadges = table.querySelectorAll('.roadmap-qlabel-row .q-badge');
-    var outcomeLines = '';
-    qTAs.forEach(function(ta, i) {
-      if (ta.value.trim()) {
-        var lbl = qBadges[i] ? qBadges[i].textContent.trim() : ('Q'+(i+1));
-        outcomeLines += lbl + ': ' + cap(ta.value.trim(), 120) + '\n';
-      }
-    });
-    if (outcomeLines) body += '7. Quarterly Outcomes\n' + outcomeLines + '\n';
+  var to=(document.getElementById('shareTo')||{}).value||'';
+  var cc=(document.getElementById('shareCc')||{}).value||'';
+  var subject=(document.getElementById('shareSubject')||{}).value||'360 IDP';
+  var message=(document.getElementById('shareMessage')||{}).value||'';
+  var name=getFieldVal('empName'),role=getFieldVal('currentRole'),date=getFieldVal('planDate'),
+      goals=getFieldVal('card1'),learning=getFieldVal('card3'),skills=getFieldVal('card4');
+  function cap(s,n){s=s||'';return s.length>n?s.substring(0,n)+'...':s;}
+  var body='';
+  if(message) body+=message+'\n\n';
+  body+='360 INDIVIDUAL DEVELOPMENT PLAN\n================================\n';
+  if(name) body+='Employee: '+name+'\n';
+  if(role) body+='Role: '+role+'\n';
+  if(date) body+='Date: '+date+'\n';
+  body+='\n';
+  if(goals)    body+='1. Career Goals\n'+cap(goals,250)+'\n\n';
+  if(learning) body+='3. Learning Goals\n'+cap(learning,250)+'\n\n';
+  if(skills)   body+='4. Skills to Develop\n'+cap(skills,250)+'\n\n';
+  var table=document.querySelector('#planOutput .roadmap-table');
+  if(table){
+    var qTAs=table.querySelectorAll('.roadmap-outcomes-row td textarea');
+    var qBadges=table.querySelectorAll('.roadmap-qlabel-row .q-badge');
+    var ol='';
+    qTAs.forEach(function(ta,i){if(ta.value.trim()){var lbl=qBadges[i]?qBadges[i].textContent.trim():('Q'+(i+1));ol+=lbl+': '+cap(ta.value.trim(),120)+'\n';}});
+    if(ol) body+='7. Quarterly Outcomes\n'+ol+'\n';
   }
-
-  body += 'Full plan: ' + window.location.href;
-
-  var mailto = 'mailto:' + encodeURIComponent(to) +
-    '?subject=' + encodeURIComponent(subject) +
-    (cc ? '&cc=' + encodeURIComponent(cc) : '') +
-    '&body=' + encodeURIComponent(body);
-
-  // Use a temporary <a> click — most reliable mailto trigger across browsers
-  // including SSO environments where window.open is blocked
-  var a = document.createElement('a');
-  a.href = mailto;
-  a.style.display = 'none';
-  document.body.appendChild(a);
-  a.click();
-  setTimeout(function() { document.body.removeChild(a); }, 200);
+  body+='Full plan: '+window.location.href;
+  var mailto='mailto:'+encodeURIComponent(to)+'?subject='+encodeURIComponent(subject)+
+    (cc?'&cc='+encodeURIComponent(cc):'')+
+    '&body='+encodeURIComponent(body);
+  var a=document.createElement('a');
+  a.href=mailto; a.style.display='none';
+  document.body.appendChild(a); a.click();
+  setTimeout(function(){document.body.removeChild(a);},200);
 }
 
 function copyPlanToClipboard() {
-  var text = buildPlanText();
-  var btn  = document.getElementById('copyBtn');
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(text).then(function() {
-      btn.textContent = '✓ Copied!';
-      setTimeout(function() { btn.innerHTML = '📋 Copy Plan Text'; }, 2000);
-    }).catch(function() { fallbackCopy(text, btn); });
-  } else {
-    fallbackCopy(text, btn);
-  }
+  var text=buildPlanText(),btn=document.getElementById('copyBtn');
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){
+      btn.textContent='✓ Copied!';
+      setTimeout(function(){btn.innerHTML='📋 Copy Plan Text';},2000);
+    }).catch(function(){fallbackCopy(text,btn);});
+  } else { fallbackCopy(text,btn); }
 }
-
-function fallbackCopy(text, btn) {
-  var ta = document.createElement('textarea');
-  ta.value = text;
-  ta.style.position = 'fixed'; ta.style.opacity = '0';
-  document.body.appendChild(ta);
-  ta.select();
-  try {
-    document.execCommand('copy');
-    if (btn) { btn.textContent = '✓ Copied!'; setTimeout(function() { btn.innerHTML = '📋 Copy Plan Text'; }, 2000); }
-  } catch(e) {
-    if (btn) btn.textContent = 'Could not copy';
-  }
+function fallbackCopy(text,btn){
+  var ta=document.createElement('textarea');
+  ta.value=text;ta.style.position='fixed';ta.style.opacity='0';
+  document.body.appendChild(ta);ta.select();
+  try{document.execCommand('copy');if(btn){btn.textContent='✓ Copied!';setTimeout(function(){btn.innerHTML='📋 Copy Plan Text';},2000);}}
+  catch(e){if(btn)btn.textContent='Could not copy';}
   document.body.removeChild(ta);
 }
 
+// ══════════════════════════════════════════════════════════
+//  MODAL HELPERS
+// ══════════════════════════════════════════════════════════
+function openModal(id){var el=document.getElementById(id);if(el){el.classList.add('open');document.body.style.overflow='hidden';}}
+function openModalEl(id){openModal(id);}
+function closeModal(id){var el=document.getElementById(id);if(el){el.classList.remove('open');document.body.style.overflow='';}}
+function openResetModal(){openModal('resetModal');}
+document.addEventListener('click',function(e){['shareModal','resetModal','versionModal'].forEach(function(id){if(e.target.id===id)closeModal(id);});});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')['shareModal','resetModal','versionModal'].forEach(closeModal);});
 
-function openModal(id) {
-  var el = document.getElementById(id);
-  if (el) { el.classList.add('open'); document.body.style.overflow = 'hidden'; }
-}
-function openModalEl(id) { openModal(id); }
-function closeModal(id) {
-  var el = document.getElementById(id);
-  if (el) { el.classList.remove('open'); document.body.style.overflow = ''; }
-}
-function openResetModal() { openModal('resetModal'); }
-
-document.addEventListener('click', function(e) {
-  ['shareModal','resetModal','versionModal'].forEach(function(id) {
-    if (e.target.id === id) closeModal(id);
+// ══════════════════════════════════════════════════════════
+//  UTILITIES
+// ══════════════════════════════════════════════════════════
+function wireOwnerRadios() {
+  document.querySelectorAll('.owner-radio').forEach(function(radio){
+    radio.addEventListener('change',function(){
+      if(!this.checked) return;
+      var qi=this.getAttribute('data-quarter'),opt=this.getAttribute('data-option');
+      var stored={};
+      try{stored=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}');}catch(e){}
+      stored['roadmap_owner_q'+qi]=opt;
+      try{localStorage.setItem(STORAGE_KEY,JSON.stringify(stored));}catch(e){}
+      showToast('✓ Saved');
+    });
   });
-});
-
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') {
-    ['shareModal','resetModal','versionModal'].forEach(closeModal);
-  }
-});
-
-// ══════════════════════════════════
-// AI PLAN GENERATION
-// ══════════════════════════════════
-function getFieldVal(key) {
-  var el = document.querySelector('[data-save="' + key + '"]');
-  return el ? el.value.trim() : '';
 }
 
+function escHtml(str){
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function hexToRgba(hex, alpha) {
+  var r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+  return 'rgba('+r+','+g+','+b+','+alpha+')';
+}
+
+// ══════════════════════════════════════════════════════════
+//  HIDDEN CLASSIC-MODE DATA-SAVE FIELDS
+//  (Always in DOM so getAllFields() works regardless of mode)
+// ══════════════════════════════════════════════════════════
+function ensureHiddenFields() {
+  var keys = ['empName','mgrName','planDate','currentRole','timeInRole','timeAtCompany',
+              'card1','card2','card3','card4','card5','card6','card7','card8','card9'];
+  var container = document.getElementById('hiddenFields');
+  if (!container) {
+    container = document.createElement('div');
+    container.id = 'hiddenFields';
+    container.style.display = 'none';
+    document.body.appendChild(container);
+  }
+  keys.forEach(function(k){
+    if (!document.querySelector('[data-save="'+k+'"]')) {
+      var ta = document.createElement('textarea');
+      ta.setAttribute('data-save',k);
+      ta.style.display = 'none';
+      container.appendChild(ta);
+    }
+  });
+}
+
+// ══════════════════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', function(){
+  // Ensure hidden fields exist for data-save sync
+  ensureHiddenFields();
+
+  // Load saved data
+  loadSaved();
+
+  // Auto-fill today's date
+  var dateEl = document.querySelector('[data-save="planDate"]');
+  if (dateEl && !dateEl.value) {
+    var today = new Date();
+    dateEl.value = (today.getMonth()+1).toString().padStart(2,'0')+'/'+
+                   today.getDate().toString().padStart(2,'0')+'/'+
+                   today.getFullYear();
+    saveAll();
+  }
+
+  // Set initial mode display
+  if (ascentMode) {
+    document.getElementById('ascentMode').style.display  = 'block';
+    document.getElementById('classicMode').style.display = 'none';
+    buildWall();
+    renderCard();
+  } else {
+    document.getElementById('ascentMode').style.display  = 'none';
+    document.getElementById('classicMode').style.display = 'block';
+    buildClassicMode();
+  }
+
+  refreshVersionDropdown();
+});
+
+// ══════════════════════════════════════════════════════════
+//  AI ROADMAP GENERATOR  (full engine)
+// ══════════════════════════════════════════════════════════
 function generateAIPlan() {
   var goals      = getFieldVal('card1');
   var loves      = getFieldVal('card2');
@@ -3123,27 +2283,7 @@ function wireOwnerRadios() {
   });
 }
 
-function escHtml(str) {
-  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
 
-
-// ══════════════════════════════════
-// INIT
-// ══════════════════════════════════
-document.addEventListener('DOMContentLoaded', function() {
-  loadSaved();
-  // Auto-fill today's date if empty
-  var dateEl = document.getElementById('planDate');
-  if (dateEl && !dateEl.value) {
-    var today = new Date();
-    dateEl.value = (today.getMonth()+1).toString().padStart(2,'0') + '/' +
-                   today.getDate().toString().padStart(2,'0') + '/' +
-                   today.getFullYear();
-    saveAll();
-  }
-});
 </script>
-
 </body>
 </html>
