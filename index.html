@@ -98,8 +98,15 @@ body{font-family:var(--font-body);background:var(--dark);color:var(--chalk);min-
   flex-shrink:0;
 }
 .wall-img {
+  /* Hidden probe — used only to detect load success/failure */
+  display:none !important;
+}
+.wall-bg-img {
   position:absolute;inset:0;width:100%;height:100%;
-  object-fit:cover;object-position:center 30%;
+  background-size:cover;background-position:center 30%;
+  background-repeat:no-repeat;
+  /* Fallback gradient while image loads */
+  background-color:#2a2d32;
 }
 .wall-dim{
   position:absolute;inset:0;
@@ -889,11 +896,10 @@ body{font-family:var(--font-body);background:var(--dark);color:var(--chalk);min-
 
   <!-- WALL STRIP -->
   <div class="wall-strip" id="wallStrip">
-    <img class="wall-img" id="wallImg"
-      src="GPS_Ascent_Journeys.jpeg"
-      alt="Climbing wall — GPS Ascent"
-      onerror="tryNextImgSrc(this)">
-    <div id="wallFallback" style="display:none;position:absolute;inset:0;background:linear-gradient(135deg,#1C1F23 0%,#E8541A 20%,#F5F2EB 45%,#F0B429 65%,#2E9FAB 100%);"></div>
+    <!-- Background image div — set by JS, no alt text issues -->
+    <div class="wall-bg-img" id="wallBgImg"></div>
+    <!-- Hidden probe image — only used to find a working URL -->
+    <img id="wallImgProbe" style="display:none" alt="" src="" onerror="tryNextImgSrc(this)" onload="applyWallImage(this.src)">
     <div class="wall-dim"></div>
     <div class="wall-dim-top"></div>
 
@@ -1357,6 +1363,7 @@ function toggleMode() {
     // then injectPlanHTML fills it
     buildWall();
     renderCard();
+    initWallImage();
   }
   saveAll();
 }
@@ -2217,31 +2224,50 @@ function ensureHiddenFields() {
 // ══════════════════════════════════════════════════════════
 
 // ── Image path fallback — tries multiple paths for GitHub Pages compatibility ──
-var _imgPaths = null;
 var _imgIdx = 0;
+var _imgPaths = null;
+
 function getImgPaths() {
   if (_imgPaths) return _imgPaths;
-  // Build paths relative to wherever this page is served from
   var base = window.location.href.replace(/\/[^/]*$/, '/');
+  // Try every plausible variant of the filename
   _imgPaths = [
-    'GPS_Ascent_Journeys.jpeg',
     base + 'GPS_Ascent_Journeys.jpeg',
-    './GPS_Ascent_Journeys.jpeg',
-    'GPS_Ascent_Journeys.jpg',
+    base + 'GPS%20Ascent%20Journeys.jpeg',
+    base + 'GPS Ascent Journeys.jpeg',
     base + 'GPS_Ascent_Journeys.jpg',
+    base + 'GPS%20Ascent%20Journeys.jpg',
+    base + 'GPS Ascent Journeys.jpg',
+    'GPS_Ascent_Journeys.jpeg',
+    'GPS%20Ascent%20Journeys.jpeg',
   ];
   return _imgPaths;
 }
+
+function applyWallImage(src) {
+  // Called when probe image loads successfully — set as CSS background
+  var bg = document.getElementById('wallBgImg');
+  if (bg) bg.style.backgroundImage = 'url("' + src.replace(/"/g, '%22') + '")';
+}
+
 function tryNextImgSrc(el) {
   var paths = getImgPaths();
   _imgIdx++;
   if (_imgIdx < paths.length) {
     el.src = paths[_imgIdx];
   } else {
-    el.style.display = 'none';
-    var fb = document.getElementById('wallFallback');
-    if (fb) fb.style.display = 'block';
+    // All paths failed — show gradient fallback (already the background-color)
+    var bg = document.getElementById('wallBgImg');
+    if (bg) bg.style.backgroundImage =
+      'linear-gradient(135deg, #1C1F23 0%, #E8541A 20%, #F5F2EB 45%, #F0B429 65%, #2E9FAB 100%)';
   }
+}
+
+function initWallImage() {
+  // Start the probe with the first path
+  var probe = document.getElementById('wallImgProbe');
+  var paths = getImgPaths();
+  if (probe && paths.length) probe.src = paths[0];
 }
 document.addEventListener('DOMContentLoaded', function(){
   // Ensure hidden fields exist for data-save sync
@@ -2266,6 +2292,7 @@ document.addEventListener('DOMContentLoaded', function(){
     document.getElementById('classicMode').style.display = 'none';
     buildWall();
     renderCard();
+    initWallImage();
   } else {
     document.getElementById('ascentMode').style.display  = 'none';
     document.getElementById('classicMode').style.display = 'block';
