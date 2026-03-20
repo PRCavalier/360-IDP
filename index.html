@@ -1099,6 +1099,7 @@ var HOLDS = [
 var ascentMode = true;
 var currentHold = 0;
 var summitReached = false;
+var _planHTML = ''; // single source of truth for generated roadmap HTML
 
 // ── FIELD SYNC: all data-save elements are in Classic mode DOM
 // Ascent mode reads/writes them directly via getFieldVal / setFieldVal
@@ -1144,12 +1145,7 @@ function applyFields(data) {
 function saveAll() {
   try {
     var data = getAllFields();
-    var planHTML = document.getElementById('planOutput') ?
-      document.getElementById('planOutput').innerHTML : '';
-    if (planHTML && planHTML.indexOf('empty-state')===-1 &&
-        planHTML.indexOf('type="checkbox"')===-1) {
-      data._generatedPlan = planHTML;
-    }
+    if (_planHTML) data._generatedPlan = _planHTML;
     data._ascentHold = currentHold;
     data._ascentMode = ascentMode ? '1' : '0';
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
@@ -1176,22 +1172,21 @@ function loadSaved() {
       document.getElementById('modeSw').classList.add('off');
     }
     if (data._generatedPlan) {
-      var po = document.getElementById('planOutput');
-      if (po) {
-        if (data._generatedPlan.indexOf('type="checkbox"')!==-1 ||
-            data._generatedPlan.indexOf('owner-chk')!==-1) {
-          delete data._generatedPlan;
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-          setTimeout(generateAIPlan, 200);
-        } else {
-          po.innerHTML = data._generatedPlan;
-          wireOwnerRadios();
-        }
+      if (data._generatedPlan.indexOf('type="checkbox"')!==-1 ||
+          data._generatedPlan.indexOf('owner-chk')!==-1) {
+        delete data._generatedPlan;
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        setTimeout(generateAIPlan, 300);
+      } else {
+        _planHTML = data._generatedPlan;
+        // Will be injected into DOM by injectPlanHTML() once the container exists
       }
     }
   } catch(e){}
   updateProgress();
   refreshVersionDropdown();
+  // Inject plan if one was loaded and the container already exists
+  if (_planHTML) setTimeout(injectPlanHTML, 50);
 }
 var _autoSaveTimer = null;
 document.addEventListener('input', function(){
@@ -1248,16 +1243,17 @@ function loadVersion(id) {
   if (!ver) return;
   applyFields(ver.data);
   if (ver.data._generatedPlan) {
-    var po = document.getElementById('planOutput');
-    if (po) {
-      if (ver.data._generatedPlan.indexOf('type="checkbox"')!==-1||
-          ver.data._generatedPlan.indexOf('owner-chk')!==-1) {
-        setTimeout(generateAIPlan,100);
-      } else {
-        po.innerHTML = ver.data._generatedPlan;
-        wireOwnerRadios();
-      }
+    if (ver.data._generatedPlan.indexOf('type="checkbox"')!==-1||
+        ver.data._generatedPlan.indexOf('owner-chk')!==-1) {
+      setTimeout(generateAIPlan,100);
+    } else {
+      _planHTML = ver.data._generatedPlan;
+      setTimeout(injectPlanHTML, 0);
     }
+  } else {
+    _planHTML = '';
+    var po = document.getElementById('planOutput');
+    if (po) po.innerHTML = '<div class="empty-state" style="padding:20px;text-align:center;color:var(--muted);">No generated plan in this version.</div>';
   }
   saveAll(); showToast('✓ Loaded: '+ver.name);
   document.getElementById('versionSelect').value='current';
@@ -1315,6 +1311,34 @@ function resetSection(section) {
   showToast('↺ Fields cleared');
 }
 
+
+// Injects the current _planHTML into whatever #planOutput exists in the DOM right now
+function injectPlanHTML() {
+  var po = document.getElementById('planOutput');
+  if (!po || !_planHTML) return;
+  po.innerHTML = _planHTML;
+  wireOwnerRadios();
+  // Also wire focus-textarea saves
+  po.querySelectorAll('.focus-textarea[data-save]').forEach(function(ta){
+    ta.addEventListener('input', function(){
+      var stored={};
+      try{stored=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}');}catch(e){}
+      stored[ta.getAttribute('data-save')]=ta.value;
+      try{localStorage.setItem(STORAGE_KEY,JSON.stringify(stored));}catch(e){}
+      // Update _planHTML to reflect edits
+      _planHTML = document.getElementById('planOutput').innerHTML;
+    });
+  });
+  po.querySelectorAll('.outcome-textarea[data-save]').forEach(function(ta){
+    ta.addEventListener('input', function(){
+      var stored={};
+      try{stored=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}');}catch(e){}
+      stored[ta.getAttribute('data-save')]=ta.value;
+      try{localStorage.setItem(STORAGE_KEY,JSON.stringify(stored));}catch(e){}
+      _planHTML = document.getElementById('planOutput').innerHTML;
+    });
+  });
+}
 // ══════════════════════════════════════════════════════════
 //  MODE TOGGLE
 // ══════════════════════════════════════════════════════════
@@ -1326,15 +1350,13 @@ function toggleMode() {
   document.getElementById('classicMode').style.display = ascentMode ? 'none'  : 'block';
   if (!ascentMode) {
     buildClassicMode();
-    // Restore roadmap if saved
-    var stored = {};
-    try { stored = JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}'); } catch(e){}
-    if (stored._generatedPlan && document.getElementById('planOutput')) {
-      if (stored._generatedPlan.indexOf('type="checkbox"') === -1) {
-        document.getElementById('planOutput').innerHTML = stored._generatedPlan;
-        wireOwnerRadios();
-      }
-    }
+    // Inject plan into the freshly-rendered Classic planOutput container
+    setTimeout(injectPlanHTML, 0);
+  } else {
+    // Ascent: renderCard will call renderRoadmapArea which creates planOutput,
+    // then injectPlanHTML fills it
+    buildWall();
+    renderCard();
   }
   saveAll();
 }
@@ -1499,9 +1521,12 @@ function renderCard() {
   // Wire detail inputs
   wireDetailInputs();
 
-  // Wire roadmap if visible
-  if (s.isRoadmap && document.getElementById('planOutput')) {
-    wireOwnerRadios();
+  // Inject saved plan into the freshly-rendered planOutput container
+  if (s.isRoadmap) {
+    setTimeout(function(){
+      if (_planHTML) injectPlanHTML();
+      else wireOwnerRadios();
+    }, 0);
   }
 }
 
@@ -1527,19 +1552,18 @@ function wireDetailInputs() {
 }
 
 function renderRoadmapArea() {
-  var po = document.getElementById('planOutput');
-  var hasGenerated = po && po.innerHTML && po.innerHTML.indexOf('roadmap-table')!==-1;
+  // Always render a fresh empty shell — injectPlanHTML() fills it after the card is in DOM
   return '<div id="planOutput">'+
-    (hasGenerated ? po.innerHTML :
-    '<table class="roadmap-table"><tr class="rm-thead"><td colspan="4">'+
-    '<div class="rm-thead-inner">'+
-    '<span class="rm-phase-txt">✦ 4 Phases of Development</span>'+
-    '<div class="rm-head-btns">'+
-    '<button class="rm-gen-btn" id="generateBtn" onclick="generateAIPlan()">✦ Generate My Roadmap</button>'+
-    '<button class="rm-redo-btn" onclick="generateAIPlan()" title="Regenerate" aria-label="Regenerate">↻</button>'+
+    '<table class="roadmap-table"><tr class="roadmap-header-row"><td colspan="4">'+
+    '<div class="roadmap-header-inner">'+
+    '<span class="roadmap-phase-text">✦ 4 Phases of Development</span>'+
+    '<div class="roadmap-header-btns">'+
+    '<button class="roadmap-gen-btn" id="generateBtn" onclick="generateAIPlan()">✦ Generate My Roadmap</button>'+
+    '<button class="roadmap-redo-btn" onclick="generateAIPlan()" title="Regenerate" aria-label="Regenerate">↻</button>'+
     '</div></div></td></tr>'+
     '<tr><td colspan="4" style="padding:28px 20px;text-align:center;color:rgba(255,255,255,0.3);font-size:13px;font-style:italic;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);">'+
-    'Complete sections 1–6 then click ✦ Generate My Roadmap</td></tr></table>')+
+    (_planHTML ? 'Loading...' : 'Complete sections 1–6 then click ✦ Generate My Roadmap')+
+    '</td></tr></table>'+
   '</div>';
 }
 
@@ -1841,22 +1865,19 @@ function buildClassicMode() {
           '<span class="cl-ltag cl-ltag-formal">Formal Training</span>'+
           '<span class="cl-ltag cl-ltag-mentor">Mentoring</span>'+
         '</div>'+
-        // Roadmap table shell with generate button in header
-        '<table class="roadmap-table">'+
-          '<tr class="roadmap-header-row"><td colspan="4">'+
-            '<div class="roadmap-header-inner">'+
-              '<span class="roadmap-phase-text">✦ 4 Phases of Development</span>'+
-              '<div class="roadmap-header-btns">'+
-                '<button class="roadmap-gen-btn" id="generateBtn" onclick="generateAIPlan()">✦ Generate My Roadmap</button>'+
-                '<button class="roadmap-redo-btn" onclick="generateAIPlan()" title="Regenerate">↻</button>'+
-              '</div>'+
-            '</div>'+
-          '</td></tr>'+
-        '</table>'+
         '<div id="planOutput">'+
-          '<div class="empty-state">'+
-            '<div style="font-size:28px;margin-bottom:8px;opacity:0.4;">📋</div>'+
-            'Complete sections 1–6 above, then click <strong>✦ Generate My Roadmap</strong> to build your personalized 12-month plan.'+
+          '<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#2D2D2D;border-radius:8px 8px 0 0;">'+
+            '<span style="font-family:var(--font-display);font-size:12px;font-weight:600;letter-spacing:0.08em;color:rgba(255,255,255,0.78);text-transform:uppercase;">✦ 4 Phases of Development</span>'+
+            '<div style="display:flex;gap:6px;align-items:center;">'+
+              '<button class="roadmap-gen-btn" id="generateBtn" onclick="generateAIPlan()">✦ Generate My Roadmap</button>'+
+              '<button class="roadmap-redo-btn" onclick="generateAIPlan()" title="Regenerate">↻</button>'+
+            '</div>'+
+          '</div>'+
+          '<div id="planOutputInner" style="background:#fff;">'+
+            '<div class="empty-state" style="background:#F7F8FA;">'+
+              '<div style="font-size:28px;margin-bottom:8px;opacity:0.4;">📋</div>'+
+              'Complete sections 1–6 above, then click <strong>✦ Generate My Roadmap</strong> to build your personalized 12-month plan.'+
+            '</div>'+
           '</div>'+
         '</div>'+
       '</div>';
@@ -2196,19 +2217,26 @@ function ensureHiddenFields() {
 // ══════════════════════════════════════════════════════════
 
 // ── Image path fallback — tries multiple paths for GitHub Pages compatibility ──
-var _imgPaths = [
-  'GPS_Ascent_Journeys.jpeg',
-  './GPS_Ascent_Journeys.jpeg',
-  '/360-IDP/GPS_Ascent_Journeys.jpeg',
-  'GPS_Ascent_Journeys.jpg',
-  './GPS_Ascent_Journeys.jpg',
-  '/360-IDP/GPS_Ascent_Journeys.jpg',
-];
+var _imgPaths = null;
 var _imgIdx = 0;
+function getImgPaths() {
+  if (_imgPaths) return _imgPaths;
+  // Build paths relative to wherever this page is served from
+  var base = window.location.href.replace(/\/[^/]*$/, '/');
+  _imgPaths = [
+    'GPS_Ascent_Journeys.jpeg',
+    base + 'GPS_Ascent_Journeys.jpeg',
+    './GPS_Ascent_Journeys.jpeg',
+    'GPS_Ascent_Journeys.jpg',
+    base + 'GPS_Ascent_Journeys.jpg',
+  ];
+  return _imgPaths;
+}
 function tryNextImgSrc(el) {
+  var paths = getImgPaths();
   _imgIdx++;
-  if (_imgIdx < _imgPaths.length) {
-    el.src = _imgPaths[_imgIdx];
+  if (_imgIdx < paths.length) {
+    el.src = paths[_imgIdx];
   } else {
     el.style.display = 'none';
     var fb = document.getElementById('wallFallback');
@@ -2689,10 +2717,9 @@ function generateAIPlan() {
 
   html += '</table>';
 
-  document.getElementById('planOutput').innerHTML =
-    '<div class="ai-plan-output" style="margin-top:16px;border:none;border-radius:10px;overflow:hidden;">' +
-      html +
-    '</div>';
+  _planHTML = '<div class="ai-plan-output" style="margin-top:16px;border:none;border-radius:10px;overflow:hidden;">' +
+      html + '</div>';
+  injectPlanHTML();
 
   // Wire owner radio save — mutual exclusivity handled natively by radio name groups
   wireOwnerRadios();
@@ -2702,6 +2729,9 @@ function generateAIPlan() {
   // Re-find generateBtn — it was just re-rendered inside planOutput
   var cardBtn = document.getElementById('generateBtn');
   if (cardBtn) { cardBtn.disabled = false; cardBtn.innerHTML = '&#10022; Generate My Roadmap'; }
+  // Wire textarea edits to keep _planHTML in sync
+  injectPlanHTML();
+  saveAll();
 }
 
 
