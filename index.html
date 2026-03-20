@@ -355,6 +355,21 @@ body{font-family:var(--font-body);background:var(--dark);color:var(--chalk);min-
 }
 .unlock-btn:hover{background:#d49a1a;}
 .unlock-btn:active{transform:scale(0.98);}
+.summit-actions{
+  display:flex;gap:10px;justify-content:center;
+  margin-top:20px;flex-wrap:wrap;
+}
+.summit-action-btn{
+  background:rgba(255,255,255,0.1);
+  border:1px solid rgba(255,255,255,0.25);
+  border-radius:8px;padding:10px 20px;
+  font-family:var(--font-display);font-size:12px;font-weight:600;
+  letter-spacing:0.08em;text-transform:uppercase;
+  color:var(--chalk);cursor:pointer;
+  transition:background 0.2s,transform 0.1s;
+}
+.summit-action-btn:hover{background:rgba(255,255,255,0.2);transform:translateY(-1px);}
+
 
 /* ═══════════════════════════════════════════════
    ROADMAP SECTION
@@ -406,9 +421,9 @@ body{font-family:var(--font-body);background:var(--dark);color:var(--chalk);min-
   letter-spacing:0.08em;color:rgba(255,255,255,0.75);text-transform:uppercase;
 }
 .rm-head-btns{display:flex;gap:6px;align-items:center;}
-.roadmap-table .ql-row td{
-  padding:10px 14px;border:1px solid rgba(255,255,255,0.07);
-  background:rgba(255,255,255,0.03);
+.roadmap-table .ql-row td,.roadmap-table .roadmap-qlabel-row td{
+  padding:10px 14px;border:1px solid #e0e0e0;border-top:none;
+  background:#fff;font-family:'DM Serif Display',serif;font-size:13px;color:#263238;
 }
 .q-badge{
   display:inline-block;border-radius:12px;padding:2px 10px;
@@ -417,58 +432,75 @@ body{font-family:var(--font-body);background:var(--dark);color:var(--chalk);min-
 }
 .q-phase-lbl{font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:3px;}
 .q-date{font-size:10px;color:rgba(255,255,255,0.28);}
-.roadmap-table .themes-row td{
-  padding:10px 14px;border:1px solid rgba(255,255,255,0.07);
+/* ── Roadmap table rows — forced white so legible in both light + dark modes ── */
+.roadmap-table .roadmap-qlabel-row td{
+  background:#fff;border:1px solid #e0e0e0;border-top:none;
+  padding:10px 14px;font-family:'DM Serif Display',serif;
+  font-size:13px;font-weight:700;color:#263238;
+}
+.roadmap-table .roadmap-qlabel-row td .q-phase{
+  display:block;font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:9px;font-weight:700;letter-spacing:1.5px;
+  text-transform:uppercase;margin-bottom:2px;
+}
+.roadmap-table .themes-row td,.roadmap-table .roadmap-themes-row td{
+  padding:10px 14px;border:1px solid #e0e0e0;border-top:none;
   background:#EAF5FB;vertical-align:top;
 }
-.themes-row .focus-label{
+.themes-row .focus-label,.themes-label{
   font-size:9px;letter-spacing:0.12em;text-transform:uppercase;
-  color:#2E7D9A;margin-bottom:6px;
+  color:#2E7D9A;margin-bottom:6px;display:block;
 }
 .themes-row ul{list-style:none;padding:0;}
-.themes-row li{
-  font-size:11px;color:#1a4a5c;padding:2px 0;line-height:1.5;
-}
-.themes-row li::before{content:'· ';color:var(--teal);}
-.focus-textarea {
+.themes-row li{font-size:11px;color:#1a4a5c;padding:2px 0;line-height:1.5;}
+.themes-row li::before{content:'· ';color:#2E9FAB;}
+.focus-textarea{
   width:100%;border:none;background:transparent;outline:none;
-  font-family:var(--font-classic);font-size:12px;color:#1a4a5c;
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;color:#1a4a5c;
   min-height:72px;resize:none;line-height:1.65;padding:0;
 }
 .focus-textarea::placeholder{color:#7ab0c4;font-style:italic;}
-
-.roadmap-table .prompt-row td{
+.roadmap-table .prompt-row td,.roadmap-table .roadmap-prompt-row td{
   background:#F8FAFB;padding:8px 14px;
   font-size:11px;font-style:italic;color:#5a7280;
-  border:1px solid rgba(255,255,255,0.07);
+  border:1px solid #e0e0e0;border-top:none;
 }
-.roadmap-table .outcomes-row td{
-  padding:8px 10px;border:1px solid rgba(255,255,255,0.07);
+.roadmap-table .outcomes-row td,.roadmap-table .roadmap-outcomes-row td{
+  padding:8px 10px;border:1px solid #e0e0e0;border-top:none;
   background:#fff;vertical-align:top;
 }
-.outcome-ta{
+.outcome-ta,.outcome-textarea{
   width:100%;border:none;background:transparent;outline:none;
-  font-family:var(--font-body);font-size:12px;color:#333;
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;color:#263238;
   min-height:70px;resize:none;line-height:1.6;
 }
-.outcome-ta::placeholder{color:#aaa;font-style:italic;}
-.roadmap-table .status-row td{
-  padding:8px 14px;border:1px solid rgba(255,255,255,0.07);
-  background:rgba(255,255,255,0.03);
+.outcome-ta::placeholder,.outcome-textarea::placeholder{color:#90A4AE;font-style:italic;}
+.roadmap-table .status-row td,.roadmap-table .roadmap-status-row td{
+  padding:8px 14px;border:1px solid #e0e0e0;border-top:none;
+  background:#fff;font-size:11.5px;color:#3C4858;
+}
+.roadmap-table .status-row td .status-label,
+.roadmap-table .roadmap-status-row td .status-label{
+  font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  color:#78909C;margin-bottom:3px;display:block;
 }
 .status-active{
   display:inline-flex;align-items:center;gap:5px;
-  font-size:11px;color:var(--teal);
+  font-size:11px;font-weight:700;color:#00BCD4;
 }
-.status-active::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--teal);}
-.status-planned{font-size:11px;color:rgba(255,255,255,0.3);}
-.roadmap-table .owner-row td{
-  padding:8px 14px;border:1px solid rgba(255,255,255,0.07);
-  background:rgba(255,255,255,0.02);
+.status-active::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:#00BCD4;}
+.status-planned{font-size:11px;font-weight:600;color:#78909C;}
+.status-dot-active{width:7px;height:7px;border-radius:50%;background:#00BCD4;display:inline-block;}
+.status-dot-planned{width:7px;height:7px;border-radius:50%;background:#ECEFF1;display:inline-block;}
+.roadmap-table .owner-row td,.roadmap-table .roadmap-owner-row td{
+  padding:8px 14px;border:1px solid #e0e0e0;border-top:none;
+  background:#F7F8FA;
 }
+.roadmap-table .roadmap-owner-row td:first-child{border-radius:0 0 0 8px;}
+.roadmap-table .roadmap-owner-row td:last-child{border-radius:0 0 8px 0;}
 .owner-label{
   font-size:9px;letter-spacing:0.12em;text-transform:uppercase;
-  color:rgba(255,255,255,0.35);margin-bottom:5px;display:block;
+  color:#78909C;margin-bottom:5px;display:block;
 }
 .owner-radios{display:flex;flex-direction:column;gap:4px;}
 .owner-radio-label{
@@ -848,7 +880,7 @@ body{font-family:var(--font-body);background:var(--dark);color:var(--chalk);min-
     <img class="wall-img" id="wallImg"
       src="GPS_Ascent_Journeys.jpeg"
       alt="Climbing wall — GPS Ascent"
-      onerror="this.style.display='none';document.getElementById('wallFallback').style.display='block'">
+      onerror="tryNextImgSrc(this)">
     <div id="wallFallback" style="display:none;position:absolute;inset:0;background:linear-gradient(135deg,#1C1F23 0%,#E8541A 20%,#F5F2EB 45%,#F0B429 65%,#2E9FAB 100%);"></div>
     <div class="wall-dim"></div>
     <div class="wall-dim-top"></div>
@@ -898,9 +930,10 @@ body{font-family:var(--font-body);background:var(--dark);color:var(--chalk);min-
       </div>
       <div class="modal-preview" id="emailPreview" style="display:none;"><div id="emailPreviewContent"></div></div>
     </div>
-    <div class="modal-footer">
+    <div class="modal-footer" style="flex-wrap:wrap;gap:6px;">
       <button class="publish-btn secondary" onclick="closeModal('shareModal')">Cancel</button>
-      <button class="publish-btn secondary" onclick="copyPlanToClipboard()" id="copyBtn">📋 Copy Plan Text</button>
+      <button class="publish-btn secondary" onclick="copyPlanToClipboard()" id="copyBtn">📋 Copy Text</button>
+      <button class="publish-btn secondary" onclick="downloadPrintVersion();closeModal('shareModal')">🖨 Download PDF</button>
       <button class="publish-btn primary" onclick="sendEmail()">✉ Open in Email App</button>
     </div>
   </div>
@@ -1549,7 +1582,11 @@ function renderSummitReveal() {
       '<div class="stat-item"><div class="stat-num">4</div><div class="stat-lbl">Quarters Mapped</div></div>'+
     '</div>'+
     '<button class="unlock-btn" onclick="unlockRoadmap()">✦ Unlock My Roadmap</button>'+
-    '<div style="margin-top:16px;"><button class="nav-btn-back" style="font-size:11px;" onclick="goToHold(0)">← Return to Base Camp</button></div>'+
+    '<div class="summit-actions">'+
+      '<button class="summit-action-btn" onclick="downloadPrintVersion()">🖨 Print / Save PDF</button>'+
+      '<button class="summit-action-btn" onclick="openShareModal()">✉ Share via Email</button>'+
+    '</div>'+
+    '<div style="margin-top:12px;"><button class="nav-btn-back" style="font-size:11px;" onclick="goToHold(0)">← Return to Base Camp</button></div>'+
   '</div>';
 }
 
@@ -2125,6 +2162,25 @@ function ensureHiddenFields() {
 // ══════════════════════════════════════════════════════════
 //  INIT
 // ══════════════════════════════════════════════════════════
+
+// ── Image path fallback — tries multiple paths for GitHub Pages compatibility ──
+var _imgPaths = [
+  'GPS_Ascent_Journeys.jpeg',
+  './GPS_Ascent_Journeys.jpeg',
+  'GPS_Ascent_Journeys.jpg',
+  './GPS_Ascent_Journeys.jpg',
+];
+var _imgIdx = 0;
+function tryNextImgSrc(el) {
+  _imgIdx++;
+  if (_imgIdx < _imgPaths.length) {
+    el.src = _imgPaths[_imgIdx];
+  } else {
+    el.style.display = 'none';
+    var fb = document.getElementById('wallFallback');
+    if (fb) fb.style.display = 'block';
+  }
+}
 document.addEventListener('DOMContentLoaded', function(){
   // Ensure hidden fields exist for data-save sync
   ensureHiddenFields();
@@ -2540,7 +2596,13 @@ function generateAIPlan() {
   html += '<td colspan="4"><span class="roadmap-outcomes-prompt">Enter the outcomes you envision for each quarter in the space provided.</span></td>';
   html += '</tr>';
 
-  // ── ROW 4: User-editable outcomes textarea ──
+  // ── ROW 4: User-editable outcomes textarea — Q-specific placeholders ──
+  var qPlaceholders = [
+    'Enter Q1 outcomes — what does success look like in Foundation quarter?',
+    'Enter Q2 outcomes — what will you have built or deepened?',
+    'Enter Q3 outcomes — what will you have applied or owned?',
+    'Enter Q4 outcomes — what have you sustained and want to carry forward?'
+  ];
   html += '<tr class="roadmap-outcomes-row">';
   quarters.forEach(function(q, qi) {
     var savedKey = 'roadmap_outcome_q' + qi;
@@ -2548,7 +2610,7 @@ function generateAIPlan() {
     try { savedVal = JSON.parse(localStorage.getItem('360idp_data') || '{}')[savedKey] || ''; } catch(e){}
     html += '<td>';
     html += '<div class="outcome-box">';
-    html += '<textarea class="outcome-textarea" data-save="'+savedKey+'" placeholder="What success looks like this quarter..." rows="3">'+escHtml(savedVal)+'</textarea>';
+    html += '<textarea class="outcome-textarea" data-save="'+savedKey+'" placeholder="'+qPlaceholders[qi]+'" rows="3">'+escHtml(savedVal)+'</textarea>';
     html += '</div>';
     html += '</td>';
   });
