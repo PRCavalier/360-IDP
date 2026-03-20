@@ -357,13 +357,22 @@ body{font-family:var(--font-body);background:var(--dark);color:var(--chalk);min-
 .unlock-btn:active{transform:scale(0.98);}
 .summit-actions{
   display:flex;gap:10px;justify-content:center;
-  margin-top:20px;flex-wrap:wrap;
+  margin-top:24px;flex-wrap:wrap;align-items:center;
 }
+/* unlock-btn inside summit-actions is the primary CTA */
+.summit-actions .unlock-btn{
+  background:var(--yellow);color:var(--dark);border:none;
+  border-radius:10px;padding:12px 28px;
+  font-family:var(--font-display);font-size:14px;font-weight:800;
+  letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;
+  transition:background 0.2s,transform 0.1s;
+}
+.summit-actions .unlock-btn:hover{background:#d49a1a;transform:translateY(-1px);}
 .summit-action-btn{
   background:rgba(255,255,255,0.1);
   border:1px solid rgba(255,255,255,0.25);
-  border-radius:8px;padding:10px 20px;
-  font-family:var(--font-display);font-size:12px;font-weight:600;
+  border-radius:8px;padding:10px 18px;
+  font-family:var(--font-display);font-size:11px;font-weight:600;
   letter-spacing:0.08em;text-transform:uppercase;
   color:var(--chalk);cursor:pointer;
   transition:background 0.2s,transform 0.1s;
@@ -392,15 +401,18 @@ body{font-family:var(--font-body);background:var(--dark);color:var(--chalk);min-
   text-transform:uppercase;letter-spacing:0.04em;color:var(--chalk);
 }
 .rm-btns{display:flex;gap:8px;}
-.rm-gen-btn{
+.rm-gen-btn,.roadmap-gen-btn{
   background:var(--teal);border:none;border-radius:7px;
   padding:8px 16px;color:#fff;
   font-family:var(--font-display);font-size:12px;font-weight:600;
   letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;
-  transition:background 0.2s;
+  transition:background 0.2s,opacity 0.2s;
+  white-space:nowrap;
 }
-.rm-gen-btn:hover{background:#228a96;}
-.rm-gen-btn:disabled{opacity:0.5;cursor:not-allowed;}
+.rm-gen-btn:hover,.roadmap-gen-btn:hover{background:#228a96;}
+.rm-gen-btn:disabled,.roadmap-gen-btn:disabled{
+  background:var(--teal);color:#fff;opacity:0.55;cursor:not-allowed;
+}
 .rm-redo-btn{
   width:34px;height:34px;border-radius:50%;
   border:1px solid var(--border);background:rgba(255,255,255,0.05);
@@ -505,7 +517,7 @@ body{font-family:var(--font-body);background:var(--dark);color:var(--chalk);min-
 .owner-radios{display:flex;flex-direction:column;gap:4px;}
 .owner-radio-label{
   display:flex;align-items:center;gap:5px;
-  font-size:11px;color:rgba(255,255,255,0.5);cursor:pointer;
+  font-size:11px;color:#3C4858;cursor:pointer;
 }
 .owner-radio{width:12px;height:12px;accent-color:var(--purple);cursor:pointer;}
 
@@ -1096,22 +1108,33 @@ function getFieldVal(key) {
   return el ? el.value.trim() : '';
 }
 function setFieldVal(key, val) {
-  var el = document.querySelector('[data-save="'+key+'"]');
-  if (el) el.value = val;
+  // Update ALL elements with this data-save key (visible inputs + hidden backup fields)
+  var els = document.querySelectorAll('[data-save="'+key+'"]');
+  els.forEach(function(el){ el.value = val; });
 }
 function getAllFields() {
   var fields = document.querySelectorAll('[data-save]');
   var data = {};
+  // For duplicate keys, prefer the first visible/non-hidden element's value
   for (var i=0;i<fields.length;i++) {
-    data[fields[i].getAttribute('data-save')] = fields[i].value;
+    var key = fields[i].getAttribute('data-save');
+    var val = fields[i].value;
+    // Only record if not yet seen, OR this element is visible (overrides hidden backup)
+    if (!(key in data)) {
+      data[key] = val;
+    } else if (val && !data[key] && fields[i].offsetParent !== null) {
+      // Visible field has a value but stored field doesn't — take the visible one
+      data[key] = val;
+    }
   }
   return data;
 }
 function applyFields(data) {
   for (var k in data) {
     if (k==='_generatedPlan'||k==='_ascentHold'||k==='_ascentMode') continue;
-    var el = document.querySelector('[data-save="'+k+'"]');
-    if (el) el.value = data[k]||'';
+    // Update ALL elements with this key so every mode stays in sync
+    var els = document.querySelectorAll('[data-save="'+k+'"]');
+    for (var i=0;i<els.length;i++) { els[i].value = data[k]||''; }
   }
 }
 
@@ -1575,18 +1598,18 @@ function renderSummitReveal() {
   stage.innerHTML = '<div class="summit-reveal">'+
     '<div class="summit-icon">🏔</div>'+
     '<div class="summit-title">Summit Reached</div>'+
-    '<div class="summit-sub">You\'ve completed all 9 holds of your development ascent.<br>Your quarterly roadmap is ready to generate.</div>'+
+    '<div class="summit-sub">All 9 holds complete. Review your roadmap, share your plan, or return to any hold to refine your entries.</div>'+
     '<div class="summit-stats">'+
       '<div class="stat-item"><div class="stat-num">'+HOLDS.length+'</div><div class="stat-lbl">Holds Completed</div></div>'+
       '<div class="stat-item"><div class="stat-num">'+filledCount+'</div><div class="stat-lbl">Reflections Captured</div></div>'+
       '<div class="stat-item"><div class="stat-num">4</div><div class="stat-lbl">Quarters Mapped</div></div>'+
     '</div>'+
-    '<button class="unlock-btn" onclick="unlockRoadmap()">✦ Unlock My Roadmap</button>'+
     '<div class="summit-actions">'+
+      '<button class="unlock-btn" onclick="unlockRoadmap()">✦ View My Roadmap</button>'+
       '<button class="summit-action-btn" onclick="downloadPrintVersion()">🖨 Print / Save PDF</button>'+
       '<button class="summit-action-btn" onclick="openShareModal()">✉ Share via Email</button>'+
     '</div>'+
-    '<div style="margin-top:12px;"><button class="nav-btn-back" style="font-size:11px;" onclick="goToHold(0)">← Return to Base Camp</button></div>'+
+    '<div style="margin-top:16px;"><button class="nav-btn-back" style="font-size:11px;" onclick="goToHold(0)">← Return to Base Camp</button></div>'+
   '</div>';
 }
 
@@ -1880,6 +1903,15 @@ function buildClassicMode() {
   }
 
   updateProgress();
+
+  // Wire all Classic inputs/textareas to sync immediately via setFieldVal
+  setTimeout(function(){
+    document.querySelectorAll('.cl-info-input[data-save],.cl-entry-area textarea[data-save],.cl-full-ta[data-save],.cl-ta[data-save]').forEach(function(el){
+      el.addEventListener('input', function(){
+        setFieldVal(el.getAttribute('data-save'), el.value);
+      });
+    });
+  }, 0);
 }
 
 // ══════════════════════════════════════════════════════════
@@ -2167,8 +2199,10 @@ function ensureHiddenFields() {
 var _imgPaths = [
   'GPS_Ascent_Journeys.jpeg',
   './GPS_Ascent_Journeys.jpeg',
+  '/360-IDP/GPS_Ascent_Journeys.jpeg',
   'GPS_Ascent_Journeys.jpg',
   './GPS_Ascent_Journeys.jpg',
+  '/360-IDP/GPS_Ascent_Journeys.jpg',
 ];
 var _imgIdx = 0;
 function tryNextImgSrc(el) {
